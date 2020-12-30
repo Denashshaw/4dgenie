@@ -49,7 +49,8 @@ class Separation extends CI_Controller {
                         //	}
                         
                         $from = $this->config->item('smtp_user');
-                        $to ='softwareteam@4dglobalinc.net';
+                        //$to ='softwareteam@4dglobalinc.net';
+                        $to ='hr@4dglobalinc.com';
                         $subject = 'Employee: '.$_POST['empid1'].'-'.$getuserdetails[0]->name.' Resignation/Revoke';
                         $message = '<p>Hi,<br>&nbsp;&nbsp;Manager Status: <h3>'. $status.'</h3>&nbsp;&nbsp;Manager Remark:<br>&nbsp;&nbsp;&nbsp;&nbsp;'.$_POST["statustext"].'<br>&nbsp;&nbsp;<b>Department - '.$getuserdetails[0]->department.'</b><br><br><a href="http://192.168.2.193/4dgenie">Goto HRMS</a><br><br>Regards,<br>'.$userdata['name'];
             
@@ -97,7 +98,8 @@ class Separation extends CI_Controller {
             );
             
             $from = $this->config->item('smtp_user');
-            $to ='softwareteam@4dglobalinc.net';
+            //$to ='softwareteam@4dglobalinc.net';
+            $to = $getmanageremailid[0]->office_mailid;
             $subject = 'Employee: '.$_POST['emp_id1'].'-'.$getuserdetails[0]->name.' Resignation/Revoke';
             $this->email->cc($to);
             $message = '<p>Hi '.$getmanageremailid[0]->name.',<br>&nbsp;&nbsp;'. $_POST['resignation_Reason'].'</b><br><br><b>Department - '.$getuserdetails[0]->department.'</b><br><br><a href="http://192.168.2.193/4dgenie">Goto HRMS</a><br><br>Regards,<br>'.$_POST['emp_id1'].' - '.$getuserdetails[0]->name;

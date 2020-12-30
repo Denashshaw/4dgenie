@@ -41,7 +41,10 @@ class FeedbackModel extends CI_Model
         $userdata=$this->session->all_userdata();
         if($userdata['role']  == 'agent'){
             $query = $this->db->query("Select * from $table where emp_id='".$userdata['emp_id']."'");
-        }else{
+        }else if($userdata['role'] =='supervisor'){
+            $query = $this->db->query("Select * from $table where reviewer_id='".$userdata['emp_id']."'");
+        }
+        else{
             $query = $this->db->query("Select * from $table");
         }
         

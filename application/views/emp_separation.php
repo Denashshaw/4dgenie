@@ -37,7 +37,7 @@
 
 	<main class="page-content">
 		<div class="container-fluid p-0">
-    <?php include('page_head.php');?>
+    <?php include('page_head.php') ?>
     <div class="row activity-row">
 			<div class="col-md-12 activity">Employee Separation</div>
 		</div>
@@ -131,10 +131,10 @@
         <td><?php echo ucfirst($a->Revoke_reason);?></td>
         <!-- <td><?php if($a->Revoke_date != '0000-00-00'){echo $a->Revoke_date; } ?></td> -->
         <?php if($userdata['department'] =='MANAGEMENT'){ ?>
-        <td  onclick="viewstatusupdate(`<?php echo $a->id; ?>`,`<?php echo $a->Resign_Manager_status; ?>`,`<?php echo $a->Resign_Manager_remark; ?>`,`<?php echo $a->Resign_Lastworkdate; ?>`,`<?php echo $a->Revoke_reason; ?>`)" style="cursor:pointer"><i class="fa fa-pencil" aria-hidden="true" style="font-size:18px;color:#a91919"></i></td>
+        <td  onclick="viewstatusupdate(`<?php echo $a->emp_id; ?>`,`<?php echo $a->name; ?>`,`<?php echo $a->id; ?>`,`<?php echo $a->Resign_Manager_status; ?>`,`<?php echo $a->Resign_Manager_remark; ?>`,`<?php echo $a->Resign_Lastworkdate; ?>`,`<?php echo $a->Revoke_reason; ?>`)" style="cursor:pointer"><i class="fa fa-pencil" aria-hidden="true" style="font-size:18px;color:#a91919"></i></td>
       <?php } ?>
       <?php if($userdata['role'] =='supervisor' && $userdata['department'] =='HR'){ ?>
-      <td  onclick="viewstatusupdateHR(`<?php echo $a->id; ?>`,`<?php echo $a->Resign_HR_status; ?>`,`<?php echo $a->Resign_HR_remark; ?>`)" style="cursor:pointer"><i class="fa fa-pencil" aria-hidden="true" style="font-size:18px;color:#a91919"></i></td>
+      <td  onclick="viewstatusupdateHR(`<?php echo $a->emp_id; ?>`,`<?php echo $a->name; ?>`,`<?php echo $a->id; ?>`,`<?php echo $a->Resign_HR_status; ?>`,`<?php echo $a->Resign_HR_remark; ?>`)" style="cursor:pointer"><i class="fa fa-pencil" aria-hidden="true" style="font-size:18px;color:#a91919"></i></td>
     <?php } ?>
       </tr>
 
@@ -150,7 +150,8 @@
               </button>
             </div>
             <div class="modal-body">
-
+                <input type="hidden" name="empid1" id="empid1">
+                <input type="hidden" name="name1" id="name1">
                 <input type="hidden" name="indexid" id="indexid">
                 <p>Status</p>
 
@@ -164,13 +165,16 @@
                 </div>
                 <p><br>Remark</p>
                 <textarea  class="form-control" id="statustext" name="statustext"></textarea>
-                <?php if($userdata['department'] == 'MANAGEMENT'){?>
+                
                   <br>
                   <div class="row">
+                  <?php if($userdata['role'] =='supervisor' && $userdata['department'] =='HR'){?>
                     <div class="col-md-6">
                       <p>Last Working Date</p>
                       <input type="date" id="lasteworkingdate" name="lasteworkingdate"  >
                     </div>
+                  <?php }
+                  if($userdata['department'] == 'MANAGEMENT'){ ?>
                     <div class="col-md-6">
                       <p>Revoke</p>
                       <textarea  class="form-control" id="revoke_Reason"  name="revoke_Reason"></textarea>
@@ -179,7 +183,8 @@
 
                 <?php
                 $i++;
-               }?>
+                  }
+              ?>
 
             </div>
             <div class="modal-footer">
@@ -213,8 +218,10 @@
 </body>
 
 <script>
-function viewstatusupdate(i,manager_accepReject,manager_remark,lastworkingdate,revoke){
+function viewstatusupdate(emp_id,name,i,manager_accepReject,manager_remark,lastworkingdate,revoke){
   $('#indexid').val(i);
+  $('#empid1').val(emp_id);
+  $('#name1').val(name);
   $("#updatestatus").trigger("reset");
   if(manager_accepReject == 'Accepted'){
     $('#updatestatus input:radio[name="statusvalue"]').filter('[value="Accepted"]').attr('checked', true);
@@ -229,8 +236,10 @@ function viewstatusupdate(i,manager_accepReject,manager_remark,lastworkingdate,r
   var ts='#updatestatus';
   $(ts).modal('toggle');
 }
-function viewstatusupdateHR(i,hr_accepReject,hr_remark){
+function viewstatusupdateHR(emp_id,name,i,hr_accepReject,hr_remark){
   $('#indexid').val(i);
+  $('#empid1').val(emp_id);
+  $('#name1').val(name);
   if(hr_accepReject == 'Accepted'){
     $('#updatestatus input:radio[name="statusvalue"]').filter('[value="Accepted"]').attr('checked', true);
   }else{

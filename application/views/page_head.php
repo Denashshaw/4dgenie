@@ -82,7 +82,12 @@ function getnoficiation_hrmsView(){
             if(res[i]["module_name"] == 'One on One Feedback'){
                 hreflink = '<a href="<?php echo base_url(); ?>feedbackform/feedbackmanager" onclick="updatethestatus('+res[i]["id"]+')">';
                 linkhref_notification = "<?php echo base_url(); ?>feedbackform/feedbackmanager";
-            }else{
+            }
+            else if(res[i]["module_name"] == 'IT Help Desk'){
+                hreflink = '<a href="<?php echo base_url(); ?>Ticket" onclick="updatethestatus('+res[i]["id"]+')">';
+                linkhref_notification = "<?php echo base_url(); ?>Ticket";
+            }   
+            else{
                 hreflink = '<a href="#">';
                 linkhref_notification = "http://192.168.2.193/4dgenie";
             }
