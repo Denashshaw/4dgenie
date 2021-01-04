@@ -8,8 +8,8 @@ class Candidate_interview extends CI_Controller{
 		$this->load->model("Client_model");
 		$this->load->model("Check_Break_Report");
 		$userdata=$this->session->all_userdata();
-		
-		if($userdata["hrms_logged_in"] != TRUE){ 
+
+		if($userdata["hrms_logged_in"] != TRUE){
 			redirect('login/index');
 		}
 	}
@@ -17,13 +17,35 @@ class Candidate_interview extends CI_Controller{
 	public function index()
 	{
 		$this->load->view('header');
-		$this->load->view('candidate_prescreening');
+		$data['candidate_interviewdata'] = $this->Client_model->getdata('candidate_interview','all');
+		$this->load->view('candidate_prescreening',$data);
+	}
+	public function getcandidate(){
+		$data = $this->Client_model->getdata('candidate_interview',$_GET['indexid']);
+		echo json_encode($data);
 	}
 
 	public function initial_add()
 	{
-		//Refer to client model
-		$result = $this->Client_model->initial_add();
+		//Refer to client model\
+		$uqid= uniqid();
+		$result = $this->Client_model->initial_add($uqid);
+
+		$this->load->config('email_interview');
+		$this->load->library('email');
+		$from = $this->config->item('smtp_user');
+		$to =$_POST['pre_email'];
+//	$to = 'v.jaganathan93@gmail.com';
+		$subject = '4D Global - Interview Form';
+		$message = '<p>Hi '.ucfirst($_POST['pre_name']).',<br>&nbsp;&nbsp;Please fill your details using this Link. <br><br><a href="https://www.4dglobalinc.com/resources/interview/?Refid='.$uqid.'" style="font-weight:bold">Click Here</a><br><br>Regards,<br>HR';
+			$this->email->set_newline("\r\n");
+			$this->email->set_mailtype("html");
+			$this->email->from($from);
+			$this->email->to($to);
+			$this->email->subject($subject);
+			$this->email->message($message);
+			$this->email->send();
+
 		if($result){
 			$this->session->set_flashdata('msg','<p style="color:green;margin-left:3%;margin-top:3%;">Data Inserted Successfully!');
 			redirect('Candidate_interview/index');

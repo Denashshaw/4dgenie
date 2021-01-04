@@ -33,12 +33,13 @@
     display:none;
 }
 
-.more{
-    background:lightblue;
-    color:navy;
-    font-size:13px;
-    padding:3px;
-    cursor:pointer;
+
+.more {
+    background: #f8f9fa;
+    color: navy;
+    font-size: 13px;
+    padding: 3px;
+    cursor: pointer;
 }
 </style>
 
@@ -61,15 +62,15 @@
     <div class="row activity-row">
 			<div class="col-md-12 activity">One on One Feedback</div>
 		</div>
-    <?php 
+    <?php
    // echo $this->session->flashdata('msg');
     ?>
 <div class="row emp-table">
 <div class="col-md-12 table-responsive" >
     <div class="row">
     <!-- <form id="attendfilter"> -->
-  
-   
+
+
     <!-- </form> -->
 <br><br>
 <div class="col-md-12">
@@ -97,12 +98,12 @@
             <?php } ?>
           <?php }?>
         </select> -->
-        <?php foreach ($emp_data as $emp) { 
+        <?php foreach ($emp_data as $emp) {
           if($emp->emp_id == $userdata['emp_id']){
           ?>
           <input type="hidden" id="useridemp" name="useridemp" value="<?php echo $emp->emp_id.'/'.$emp->name.'/'.$emp->department.'/'.$emp->manager_id.'/'.$emp->reporting_manager.'/'.$emp->designation; ?>">
         <input type="text" id="emp_details" name="emp_details" class="form-control" value="<?php echo $userdata['emp_id'].'/'.$userdata['name']; ?>" readonly>
-        <?php 
+        <?php
         }
       } ?>
       </div>
@@ -114,7 +115,7 @@
         <p>Department</p>
         <h5 id="employeedepartment" ></h5>
       </div>
-   
+
       <div class="col-md-12"  style="padding-top:5%;">
         <table class="table table-bordered menu1">
           <tr>
@@ -124,7 +125,7 @@
                   ?><b id="employeesupervisor"></b><?php
                 } ?></h5>
               </td>
-             
+
               <td>
                 <p>Date</p>
                 <input type="date" id="getdate" name="getdate" value="<?php echo date('Y-m-d'); ?>" style="margin-top: 1%;" >
@@ -134,7 +135,7 @@
                 <input type="text" id="monthdatepicker" name="monthdatepicker"  value="<?php echo date("m",strtotime("-1 month"))."-".date("Y"); ?>" style="margin-top: 1%;">
               </td>
           </tr>
-        </table>  
+        </table>
       </div>
       <br><br>
       <div class="col-md-12" style="padding-top:2%;">
@@ -154,11 +155,11 @@
         <textarea class="form-control" id="emp_remark" name="emp_remark" required rows=5 ></textarea>
       </div>
 
-            
+
        <div class="col-md-6"  style="margin-left:45%;padding-top:5%;">
           <input type="submit" class="check-in" >
-      </div> 
-          
+      </div>
+
       </div>
     </form>
     </div>
@@ -177,7 +178,7 @@
         <th>Emp ID/Name</th>
         <th>Date</th>
         <th>Month & Year</th>
-        
+
         <th>Department</th>
         <th>Designation</th>
         <th>Reviewer</th>
@@ -201,8 +202,8 @@
     <tbody style="background-color:white">
       <?php
       $i=0;
-      foreach($manager_feedback as $a){ 
-      
+      foreach($manager_feedback as $a){
+
       ?>
       <tr>
       <?php if($userdata['department'] =='MANAGEMENT'){ ?>
@@ -219,11 +220,11 @@
         <td><?php echo ucfirst($a->quality_perc);?></td>
         <td><?php echo ucfirst($a->attendance);?></td>
         <td><?php echo ucfirst($a->time_efficiency);?></td>
-        
-    
+
+
         <td >
           <span class="readmore">
-            <?php 
+            <?php
             $achieven_len = strlen($a->achievements);
             echo ucfirst(substr($a->achievements,0,50));
             ?>
@@ -235,7 +236,7 @@
         </td>
         <td>
           <span class="readmore">
-            <?php 
+            <?php
             $areaofimport_len = strlen($a->area_of_improvement);
             echo ucfirst(substr($a->area_of_improvement,0,50));
             ?>
@@ -247,7 +248,7 @@
         </td>
         <td>
           <span class="readmore">
-            <?php 
+            <?php
             $goalsfornextmonth_len = strlen($a->goals_for_next_month);
             echo ucfirst(substr($a->goals_for_next_month,0,50));
             ?>
@@ -259,7 +260,7 @@
         </td>
         <td>
           <span class="readmore">
-            <?php 
+            <?php
             $emplouyeecom_len = strlen($a->employee_com);
             echo ucfirst(substr($a->employee_com,0,50));
             ?>
@@ -271,7 +272,7 @@
         </td>
         <td>
           <span class="readmore">
-            <?php 
+            <?php
             $reviewercom_len = strlen($a->reviewer_comm);
             echo ucfirst(substr($a->reviewer_comm,0,50));
             ?>
@@ -285,9 +286,9 @@
         <?php if($userdata['department'] =='MANAGEMENT'){ ?>
         <td ><i class="fa fa-pencil" aria-hidden="true" style="font-size:18px;color:#19a938;cursor:pointer"  onclick="viewstatusupdate(`<?php echo $a->id; ?>`)" ></i></td>
         <?php } ?>
-        
+
       </tr>
-     
+
 
 
 
@@ -345,7 +346,7 @@
                 <b>Employee Comments</b>
                 <div id="emp_comm_view" style="max-height:80px;overflow-y: auto;"></div>
               </div>
-              
+
             </div>
             <div class="col-md-6" style="font-size:12px;">
             <p  style="font-size:12px;">Reviewer Title</p>
@@ -373,7 +374,7 @@
                     <input type="text" id="timeefficiency" name="timeefficiency" class="form-control"  style="font-size:12px;"  required>
                   </td>
               </tr>
-            </table>  
+            </table>
 
             <p style="font-size:12px;">Reviewer Comments</p>
             <textarea class="form-control" rows=10 id="reviewercomm" name="reviewercomm"></textarea>
@@ -400,9 +401,9 @@
 <?php if($userdata['department'] != 'MANAGEMENT'){ ?>
   <script>
     $('.menu1 input').prop("readonly", true);
-    $('#monthdatepicker').attr('disabled', true); 
+    $('#monthdatepicker').attr('disabled', true);
     $('.menu2 input').prop("readonly", true);
-    //$('#monthdatepicker').attr('disabled', true); 
+    //$('#monthdatepicker').attr('disabled', true);
   </script>
 <?php } ?>
 <script>
@@ -411,10 +412,10 @@ $(".more").click(function(){
 }, function(){
   if($(this).text() == 'more...'){
 
-$(this).text("less..").siblings(".complete").show();    
+$(this).text("less..").siblings(".complete").show();
 }else{
-$(this).text("more..").siblings(".complete").hide();    
-}  
+$(this).text("more..").siblings(".complete").hide();
+}
 });
 
 showvalue();
@@ -428,13 +429,13 @@ function showvalue(){
     }else{
       $('#employeedesignation').html('');
     }
-    
+
     if(data[2]){
       $('#employeedepartment').html('<p style="font-weight:bold;">'+data[2]+'</p>');
     }else{
       $('#employeedepartment').html('');
     }
-   
+
     if(data[3]){
       $('#employeesupervisor').html('<p style="font-weight:bold;">'+data[3]+'/'+data[4]+'</p>');
     }else{
@@ -474,14 +475,14 @@ function viewstatusupdate(i){
 
 $("#monthdatepicker").datepicker( {
     format: "mm-yyyy",
-    viewMode: "months", 
+    viewMode: "months",
     minViewMode: "months",
 });
 
 
 
 
-$('#monthdatepicker').change(function() { 
+$('#monthdatepicker').change(function() {
   getattendanceview();
 });
 
@@ -549,7 +550,7 @@ $('.useridhrfeedback').select2();
 function viewhrfeedback(){
 
   $('#viewoneononeform').toggle();
- 
+
 }
 
 

@@ -1,9 +1,9 @@
-<?php  
- class Client_model extends CI_Model  
- {  
+<?php
+ class Client_model extends CI_Model
+ {
 
 	public function add_client_data($client){
-		$this->db->insert_batch('client',$client);  
+		$this->db->insert_batch('client',$client);
         $this->session->set_flashdata('msg','<p style="color:green;font-size:16px;margin-top:2%;margin-left:3.2%;">Client Added Successfully!');
         redirect('client/add_client');
 	}
@@ -13,12 +13,13 @@
 		return $dep->result();
 	}
 
-	public function initial_add()
+	public function initial_add($uqid)
 	{
 		$initial_add_data = array(
 			'name'   => $_POST['pre_name'],
 			'mobile' => $_POST['pre_mobile'],
 			'email'  => $_POST['pre_email'],
+      'temp_id' => $uqid
 		);
 
 		$this->db->insert('candidate_interview', $initial_add_data);
@@ -44,7 +45,7 @@
 		$responsible = $split_res[3];
 
 
-		$check_id=$this->db->select('*')->from('onboarding_emp')->where('emp_id',$onboard_emp_id)->where('keyword',$name)->get()->row();		
+		$check_id=$this->db->select('*')->from('onboarding_emp')->where('emp_id',$onboard_emp_id)->where('keyword',$name)->get()->row();
 
 		if($check_id){
 			$arayVal = array(
@@ -56,12 +57,12 @@
 
 			$this->db->where('emp_id', $onboard_emp_id)->where('keyword',$name)->update('onboarding_emp', $arayVal);
 			return $this->db->affected_rows();
-		}else{	
+		}else{
 			$arayVal = array(
 				'emp_id' => $onboard_emp_id,
 				'keyword' => $name,
 				'preboarding' => $preboarding,
-				'action_required' => $action_required,			
+				'action_required' => $action_required,
 				'responsible' => $responsible,
 				'person' => $_SESSION['name'],
 				'person_id' => $_SESSION['emp_id'],
@@ -78,6 +79,16 @@
 		$onboard_emp_id = $this->input->post('onboard_emp_id');
 		return $this->db->select('*')->from('onboarding_emp')->where('emp_id', $onboard_emp_id)->get()->result_array();
 	}
- }  
+
+  //jagan
+  public function getdata($table,$id){
+    if($id == 'all'){
+      $dt = $this->db->query("SELECT * FROM $table");
+    }else{
+      $dt = $this->db->query("SELECT * FROM $table WHERE id='$id'");
+    }
+    return $dt->result();
+  }
+ }
 
  ?>
