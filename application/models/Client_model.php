@@ -85,8 +85,9 @@
     if($id == 'all'){
       $dt = $this->db->query("SELECT * FROM $table");
     }else{
-      $dt = $this->db->query("SELECT * FROM $table WHERE id='$id'");
+      $dt = $this->db->query("SELECT * FROM $table WHERE id=$id");
     }
+
     return $dt->result();
   }
  }

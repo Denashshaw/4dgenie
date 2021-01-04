@@ -16,8 +16,8 @@
             <div style="float: right;">
               <button class="btn btn-primary" onclick="openmodal()" style="float: right;">Add Agent</button>
             </div>
-					</div>			
-<!-- 
+					</div>
+<!--
           <div class="form-group has-search">
             <span class="fa fa-search form-control-feedback"></span>
             <input type="text" class="search-input" placeholder="Search" id="search" style="width:15% !important;">
@@ -26,7 +26,7 @@
           <?php echo $this->session->flashdata('msg');?>
 
 					<div class="row emp-table">
-						<div class="col-md-12 table-responsive">              
+						<div class="col-md-12 table-responsive">
 							<table class="table" id="tabledata">
 								<thead>
 									<tr>
@@ -49,7 +49,7 @@
 								<td><?php echo ucfirst($agentdata->department);?></span></td>
 								<td><?php echo ucfirst($agentdata->client);?></span></td>
 								<td><span class="emp-break-in"><a href="javaScript:void(0)" class="" data-toggle="modal" data-target="#edit_Modal_<?php echo $agentdata->id;?>">Edit</a></span>
-								<span class="emp-break-out"><a href="<?php echo base_url()?>adduser/deleteuser/<?php echo $agentdata->id;?>" onClick="return doconfirm();" style="color:red;">Delete</a></span>	
+								<span class="emp-break-out"><a href="<?php echo base_url()?>adduser/deleteuser/<?php echo $agentdata->id;?>" onClick="return doconfirm();" style="color:red;">Delete</a></span>
 								</td>
 								</tr>
 
@@ -70,14 +70,15 @@
           <p class="">Employee Name:</p>
           <input class="col-md-12 col-xs-12 form-control" type="text" id="name" name="name" placeholder="Name" required="" value="<?php echo $agentdata->name;?>">
           <p class="">User Name:</p>
-          <input class="col-md-12 col-xs-12 form-control" type="text" id="username" name="username" placeholder="UserName" required="" value="<?php echo $agentdata->username;?>"> 
+          <input class="col-md-12 col-xs-12 form-control" type="text" id="username" name="username" placeholder="UserName" required="" value="<?php echo $agentdata->username;?>">
           <p class="">Role:</p>
           <select class="form-control" name="role" required="">
             <option value="">--Select--</option>
             <option value="agent" <?php if($agentdata->role=="agent") echo 'selected="selected"'; ?>>Agent</option>
             <option value="supervisor" <?php if($agentdata->role=="supervisor") echo 'selected="selected"'; ?>>Supervisor</option>
+						<option value="MANAGEMENT" <?php if($agentdata->role=="MANAGEMENT") echo 'selected="selected"'; ?>>Management</option>
           </select><br>
-          <?php 
+          <?php
             $sql=$this->db->query("SELECT * FROM department");
             $dep=$sql->result();
           ?>
@@ -106,7 +107,7 @@
           ?>
           <p class="">Client:</p>
           <select data-placeholder="Choose Client..." class="chosen-select form-control" multiple tabindex="4" name="client[]" required="">
-          
+
           <?php foreach($client_data as $cli){ ?>
             <option value="<?php echo trim($cli->client);?>" <?php if(in_array($cli->client, $client) == 1) echo 'selected="selected"'; ?>><?php echo $cli->client?></option>
           <?php } ?>
@@ -134,7 +135,7 @@
 	</div>
 </main>
 
-			
+
 </div>
 <script>
 function doconfirm()
@@ -182,9 +183,11 @@ $('#search').keyup(function(){
             <option value="">--Select--</option>
             <option value="agent">Agent</option>
             <option value="supervisor">Supervisor</option>
+						<option value="MANAGEMENT">Management</option>
+						<option value="Admin">Admin</option>
           </select>
           <br>
-          <?php 
+          <?php
           $sql=$this->db->query("SELECT * FROM department");
           $dep=$sql->result();
           ?>
@@ -218,7 +221,7 @@ $('#search').keyup(function(){
             <!-- <option value="RCM">RCM</option> -->
           </select>
           <br>
-	
+
           <p class="">Date of Join:</p>
           <input class="col-md-12 col-xs-12 form-control" type="date" id="doj" name="doj" required="">
 	 <br>
