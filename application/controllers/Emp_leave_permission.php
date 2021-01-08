@@ -93,5 +93,75 @@ class Emp_leave_permission extends CI_Controller {
 		$res = $this->empdetailsModel->getleaverep($userid,$fromdate,$todate);
 		echo json_encode($res);
 	}
+	public function leaveExcelexport(){
+		$columnHeader="Emp ID" . "\t" . "Emp Name" . "\t". "Leave Start Date" . "\t". "Leave End Date" . "\t". "Total Days" . "\t". "Leave Type" . "\t". "Reason" . "\t". "Manager ID" . "\t"."Manager Name" . "\t". "Status";
+			$setData = '';
+			$rpt = $this->empdetailsModel->getleaverep_report($_GET['useridemp'],$_GET['fromdate'],$_GET['todate']);
+			foreach ($rpt as $row) {
+			$rowData = '';
+			foreach ($row as $value) {
+								$value = '"' . $value . '"' . "\t";
+								$rowData .= $value;
+						}
+						$setData .= trim($rowData) . "\n";
+			}
+			$filename= 'LeaveReport.xls';
+
+
+
+
+		header("Content-type: application/octet-stream");
+		header("Content-Disposition: attachment; filename=$filename");
+		header("Pragma: no-cache");
+		header("Expires: 0");
+		echo ucwords($columnHeader) . "\n" . $setData . "\n";
+	}
+
+	public function leavePdfexport(){
+		$report_query = $this->empdetailsModel->getleaverep_report($_GET['useridemp'],$_GET['fromdate'],$_GET['todate']);
+		$reshtml='';
+		$date=date('d-m-Y');
+		$reshtml .= '<br><table  class="table table-responsive" style="align:Center;border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr style="border: 1px solid black;font-size:14px;font-weight:bold;background-color:#e4e2e2;"><th colspan="3"><img src="'.base_url().'img/logo.jpg" style="width:120px;height150px;align:right"></th><th colspan="6" style="font-size:16px;text-align:center"><br>Employee Leave Report</th><th colspan="1" style="text-align:right">'.$date.'</th></tr></thead></table><table  class="table table-responsive" style="border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr  style="border: 1px solid gray;">';
+
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Emp ID</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Emp Name</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Leave Start Date</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Leave End Date</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Total Days</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Leave Type</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Reason</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Manager ID</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Manager Name</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Status</th>');
+
+		$reshtml .='</tr>	</thead><tbody style="font-size:8px;">';
+		foreach (	$report_query as $row) {
+			$rowData = '<tr style="border: 1px solid gray;">';
+				foreach ($row as $value) {
+					$value = '<td  style="border: 1px solid gray;">' . $value . '</td>' ;
+					$rowData .= $value;
+				}
+				$reshtml .= $rowData . "</tr>";
+		}
+		$reshtml .='</tbody></table>';
+
+
+		$this->load->library('Pdf');
+		$pdf = new Pdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		$pdf->SetTitle('Employee Information');
+		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		$pdf->SetDisplayMode('real', 'default');
+		// if(sizeof($_POST['fields']) > 8){
+		// 	$pdf->AddPage('L');
+		// }else{
+
+		// }
+		$pdf->AddPage();
+			$pdf->writeHTML($reshtml, true, 0, true, 0);
+		$pdf->Output('EmpInformation.pdf', 'I');
+	}
 }
 ?>

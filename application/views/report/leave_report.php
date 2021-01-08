@@ -26,7 +26,7 @@
 
   <div class="col-md-3">
         <p>Employee</p>
-         <select class="form-control useridnameReport2" id="useridemp" name="useridemp" >
+         <select class="form-control useridnameReport2" id="useridemp" name="useridemp" style="min-height:500px">
 
             <?php if($userdata['role'] != 'agent'){ ?>
               <option value="All" selected>All</option>
@@ -72,9 +72,9 @@
         <!-- <form action="<?php echo base_url(); ?>TicketReport/excelexport" method="POST"> -->
           <!-- <input type="submit" class="check-in" value="Excel" style="margin-left:40%"> -->
           <td>
-          <button type="submit" class="check-out" formaction="<?php echo base_url(); ?>TicketReport/excelexport">Excel</button>
-          <!-- </td><td> --><br>
-          <button type="submit" class="check-out" style="background:#706FAC;margin-top:10%" formaction="<?php echo base_url(); ?>TicketReport/pdfexport">PDF</button>
+            <button type="submit" class="check-out" formaction="<?php echo base_url(); ?>Emp_leave_permission/leaveExcelexport">Excel</button>
+            <br>
+            <button type="submit" class="check-out" style="background:#706FAC;margin-top:10%" formaction="<?php echo base_url(); ?>Emp_leave_permission/leavePdfexport">PDF</button>
           </td>
           <!-- </form> -->
         <!-- <i class="fa fa-download" onclick="previewdata()" aria-hidden="true" style="font-size:100px;cursor:pointer" title="Download"></i> -->
@@ -146,7 +146,9 @@
     </div>
   </div>
 <script>
-$('.useridnameReport2').select2();
+$('.useridnameReport2').select2({
+  height:'resolve'
+});
 function previewdata(){
   $('#previewtoprint').modal('toggle');
 }
