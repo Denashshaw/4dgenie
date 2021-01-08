@@ -148,20 +148,15 @@ class Emp_leave_permission extends CI_Controller {
 
 		$this->load->library('Pdf');
 		$pdf = new Pdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		$pdf->SetTitle('Employee Information');
+		$pdf->SetTitle('Employee Leave Report');
 		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 		$pdf->SetDisplayMode('real', 'default');
-		// if(sizeof($_POST['fields']) > 8){
-		// 	$pdf->AddPage('L');
-		// }else{
-
-		// }
 		$pdf->AddPage();
-			$pdf->writeHTML($reshtml, true, 0, true, 0);
-		$pdf->Output('EmpInformation.pdf', 'I');
+		$pdf->writeHTML($reshtml, true, 0, true, 0);
+		$pdf->Output('EmpLeaveReport.pdf', 'I');
 	}
 }
 ?>

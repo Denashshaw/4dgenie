@@ -13,7 +13,7 @@
 <!-- <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script> -->
 	<main class="page-content">
 		<div class="container-fluid p-0">
-    <?php include('page_head.php');?>
+    <?php $this->load->view('page_head'); ?>
     <div class="row activity-row">
 			<div class="col-md-12 activity">Leave Report</div>
 		</div>
@@ -52,10 +52,6 @@
         </div>
 
     </div>
-
-        <!-- <td><br><br>
-          <button class="check-in showhide" style="margin-left:700%">Add</button>
-        </td> -->
         <br>
       <div class="row">
         <div class="col-md-12">
@@ -67,17 +63,12 @@
             <td id="pltotal"></td>
             <td id="halftotal"></td>
             <td id="loptotal"></td>
-
-
-        <!-- <form action="<?php echo base_url(); ?>TicketReport/excelexport" method="POST"> -->
-          <!-- <input type="submit" class="check-in" value="Excel" style="margin-left:40%"> -->
           <td>
             <button type="submit" class="check-out" formaction="<?php echo base_url(); ?>Emp_leave_permission/leaveExcelexport">Excel</button>
             <br>
             <button type="submit" class="check-out" style="background:#706FAC;margin-top:10%" formaction="<?php echo base_url(); ?>Emp_leave_permission/leavePdfexport">PDF</button>
           </td>
-          <!-- </form> -->
-        <!-- <i class="fa fa-download" onclick="previewdata()" aria-hidden="true" style="font-size:100px;cursor:pointer" title="Download"></i> -->
+
         </tr>
         </table>
       </div>
