@@ -151,9 +151,9 @@
 
   }
 
-  
+
   public function updateDetails($data){
-  
+
     $values = array(
             "Current_Address1" => $data['Updateaddress1'],
             "Current_Address2" => $data['Updateaddress2'],
@@ -196,11 +196,11 @@
       );
       $updatepr=$this->db->where('Emp_id', $data['updateempid'])->update('emp_personal_details',$values);
       if($updatepr){
-  
+
          $this->session->set_flashdata('msg','<p style="color:green;font-size:18px;margin-left:3%;margin-top:3%;">Updated Successfully!..');
       }else{
           $this->session->set_flashdata('msg','<p style="color:red;font-size:18px;margin-left:3%;margin-top:3%;">Not Update!..');
-  
+
       }
     }
 
@@ -257,8 +257,8 @@
       $reason = $this->input->post('reason');
       $approved_by = $this->input->post('approved_by');
       $approver_name = $this->input->post('approver_name');
-      $formType = $this->input->post('formType');      
-      $trans_id = $this->input->post('trans_id');      
+      $formType = $this->input->post('formType');
+      $trans_id = $this->input->post('trans_id');
 
       if($formType == 'update'){
         $updated_data = array(
@@ -281,7 +281,7 @@
         );
          $update_transfer_data = $this->db->where('id', $trans_id)->update('internal_emp_transfer', $transfer_data);
          return $update_transfer_data;
-      } else { 
+      } else {
         $updated_data = array(
           'department' => $transfer_process,
           'client' => $transfer_client,
@@ -302,7 +302,7 @@
         );
         $this->db->insert('internal_emp_transfer',$transfer_data);
         return $this->db->insert_id();
-      }            
+      }
     }
 
     public function get_all_transfer_data()
@@ -311,15 +311,15 @@
       if($_SESSION['role'] == 'agent'){
         $transfer_data = $this->db->select('*')->from('internal_emp_transfer')->where('emp_id', $_SESSION['emp_id'])->get();
       }else{
-        $transfer_data = $this->db->select('*')->from('internal_emp_transfer')->get();  
+        $transfer_data = $this->db->select('*')->from('internal_emp_transfer')->get();
       }
-      
+
       $result_val = $transfer_data->result_array();
       return $result_val;
 
      /* foreach($result_val as $key => $value) {
         $emp_name = $this->db->select('emp_id, name')->from('users')->where('emp_id', $value['emp_id'])->get();
-        $emp_names[$key] = (array) $emp_name->row();        
+        $emp_names[$key] = (array) $emp_name->row();
       }
         $emp_detailsnew = array('employee_results'=>$result_val, 'emp_names'=>$emp_names);
         return $emp_detailsnew;*/
@@ -365,7 +365,7 @@
 
   public function getempprescreening(){
     $res = $this->db->select('*')->from('emp_prescreening')->get();
-    return $res->result(); 
+    return $res->result();
   }
 
   //fetch allemployy details from single
@@ -387,7 +387,7 @@
 
 // denash worked part
  public function emp_leave_add()
-    {      
+    {
       $emp_id = $this->input->post('empLeaveName');
       $emp_name = $this->input->post('emp_name');
       $lev_start_date = $this->input->post('lev_start_date');
@@ -397,7 +397,7 @@
       $leave_type = $this->input->post('leave_type');
       $manager_id = $this->input->post('managers_list');
       $manager_name = $this->input->post('manager_name');
-      
+
       $insert_data = array(
         'emp_id' => $emp_id,
         'emp_name' => $emp_name,
@@ -409,7 +409,7 @@
         'leave_status' => 'Pending',
         'manager_id' => $manager_id,
         'manager_name' => $manager_name,
-      );      
+      );
 
       $this->db->insert('emp_leave_details', $insert_data);
       return $this->db->insert_id();
@@ -478,7 +478,7 @@
     {
        if ($_SESSION['role'] == 'admin') {
           $permission_count = $this->db->select('*')->from('emp_permission_details')->where('status=', 'Pending')->count_all_results();
-          $leave_count = $this->db->select('*')->from('emp_leave_details')->where('leave_status=', 'Pending')->count_all_results();  
+          $leave_count = $this->db->select('*')->from('emp_leave_details')->where('leave_status=', 'Pending')->count_all_results();
        }elseif($_SESSION['department'] == 'MANAGEMENT'){
           $logged_manager_id = $this->input->post('logged_manager_id');
           $permission_count = $this->db->select('*')->from('emp_permission_details')->where('manager_id', $logged_manager_id)->where('status=', 'Pending')->count_all_results();
@@ -486,12 +486,12 @@
        }else{
           $permission_count = 0;
           $leave_count = 0;
-       }       
+       }
           return $permission_count + $leave_count;
     }
 
     public function get_emp_leave_list()
-    {      
+    {
       if ($_SESSION['role'] == 'admin') {
         return $this->db->select('*')->from('emp_leave_details')->get()->result_array();
       } elseif($_SESSION['department'] == 'MANAGEMENT'){
@@ -513,7 +513,7 @@
         return $leave_data = 0;
       }
 
-      return $leave_data->total_leave;      
+      return $leave_data->total_leave;
     }
 
     public function validate_approve_leave()
@@ -527,6 +527,32 @@
         }
       $apprv_validation = $this->db->where('id', $leave_id)->update('emp_leave_details', $update_arr);
       return $apprv_validation;
+    }
+
+    public function getagentlist(){
+      if($_SESSION['role'] == 'supervisor'){
+        $empid=$_SESSION['emp_id'];
+        $query = $this->db->query("select emp_id,agent_name from emp_separation_managers where manager_id='$empid'");
+      }else{
+        $query = $this->db->query("select * from users");
+      }
+      return $query->result();
+    }
+
+    public function getleaverep($agent,$fromdate,$todate){
+      $frmDt1=date_create($fromdate);
+      $frmDt=date_format($frmDt1,'Y-m-d');
+      $toDt1= date_create($todate);
+      $toDt=date_format($toDt1,'Y-m-d');
+      if($agent == 'All'){
+        $query = "select * from emp_leave_details where (leave_start_date > '$frmDt' or leave_start_date = '$frmDt') and (leave_end_date < '$toDt' or leave_end_date = '$toDt')";
+      }else{
+        $query = "select * from emp_leave_details where emp_id='$agent' and (leave_start_date > '$frmDt' or leave_start_date = '$frmDt') and (leave_end_date < '$toDt' or leave_end_date = '$toDt')";
+      }
+
+      $exe=$this->db->query($query);
+      return $exe->result();
+
     }
 
 

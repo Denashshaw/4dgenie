@@ -71,6 +71,30 @@
 		//$query->result();
 	}
 
+  public function reset_password($details){
+
+  if($details['reset_new_password']==$details['reset_confirm_password'])
+  {
+    $this->db->query("UPDATE users SET password='".md5($details['reset_confirm_password'])."' WHERE user_id='".$details['userid']."' ");
+  }
+  else{
+    $this->session->set_flashdata('msg','<p style="color:red">Confirm Password & New Password Does Not Match!..');
+        redirect('home');
+        return FALSE;
+  }
+
+  if($this->db->affected_rows() > 0){
+        $this->session->set_flashdata('msg','<p style="color:green;font-size:18px;margin-left:3%;margin-top:3%;">Password Updated successfully!..');
+        redirect('home');
+        return TRUE;
+    }
+    else{
+        $this->session->set_flashdata('msg','<p style="color:red;margin-left:3%;margin-top:3%;">Password not Updated!..');
+        redirect('home');
+        return FALSE;
+    }
+}
+
  }
 
  ?>

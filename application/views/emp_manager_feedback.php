@@ -36,7 +36,7 @@
 
 .more {
     background: #f8f9fa;
-    color: navy;
+    color: red;
     font-size: 13px;
     padding: 3px;
     cursor: pointer;

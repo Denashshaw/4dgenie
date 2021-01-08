@@ -25,13 +25,13 @@ class Emp_leave_permission extends CI_Controller {
 	}
 
 	public function permission_data_save()
-	{		
+	{
 		$insert_status = $this->empdetailsModel->permission_data_save();
 		echo json_encode($insert_status);
-	} 
+	}
 
 	public function get_managers_list()
-	{		
+	{
 		$managers_list =  $this->empdetailsModel->get_managers_list();
 		echo json_encode($managers_list);
 	}
@@ -44,13 +44,13 @@ class Emp_leave_permission extends CI_Controller {
 
 	public function validate_approve_permission()
 	{
-		$vali_approv = $this->empdetailsModel->validate_approve_permission();		
+		$vali_approv = $this->empdetailsModel->validate_approve_permission();
 		echo json_encode($vali_approv);
 	}
 
 	public function check_permission_exists()
 	{
-		$check_per = $this->empdetailsModel->check_permission_exists();				
+		$check_per = $this->empdetailsModel->check_permission_exists();
 		echo json_encode($check_per);
 	}
 
@@ -79,6 +79,19 @@ class Emp_leave_permission extends CI_Controller {
 	{
 		$leav_app_status = $this->empdetailsModel->validate_approve_leave();
 		print_r($leav_app_status);
+	}
+
+	public function leavereport(){
+		$data['getagentlist'] =  $this->empdetailsModel->getagentlist();
+		$this->load->view('report/leave_report',$data);
+	}
+
+	public function getleavereport(){
+		$userid=$_POST['useridemp'];
+		$fromdate=$_POST['fromdate'];
+		$todate=$_POST['todate'];
+		$res = $this->empdetailsModel->getleaverep($userid,$fromdate,$todate);
+		echo json_encode($res);
 	}
 }
 ?>

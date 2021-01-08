@@ -16,6 +16,9 @@
           <li class="list-group-item <?php if($actlinks == "breakin_report") echo "active";?> dropMenu_rep">
           <a class="<?php  if($actlinks == "breakin_report") echo "active";?>" href="<?php echo base_url();?>breakin_report"> Break In-Out Report</a></li>
 
+          <li class="list-group-item <?php if($actlinks == "leave_report") echo "active";?> dropMenu_rep">
+          <a class="<?php  if($actlinks == "leave_report") echo "active";?>" href="<?php echo base_url();?>Emp_leave_permission/leavereport">Leave Report</a></li>
+
            <li class="list-group-item">Attendance Report</li>
          </ul>
       </div>

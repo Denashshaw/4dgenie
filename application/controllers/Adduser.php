@@ -6,9 +6,9 @@ class Adduser extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model("Mainmodel");	
+		$this->load->model("Mainmodel");
 		$userdata=$this->session->all_userdata();
-		if($userdata["hrms_logged_in"] != TRUE){ 
+		if($userdata["hrms_logged_in"] != TRUE){
 			redirect('login/index');
 		}
 	}
@@ -16,10 +16,10 @@ class Adduser extends CI_Controller {
 	public function adduser()
 	{
 		$userdata=$this->session->all_userdata();
-		
-		if ($userdata["hrms_logged_in"] != TRUE ){ 
+
+		if ($userdata["hrms_logged_in"] != TRUE ){
 			redirect('login/index');
-		} 
+		}
 
 		if(isset($_POST['fadd']))
 		{
@@ -29,7 +29,7 @@ class Adduser extends CI_Controller {
 			$details=$this->input->post();
 
 			$check=$this->db->query("SELECT * FROM users WHERE emp_id='".$_POST['userid']."' OR username='".$_POST['username']."' ");
-			
+
 			if($check->num_rows() == 0){
 				$client_arr = $details['client'];
 				$client_val = implode(",", $client_arr);
@@ -62,16 +62,16 @@ class Adduser extends CI_Controller {
 			}
 			redirect('home/agentlist');
 		}
-		
+
 	}
 
 
 	public function updateuser(){
 		$userdata=$this->session->all_userdata();
-		
-		if ($userdata["hrms_logged_in"] != TRUE ){ 
+
+		if ($userdata["hrms_logged_in"] != TRUE ){
 			redirect('login/index');
-		} 
+		}
 
 		if(isset($_POST['fupdate']))
 		{
@@ -83,7 +83,7 @@ class Adduser extends CI_Controller {
 			if($details['name'] != ''){
 				$client_arr = $details['client'];
 				$client_val = implode(",", $client_arr);
-				
+
 				$data = array(
 					'name'	    => $details['name'],
 					'username'  => $details['username'],
@@ -107,8 +107,8 @@ class Adduser extends CI_Controller {
 			redirect('home/agentlist');
 		}
 	}
-	
-	public function deleteuser(){	
+
+	public function deleteuser(){
 		$id=$this->uri->segment(3);
 		if($id !=""){
 			$this->db->where('id',$id);
@@ -122,12 +122,19 @@ class Adduser extends CI_Controller {
 		if(isset($_POST['password'])){
 			$details=$this->input->post();
 			$data["pass"]=$this->Mainmodel->change_password($details);
-			$this->load->view('agentlist',$data);	
+			$this->load->view('agentlist',$data);
 		}
 		$this->load->view('agentlist');
 	}
 
-	
+	public function reset_password(){
+		if(isset($_POST['reset_password'])){
+			$details=$this->input->post();
+			$data["pass"]=$this->Mainmodel->reset_password($details);
+			$this->load->view('agentlist',$data);
+		}
+	}
+
 }
 
 ?>

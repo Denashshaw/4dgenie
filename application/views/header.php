@@ -261,6 +261,11 @@ a:hover,.dropdown-options:hover, li.active, a.active {
             <a class="<?php if($actlinks == "agentlist") echo "active";?>" href="<?php echo base_url();?>agentlist"><i class="fa fa-arrow-right" aria-hidden="true"></i>
             Agent List</a>
           </li>
+
+          <li>
+            <a href="#" class="" data-toggle="modal" data-target="#resetPassword"><i class="fa fa-arrow-right" aria-hidden="true"></i>Reset Agent Password</a>
+          </li>
+
         <?php } ?>
 
         <li><a href="#" class="show-modal" data-toggle="modal" data-target="#changePassword" data-backdrop="static"><i class="fa fa-arrow-right" aria-hidden="true"></i> Change Password</a></li>
@@ -444,6 +449,47 @@ a:hover,.dropdown-options:hover, li.active, a.active {
  <div id='loading' style="width: 100%;height: 100%;position: fixed;z-index: 9999;background: white;display: none;">
     <img src='<?php echo base_url('img/loader.gif'); ?>' width="200" height="200" style="margin-top: 150px;"/>
   </div>
+
+  <div style="padding-top:1px;" class="modal fade" id="resetPassword" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="mons modal-title">Reset Agent Password</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body mons">
+        <form method="post" action="<?php echo base_url();?>Adduser/reset_password">
+          <!-- <input type="hidden" name="userid" value="<?php echo $userdata['user_id'];?>" id="user_id"> -->
+          <?php
+              $userdata=$this->session->all_userdata();
+
+              $sql=$this->db->query("SELECT * FROM users WHERE role='agent'");
+              $usr_data=$sql->result();
+
+          ?>
+          <p class="">Select Agent</p>
+          <select class="form-control" name="userid" id="" required="">
+            <option value="">--Select Agent--</option>
+            <?php foreach($usr_data as $usr){ ?>
+            <option value="<?php echo $usr->user_id;?>"><?php echo $usr->emp_id.'/'.$usr->name;?></option>
+          <?php }?>
+          </select><br>
+          <p class="">New Password:</p>
+          <input class="col-md-12 col-xs-12 form-control" type="password" id="reset_new_password" name="reset_new_password" placeholder="Password" required="">
+
+          <p class="">Confirm Password:</p>
+          <input class="col-md-12 col-xs-12 form-control" type="password" id="reset_confirm_password" name="reset_confirm_password" placeholder="Password" required="" onkeyup="ResetPasswordMatch();">
+
+        <input type="submit" name="reset_password" class="apply formSubmit" value="Submit" id="reset_apply">
+          <input type="button" value="Cancel" class="apply" data-dismiss="modal" >
+        </form>
+        <span class="blinking" id="ajaxmsg" style="color:#337ab7;font-size:15px;position:relative;top:7px;font-weight:800;"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
 function viewreport(){
   $('.viewmegamenu').toggle();
