@@ -1,17 +1,25 @@
-<?php  
-class attendanceModel extends CI_Model  
-{  
+<?php
+class attendanceModel extends CI_Model
+{
     public function getattendanceview($data){
         $id = $data['userid'];
         $monthyear = $data['monthyear'];
        	$montexp = explode("-",$monthyear);
        	$month =$montexp[0];
        	$year = $montexp[1];
-	
+
 		 $days = cal_days_in_month(CAL_GREGORIAN,$month,$year); // Days in current month
 		//echo $days;\
 		 $attendancearray = array();
 		 $index=0;
+
+     //shift getTime
+     $selectuser = $this->db->query("SELECT department,checkin,checkout FROM users WHERE emp_id='".$id."'");
+ 		$userdet = $selectuser->result();
+
+    $shift_intime=$userdet[0]->checkin;
+    $shift_outtime=$userdet[0]->checkout;
+
 		for($i=1;$i<= $days; $i++){
 			$date = date(sprintf("%02d",$i)."-".$month."-".$year);
 			$attendancearray[$index]["Date"] = $date;
@@ -21,6 +29,7 @@ class attendanceModel extends CI_Model
 			//Checkinoput
 			$query = "SELECT * FROM checkin_checkout WHERE emp_id='".$id."'		 and  date(created_date)='".$ckdate."'";
 			$quRes = $this->db->query($query);
+
 			if($quRes->row() > 0){
 				$queryres = $quRes->result();
 				$attendancearray[$index]['checkin']= date_format(date_create($queryres[0]->checkin_time),"d-m-Y H:i:s");
@@ -46,7 +55,9 @@ class attendanceModel extends CI_Model
 
 			if($attendancearray[$index]["Day"] == 'Sunday'){
 				$attendancearray[$index]['Status'] = 'Holiday';
-			}
+			}else if($attendancearray[$index]["Day"] == 'Saturday' && ($shift_intime[0] == 1 && $shift_intime[1] > 7)){
+        $attendancearray[$index]['Status'] = 'Holiday';
+      }
 			else if($attendancearray[$index]['checkin']!=''){
 		        $attendancearray[$index]['Status'] = '<p id="presentid">Present</p>';
 		    }
@@ -64,8 +75,7 @@ class attendanceModel extends CI_Model
 			$index++;
 		}
 
-		$selectuser = $this->db->query("SELECT department,checkin,checkout FROM users WHERE emp_id='".$id."'");
-		$userdet = $selectuser->result();
+
 		echo json_encode(array("attendancedata"=>$attendancearray,"shiftdetails"=>$userdet));
     }
 }

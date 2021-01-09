@@ -43,11 +43,11 @@ $userdata=$this->session->all_userdata();
     <div class="row activity-row">
 						<div class="col-md-12 activity">Employee Attendance</div>
 		</div>
-      
+
 <div class="row emp-table">
 <div class="col-md-12 table-responsive" >
     <div class="row">
-   
+
     <!-- <form id="attendfilter"> -->
     <div class="col-md-12">
       <table><tr>
@@ -75,8 +75,8 @@ $userdata=$this->session->all_userdata();
     </table>
     </div>
     <!-- </form> -->
-    
-  
+
+
 
     <div class="card card-body" style="width:15%;margin-left:2%;background-color:#3fc98e ">
       <p style="color:white">Present</p>
@@ -100,7 +100,7 @@ $userdata=$this->session->all_userdata();
      <p style="color:white">Early Logout</p>
       <h1  style="color:white" id="Earlylogoutid"></h1>
     </div>
- 
+
 </div>
 <br>
 <div class="card card-body shifttiming">
@@ -120,7 +120,7 @@ $userdata=$this->session->all_userdata();
       </tr>
     </thead>
     <tbody id="attendanceresone">
-          
+
     </tbody>
 </table>
 </div>
@@ -134,7 +134,7 @@ $('.useridvalattendance').select2();
 
 $("#attendancedatepicker").datepicker( {
     format: "mm-yyyy",
-    viewMode: "months", 
+    viewMode: "months",
     minViewMode: "months"
 });
 <?php if($userdata['role'] == 'agent'){ ?>
@@ -151,6 +151,8 @@ function getattendanceview(){
     success : function(datares){
       var dataset = JSON.parse(datares);
       var data = dataset.attendancedata;
+      var checkintim = dataset.shiftdetails[0].checkin;
+      var checkout = dataset.shiftdetails[0].checkout;
       var out ='';
       var presentcount=0;
       var leavecount=0;
@@ -159,38 +161,43 @@ function getattendanceview(){
       var earlylogout_count =0;
       for(var i=0;i<data.length;i++){
         if(data[i]['permission'] != null){
-        var per = data[i]['permission'] 
+        var per = data[i]['permission']
        }else{
         var per ='';
        }
        if(data[i]['Day'] == 'Sunday'){
         out += '<tr style="background-color:#ff8f008a">';
-     
+
        }else{
-        out += '<tr>';
-       
+         //Shift timing greater than 17
+         if((checkintim[0] == 1 && checkintim[1] > 7) && data[i]['Day'] == 'Saturday'){
+           out += '<tr style="background-color:#ff8f008a">';
+         }
+         else{
+           out += '<tr>';
+         }
        }
-       
+
        //Check in different
        var dtofDB = data[i]['Date'].split("-");
        var dtcuu = dtofDB[2]+"/"+ dtofDB[1] +"/"+ dtofDB[0];
       var ft =(dtcuu+" "+dataset.shiftdetails[0].checkin);
-       
+
        var att_checkin_gettime = data[i]['checkin'].split(" ");
        var att_checkin = att_checkin_gettime[0].split("-");
        var att_checkin_order = att_checkin[2]+"/"+ att_checkin[1] +"/"+ att_checkin[0];
        var attcheck = (att_checkin_order+" "+att_checkin_gettime[1]);
-      
+
       var currentval = new Date(ft);
-      // 10 min extra time 
+      // 10 min extra time
       var start_actual_time = new Date(currentval.getTime() + 10*60000);
       var end_actual_time = new Date(attcheck);
       var formatted = calculateTimediff(start_actual_time,end_actual_time);
       var timesplit1 = formatted.split(":");
       //console.log(timesplit1);
-      //without 10 mins 
+      //without 10 mins
       var formatted_without = calculateTimediff(currentval,end_actual_time);
-      
+
       if(att_checkin_gettime[1] == undefined){
         var time_in = '';
       }else{
@@ -199,23 +206,23 @@ function getattendanceview(){
 
       // Check out time
       var ft2 =(dtcuu+" "+dataset.shiftdetails[0].checkout);
-       
+
        var att_checkout_gettime = data[i]['checkout'].split(" ");
        var att_checkout = att_checkout_gettime[0].split("-");
        var att_checkout_order = att_checkout[2]+"/"+ att_checkout[1] +"/"+ att_checkout[0];
        var attcheck1 = (att_checkout_order+" "+att_checkout_gettime[1]);
-      
+
       var currentval_out = new Date(ft2);
-      // 10 min extra time 
+      // 10 min extra time
       var start_actual_time_out = new Date(currentval_out.getTime() - 10*60000);
       var end_actual_time_out = new Date(attcheck1);
       console.log(end_actual_time_out+" - "+start_actual_time_out);
       var formatted_out = calculateTimediff(end_actual_time_out,start_actual_time_out);
       var timesplit1_out = formatted_out.split(":");
       console.log(timesplit1_out);
-      //without 10 mins 
+      //without 10 mins
       var formatted_without_out = calculateTimediff(end_actual_time_out,currentval_out);
-      
+
       if(att_checkout_gettime[1] == undefined){
         var time_out = '';
       }else{
@@ -236,14 +243,14 @@ function getattendanceview(){
         }
         if(parseInt(timesplit1[0]) > 0 || parseInt(timesplit1[1]) > 0 ){
           latelogin_count++;
-          out += '<td onclick="viewlatelogin(`'+dataset.shiftdetails[0].checkin+'`,`'+time_in+'`,`'+data[i]['Date']+'`,`'+formatted_without+'`)"><p style="border: 1px solid #ad0a64;padding:5%" >'+time_in+'</p></td>';  
+          out += '<td onclick="viewlatelogin(`'+dataset.shiftdetails[0].checkin+'`,`'+time_in+'`,`'+data[i]['Date']+'`,`'+formatted_without+'`)"><p style="border: 1px solid #ad0a64;padding:5%" >'+time_in+'</p></td>';
         }
         if(timesplit1_out[0] == 'NaN' || parseInt(timesplit1_out[0]) == '0-1' || timesplit1_out[0] == '0-2' || (parseInt(timesplit1_out[0]) == 0 && parseInt(timesplit1_out[1]) == 0)){
           out += '<td>'+time_out+'</td>';
         }
         if(parseInt(timesplit1_out[0]) > 0 || parseInt(timesplit1_out[1]) > 0 ){
           earlylogout_count++;
-          out += '<td onclick="viewlatelogout(`'+dataset.shiftdetails[0].checkout+'`,`'+time_out+'`,`'+data[i]['Date']+'`,`'+formatted_without_out+'`)"><p style="border: 1px solid #ad0a64;padding:5%" >'+time_out+'</p></td>';  
+          out += '<td onclick="viewlatelogout(`'+dataset.shiftdetails[0].checkout+'`,`'+time_out+'`,`'+data[i]['Date']+'`,`'+formatted_without_out+'`)"><p style="border: 1px solid #ad0a64;padding:5%" >'+time_out+'</p></td>';
         }
         //out += '<td>'+time_out+'</td>';
         out += '<td>'+data[i]['worktimingg']+'</td>';
@@ -260,16 +267,15 @@ function getattendanceview(){
         if(data[i]['Status'] == '<p id="absentid">Absent</p>'){
           absentcount = absentcount + 1;
         }
-      } 
+      }
       $('#Lateloginid').html(latelogin_count);
       $('#Earlylogoutid').html(earlylogout_count);
       $('#presentcount').html(presentcount);
       $('#leavecount').html(leavecount);
       $('#absentcount').html(absentcount);
       $('#attendanceresone').html(out);
-      var checkintim = dataset.shiftdetails[0].checkin;
-      var checkout = dataset.shiftdetails[0].checkout;
-      $('.shifttiming').html("<h4 style='text-align:center'>"+checkintim+" - "+checkout+"</h4>"); 
+
+      $('.shifttiming').html("<h4 style='text-align:center'>"+checkintim+" - "+checkout+"</h4>");
     }
   });
 }
@@ -306,9 +312,9 @@ function calculateTimediff(starttime,endtime){
       var diffSeconds = diff/1000;
       var HH = Math.floor(diffSeconds/3600);
       var MM = parseInt(Math.floor(diffSeconds%3600)/60);
-      
+
       var formatted_res= ((HH < 10)?("0" + HH):HH) + ":" + ((MM < 10)?("0" + MM):MM)
-      
+
       return formatted_res;
      }
 </script>
