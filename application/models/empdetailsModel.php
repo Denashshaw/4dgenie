@@ -36,7 +36,12 @@
   }
 
   public function agentdata(){
-    $user =$this->db->query("SELECT * FROM users WHERE role!='admin' Order by Emp_id");
+    if($_SESSION['role'] == 'supervisor'){
+      $empid=$_SESSION["emp_id"];
+      $user =$this->db->query("SELECT * FROM users WHERE role!='admin' and emp_id in (SELECT emp_id from emp_separation_managers where manager_id='$empid')");
+    }else{
+      $user =$this->db->query("SELECT * FROM users WHERE role!='admin' Order by Emp_id");
+    }
     return $user->result();
   }
   public function addDetails($data){
