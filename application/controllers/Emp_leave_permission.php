@@ -90,13 +90,20 @@ class Emp_leave_permission extends CI_Controller {
 		$userid=$_POST['useridemp'];
 		$fromdate=$_POST['fromdate'];
 		$todate=$_POST['todate'];
-		$res = $this->empdetailsModel->getleaverep($userid,$fromdate,$todate);
+		$table = $_POST['leavetype'];
+		$res = $this->empdetailsModel->getleaverep($table,$userid,$fromdate,$todate);
 		echo json_encode($res);
 	}
 	public function leaveExcelexport(){
-		$columnHeader="Emp ID" . "\t" . "Emp Name" . "\t". "Leave Start Date" . "\t". "Leave End Date" . "\t". "Total Days" . "\t". "Leave Type" . "\t". "Reason" . "\t". "Manager ID" . "\t"."Manager Name" . "\t". "Status";
+		if($_GET['leavetype'] == 'emp_leave_details'){
+			$columnHeader="Emp ID" . "\t" . "Emp Name" . "\t". "Leave Start Date" . "\t". "Leave End Date" . "\t". "Total Days" . "\t". "Leave Type" . "\t". "Reason" . "\t". "Manager ID" . "\t"."Manager Name" . "\t". "Status";
+			$filename= 'LeaveReport.xls';
+		}else{
+			$columnHeader="Emp ID" . "\t" . "Emp Name" . "\t". "Permission IN Hours" . "\t". "Reason" . "\t". "Manager ID" . "\t"."Manager Name" . "\t". "Status". "\t". "Permission Date";
+			$filename= 'Permission.xls';
+		}
 			$setData = '';
-			$rpt = $this->empdetailsModel->getleaverep_report($_GET['useridemp'],$_GET['fromdate'],$_GET['todate']);
+			$rpt = $this->empdetailsModel->getleaverep_report($_GET['leavetype'],$_GET['useridemp'],$_GET['fromdate'],$_GET['todate']);
 			foreach ($rpt as $row) {
 			$rowData = '';
 			foreach ($row as $value) {
@@ -105,23 +112,24 @@ class Emp_leave_permission extends CI_Controller {
 						}
 						$setData .= trim($rowData) . "\n";
 			}
-			$filename= 'LeaveReport.xls';
-
-
-
-
-		header("Content-type: application/octet-stream");
-		header("Content-Disposition: attachment; filename=$filename");
-		header("Pragma: no-cache");
-		header("Expires: 0");
-		echo ucwords($columnHeader) . "\n" . $setData . "\n";
+			header("Content-type: application/octet-stream");
+			header("Content-Disposition: attachment; filename=$filename");
+			header("Pragma: no-cache");
+			header("Expires: 0");
+			echo ucwords($columnHeader) . "\n" . $setData . "\n";
 	}
 
 	public function leavePdfexport(){
-		$report_query = $this->empdetailsModel->getleaverep_report($_GET['useridemp'],$_GET['fromdate'],$_GET['todate']);
+
 		$reshtml='';
 		$date=date('d-m-Y');
-		$reshtml .= '<br><table  class="table table-responsive" style="align:Center;border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr style="border: 1px solid black;font-size:14px;font-weight:bold;background-color:#e4e2e2;"><th colspan="3"><img src="'.base_url().'img/logo.jpg" style="width:120px;height150px;align:right"></th><th colspan="6" style="font-size:16px;text-align:center"><br>Employee Leave Report</th><th colspan="1" style="text-align:right">'.$date.'</th></tr></thead></table><table  class="table table-responsive" style="border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr  style="border: 1px solid gray;">';
+		$report_query = $this->empdetailsModel->getleaverep_report($_GET['leavetype'],$_GET['useridemp'],$_GET['fromdate'],$_GET['todate']);
+		if($_GET['leavetype'] == 'emp_leave_details'){$printTitle='Employee Leave Report';}else{$printTitle='Employee Permission Details';}
+		$reshtml .= '<br><table  class="table table-responsive" style="align:Center;border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr style="border: 1px solid black;font-size:14px;font-weight:bold;background-color:#e4e2e2;"><th colspan="3"><img src="'.base_url().'img/logo.jpg" style="width:120px;height150px;align:right"></th><th colspan="6" style="font-size:16px;text-align:center"><br>'.$printTitle.'</th><th colspan="1" style="text-align:right">'.$date.'</th></tr></thead></table><table  class="table table-responsive" style="border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr  style="border: 1px solid gray;">';
+
+		if($_GET['leavetype'] == 'emp_leave_details'){
+			$titleset='Employee Leave Report';
+			$filename='EmpLeaveReport.pdf';
 
 		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Emp ID</th>');
 		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Emp Name</th>');
@@ -133,6 +141,20 @@ class Emp_leave_permission extends CI_Controller {
 		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Manager ID</th>');
 		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Manager Name</th>');
 		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Status</th>');
+
+	}else{
+		$titleset='Employee Permission Report';
+		$filename='EmpPermissionReport.pdf';
+
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Emp ID</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Emp Name</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Permission IN Hours</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Reason</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Manager ID</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Manager Name</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Status</th>');
+		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Permission Date</th>');
+	}
 
 		$reshtml .='</tr>	</thead><tbody style="font-size:8px;">';
 		foreach (	$report_query as $row) {
@@ -148,7 +170,7 @@ class Emp_leave_permission extends CI_Controller {
 
 		$this->load->library('Pdf');
 		$pdf = new Pdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		$pdf->SetTitle('Employee Leave Report');
+		$pdf->SetTitle($titleset);
 		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
@@ -156,7 +178,7 @@ class Emp_leave_permission extends CI_Controller {
 		$pdf->SetDisplayMode('real', 'default');
 		$pdf->AddPage();
 		$pdf->writeHTML($reshtml, true, 0, true, 0);
-		$pdf->Output('EmpLeaveReport.pdf', 'I');
+		$pdf->Output($filename, 'I');
 	}
 }
 ?>

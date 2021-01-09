@@ -23,7 +23,7 @@ class Ticket extends CI_Controller {
 
     public function addticket(){
         $this->TicketingModel->insertticket($_POST);
-       
+
         $userdetails = $_POST['uid'];
         $uid_split = explode("/",$userdetails);
         $empid=$uid_split[0];
@@ -37,11 +37,10 @@ class Ticket extends CI_Controller {
 
         $this->load->config('email');
         $this->load->library('email');
-        
+
         $from = $this->config->item('smtp_user');
-         $to = 'it@4dglobalinc.com';
-        //$to ='v.jaganathan93@gmail.com';
-        // $message = 'Hai jagan';
+        $to = 'it@4dglobalinc.com';
+    //    $to ='v.jaganathan93@gmail.com';
         $this->email->set_newline("\r\n");
         $this->email->set_mailtype("html");
         $this->email->from($from);
