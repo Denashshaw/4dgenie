@@ -266,6 +266,12 @@ a:hover,.dropdown-options:hover, li.active, a.active {
             <a href="#" class="" data-toggle="modal" data-target="#resetPassword"><i class="fa fa-arrow-right" aria-hidden="true"></i>Reset Agent Password</a>
           </li>
 
+        <?php }
+        if($userdata['department'] == 'MANAGEMENT' || $userdata['role'] == 'admin'){ ?>
+          <li class="<?php if($actlinks  == "reportingPerson") echo "active";?> dropMenu">
+            <a class="<?php if($actlinks == "reportingPerson") echo "active";?>" href="<?php echo base_url();?>reportingPerson"><i class="fa fa-arrow-right" aria-hidden="true"></i>
+            Reporting Person</a>
+          </li>
         <?php } ?>
 
         <li><a href="#" class="show-modal" data-toggle="modal" data-target="#changePassword" data-backdrop="static"><i class="fa fa-arrow-right" aria-hidden="true"></i> Change Password</a></li>
