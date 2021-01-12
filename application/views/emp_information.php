@@ -142,17 +142,15 @@ $userdata=$this->session->all_userdata();
 				         <!--  <li class="nav-item">
                   <a class="nav-link tablink" id="profile-tab" data-toggle="tab" data-tab-index="4" onclick="openPage('management', this, 'white')">Management</a>
                 </li> -->
-                <?php if($userdata['role'] != 'agent'){ ?> 
-                <li class="nav-item">
-                  <a class="nav-link tablink" id="profile-tab" data-toggle="tab" data-tab-index="5" onclick="openPage('profile', this, 'white')">Pre - Screening</a>
-                </li>
-                <?php } ?>
+
                 <!-- <li class="nav-item">
                   <a class="nav-link tablink" id="contact-tab" data-toggle="tab" data-tab-index="6" onclick="openPage('contact', this, 'white')" >Attendance</a>
                 </li> -->
-                <li class="nav-item">
-                  <a class="nav-link tablink" id="transfer-tab" data-toggle="tab" data-tab-index="8" onclick="openPage('empTransfer', this, 'white')" >Internal Employee Transfer</a>
-                </li>
+                <?php if($userdata['role'] =='admin' || $userdata['department'] == 'MANAGEMENT'){ ?>
+                  <li class="nav-item">
+                    <a class="nav-link tablink" id="transfer-tab" data-toggle="tab" data-tab-index="8" onclick="openPage('empTransfer', this, 'white')" >Internal Employee Transfer</a>
+                  </li>
+              <?php } ?>
                 <!-- <li class="nav-item">
                   <a class="nav-link" id="emp1to1-tab" data-toggle="tab" data-tab-index="7" onclick="openPage('emp1to1', this, 'white')" >Employee 1 on 1</a>
                 </li> -->
@@ -181,10 +179,8 @@ $userdata=$this->session->all_userdata();
 		  <div class="tabcontent" id="management" style="display: none;">
             <?php include('managementdet.php'); ?>
           </div>
-          <div class="tabcontent" id="profile" style="display: none;">
-            <?php include('emp_prescreen.php'); ?>
-          </div>
-          
+
+
           <div class="tabcontent" id="empTransfer" style="display: none;">
             <?php include('emp_internal_transfer.php'); ?>
           </div>

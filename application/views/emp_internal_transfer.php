@@ -22,7 +22,7 @@
               <th scope="col">Action</th>
             <?php } ?>
           </thead>
-          <tbody id="transfer_table_data">          	
+          <tbody id="transfer_table_data">
           </tbody>
       </table>
       <!-- <div class="plinks"> <?= $links; ?></div> -->
@@ -41,12 +41,14 @@
 	            <div class="modal-body">
 	                <div class="form-group col-md-12 mb-3">
 	                	<label for="">Employee Name</label>
-	                	<select class="col-md-12 col-xs-12 form-control" id="transfer_emp" required onchange="changeTransferData()">
+	                	<select class="col-md-12 col-xs-12 form-control addselected" id="transfer_emp" name="" onchange="changeTransferData()" style="display:none">
 		                  <option style="display: none;" value="" selected>Select Employee Name</option>
 		                  <?php foreach ($emp_data as $emp) { ?>
-		                      <option value="<?php echo $emp->emp_id; ?>" ><?php echo ucfirst($emp->name); ?></option>
+		                      <option value="<?php echo $emp->emp_id.'/'.$emp->name; ?>" ><?php echo ucfirst($emp->emp_id.'/'.$emp->name); ?></option>
 		                  <?php } ?>
 		                </select>
+                    <input class="col-md-12 col-xs-12 form-control updateselected" id="transfer_emp" name="transfer_emp" readonly style="display:none">
+
 		                <input type="hidden" id="formType" name="formType" value="">
 		                <input type="hidden" id="trans_id" name="trans_id" value="">
 	                </div>
@@ -86,7 +88,7 @@
 	                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 	                <button type="submit" class="btn btn-primary">Transfer</button>
 	            </div>
-	            </form>	            
+	            </form>
 	        </div>
 	    </div>
 	</div>
@@ -107,12 +109,14 @@
   		$.ajax({
   			url: base_url+'empinfoControl/transfer_emp_list',
 			method: 'GET',
-			success: function(res1){			
+			success: function(res1){
 				var data = JSON.parse(res1);
 				var output='';
 				data.forEach(res => {
+          console.log(res.emp_name);
+          // <td>`+res.emp_id+`</td>
 				output += `<tr>
-							<td>`+res.emp_id+`</td>													
+              <td>`+res.emp_id+`</td>
 							<td> `+res.emp_name+`</td>
 							<td>`+res.current_process+`</td>
 							<td>`+res.current_client+`</td>
@@ -132,16 +136,18 @@
 			}
   		});
   	}
-	
+
 	function date_format(date){
 		var d = new Date(date);
 		var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 		return months[d.getMonth()]+' '+d.getDate() +', '+ d.getFullYear();
 
-	}  	
+	}
 
   	// open emp transfer popup
   	function emp_transfer_popup(){
+      $('.updateselected').hide();
+      $('.addselected').show();
 		var base_url = $('#base_url').val();
 		$.ajax({
 			url: base_url+'empinfoControl/get_all_clients',
@@ -165,7 +171,7 @@
   	function editTransData(trans_id){
   		$('#trans_id').val(trans_id);
   		emp_transfer_popup();
-		get_all_departs();		
+		get_all_departs();
   		var base_url = $('#base_url').val();
   		$('#transfer_modal').modal('show');
   		setTimeout(()=>{
@@ -177,16 +183,19 @@
   				trans_id : trans_id
   			}, success: function(res){
   				var data = JSON.parse(res);
-  				$('#transfer_emp').val(data.emp_id);
+          $('.updateselected').show();
+          $('.addselected').hide();
+
+  				$('.updateselected').val(data.emp_id+'/'+data.emp_name);
   				$('#current_process').val(data.current_process);
   				$('#current_client').val(data.current_client);
   				$('#transfer_process').val(data.transfer_to_process);
   				$('#transfer_client').val(data.transfer_to_client);
-  				$('#reason').val(data.reason_for_transfer);  				
+  				$('#reason').val(data.reason_for_transfer);
   			}, failed: function(err){
   				console.log(err)
   			}
-  		});  			
+  		});
   		},300);
   	}
 
@@ -199,20 +208,21 @@
   			data: {
   				trans_id : trans_id
   			}, success: function(res){
-  				generate_transfer_table();	
+  				generate_transfer_table();
   			}, failed: function(err){
   				console.log(err)
   			}
   		});
-  		}	
+  		}
   	}
 
 
 	// Popup form submit
 	$('#transfer_emp_form').submit((e)=>{
+    var idnamesplit=$('.updateselected').val().split('/');
 		var base_url = $('#base_url').val();
-		var transfer_emp = $('#transfer_emp').val();
-		var emp_name = $("#transfer_emp option:selected").text();
+		var transfer_emp = idnamesplit[0];
+		var emp_name = idnamesplit[1];
 		var current_process = $('#current_process').val();
 		var current_client = $('#current_client').val();
 		var transfer_process = $('#transfer_process').val();
@@ -223,7 +233,7 @@
 		var formType = $('#formType').val();
 		var trans_id = $('#trans_id').val();
 		e.preventDefault();
-		
+
 		$.ajax({
 			url: base_url+'empinfoControl/add_transfer_data',
 			method: 'POST',
@@ -235,7 +245,7 @@
 				transfer_process : transfer_process,
 				transfer_client : transfer_client,
 				reason : reason,
-				approved_by : approved_by,				
+				approved_by : approved_by,
 				approver_name : approver_name,
 				formType : formType,
 				trans_id : trans_id
@@ -248,7 +258,7 @@
 				console.log(err);
 			}
 		});
-	});	
+	});
 
 	function get_all_departs(){
 		var base_url = $('#base_url').val();
@@ -270,14 +280,15 @@
 
 	function changeTransferData(){
 		var base_url = $('#base_url').val();
-		var emp_id = $('#transfer_emp').val();
+		var emp_id = $('#transfer_emp').val().split('/');
+    	$('.updateselected').val($('#transfer_emp').val());
 		$.ajax({
 			url: base_url+'empinfoControl/get_emp_department',
 			method: 'POST',
 			data: {
-				emp_id : emp_id
+				emp_id : emp_id[0]
 			}, success: function(res){
-				var data = JSON.parse(res);				
+				var data = JSON.parse(res);
 				$('#current_process').val(data.department);
 				$('#current_client').val(data.client);
 			}, failed: function(err){
