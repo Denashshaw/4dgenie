@@ -194,45 +194,120 @@ class empinfoControl extends CI_Controller {
 			$get_social_data = $this->empdetailsModel->get_social_links_data();
 			echo json_encode($get_social_data);
 		}
-	
+
 		public function update_social_links_data(){
-			return $this->empdetailsModel->update_social_links_data();			 
+			return $this->empdetailsModel->update_social_links_data();
 		}
-	
+
 		public function get_emp_department(){
 			$emp_client_data = $this->empdetailsModel->get_emp_department();
 			echo json_encode($emp_client_data);
 		}
-	
+
 		public function get_all_clients(){
 			$get_all_clients = $this->empdetailsModel->get_all_clients();
 			echo json_encode($get_all_clients);
 		}
-	
+
 		public function get_all_departs(){
 			$get_all_departs = $this->empdetailsModel->get_all_departs();
 			echo json_encode($get_all_departs);
 		}
-	
+
 		public function add_transfer_data(){
 			$add_transfer_data = $this->empdetailsModel->add_transfer_data();
 			echo json_encode($add_transfer_data);
 		}
-	
+
 		public function transfer_emp_list(){
 			$transfer_emp_list = $this->empdetailsModel->get_all_transfer_data();
 			echo json_encode($transfer_emp_list);
 		}
-	
+
 		public function get_trans_emp(){
 			$get_trans_emp =  $this->empdetailsModel->get_trans_emp();
 			echo json_encode($get_trans_emp);
 		}
-	
+
 		public function del_trans_emp()
 		{
 			$del_trans_emp = $this->empdetailsModel->del_trans_emp();
 			return $del_trans_emp;
 		}
+
+		//jagan - Report Start
+		public function Internal_transfer(){
+			$this->load->view('report/InternalTransfer_Report');
+		}
+
+		public function getview(){
+			$inter_trans_emp = $this->empdetailsModel->getfilterReport($_POST);
+			echo json_encode($inter_trans_emp);
+		}
+
+		public function InterTrans_excelexport(){
+			$columnHeader="Emp ID" . "\t" . "Emp Name" . "\t". "Current Process" . "\t". "Current Client" . "\t". "Transfer To Process" . "\t"."Transfer To Client" . "\t". "Date of Transfer". "\t". "Reason". "\t". "Approver Name";
+			$filename= 'Employee Internal Transfer Report.xls';
+			$setData = '';
+			$rpt = $this->empdetailsModel->getfilterReport_export($_GET);
+			foreach ($rpt as $row) {
+			$rowData = '';
+			foreach ($row as $value) {
+								$value = '"' . $value . '"' . "\t";
+								$rowData .= $value;
+						}
+						$setData .= trim($rowData) . "\n";
+			}
+			header("Content-type: application/octet-stream");
+			header("Content-Disposition: attachment; filename=$filename");
+			header("Pragma: no-cache");
+			header("Expires: 0");
+			echo ucwords($columnHeader) . "\n" . $setData . "\n";
+		}
+
+		public function InterTrans_pdfexport(){
+			$reshtml='';
+			$date=date('d-m-Y');
+			$columnHeader="Emp ID" . "\t" . "Emp Name" . "\t". "Current Process" . "\t". "Current Client" . "\t". "Transfer To Process" . "\t"."Transfer To Client" . "\t". "Date of Transfer". "\t". "Reason". "\t". "Approver Name";
+			$report_query = $this->empdetailsModel->getfilterReport_export($_GET);
+			$reshtml .= '<br><table  class="table table-responsive" style="align:Center;border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr style="border: 1px solid black;font-size:14px;font-weight:bold;background-color:#e4e2e2;"><th colspan="1"><img src="'.base_url().'img/logo.jpg" style="width:120px;height150px;align:right"></th><th colspan="3" style="font-size:16px;text-align:center"><br>Internal Employee Transfer Report</th><th colspan="1" style="text-align:right">'.$date.'</th></tr></thead></table><table  class="table table-responsive" style="border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr  style="border: 1px solid gray;">';
+
+
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Emp ID</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Emp Name</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Current Process</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Current Client</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Transfer To Process</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Transfer To Client</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Date of Transfer</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Reason</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Approver Name</th>');
+
+			$reshtml .='</tr>	</thead><tbody style="font-size:8px;">';
+			foreach (	$report_query as $row) {
+				$rowData = '<tr style="border: 1px solid gray;">';
+					foreach ($row as $value) {
+						$value = '<td  style="border: 1px solid gray;">' . $value . '</td>' ;
+						$rowData .= $value;
+					}
+					$reshtml .= $rowData . "</tr>";
+			}
+			$reshtml .='</tbody></table>';
+
+
+			$this->load->library('Pdf');
+			$pdf = new Pdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+			$pdf->SetTitle('Employee Internal Transfer Report');
+			$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+			$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+			$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+			$pdf->SetDisplayMode('real', 'default');
+			$pdf->AddPage();
+			$pdf->writeHTML($reshtml, true, 0, true, 0);
+			$pdf->Output('EmpInternalTransferReport.pdf', 'I');
+		}
+		//jagan - Report Stop
+
 }
 ?>

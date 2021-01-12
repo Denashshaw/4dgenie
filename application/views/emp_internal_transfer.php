@@ -1,10 +1,12 @@
+
+
 <?php if($userdata['role'] == 'admin' || $userdata['role']=='supervisor'){ ?>
   <div class="row activity-row">
       <div class="col-md-12 activity"><button class="add_button start-break" onclick="emp_transfer_popup()" style="background-color:#007bff;font-size:12px;"> Transfer Employee</button></div>
   </div>
 <?php } ?>
 
-    <div class="row emp-table" style="max-width: 1000px;">
+    <div class="row emp-table" >
       <div class="col-md-12 table-responsive">
         <table class="table" id="myTable">
           <thead>
@@ -21,6 +23,7 @@
               <?php if($userdata['role'] == 'admin' || $userdata['role']=='supervisor'){ ?>
               <th scope="col">Action</th>
             <?php } ?>
+          </tr>
           </thead>
           <tbody id="transfer_table_data">
           </tbody>
@@ -94,6 +97,10 @@
 	</div>
 
   <script>
+
+
+
+
   	var base_url = $('#base_url').val();
   	$('#transfer_modal').on('hidden.bs.modal', function(){
 	    $('.modal-backdrop').remove();

@@ -589,6 +589,26 @@
         return $exe->result();
       }
 
+      public function getfilterReport($data){
+        $frmDt1=date_create($data['fromdate']);
+        $frmDt=date_format($frmDt1,'Y-m-d');
+        $toDt1= date_create($data['todate']);
+        $toDt=date_format($toDt1,'Y-m-d');
+        $query = "SELECT * FROM internal_emp_transfer WHERE date_of_transfer between '$frmDt' and '$toDt'";
+        $exe=$this->db->query($query);
+        return $exe->result();
+      }
+
+      public function getfilterReport_export($data){
+        $frmDt1=date_create($data['fromdate']);
+        $frmDt=date_format($frmDt1,'Y-m-d');
+        $toDt1= date_create($data['todate']);
+        $toDt=date_format($toDt1,'Y-m-d');
+        $query = "SELECT emp_id,emp_name,current_process,current_client,transfer_to_process,transfer_to_client,date_of_transfer,reason_for_transfer,approver_name FROM internal_emp_transfer WHERE date_of_transfer between '$frmDt' and '$toDt'";
+        $exe=$this->db->query($query);
+        return $exe->result();
+      }
+
 
  }
 
