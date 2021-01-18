@@ -1,4 +1,4 @@
-<?php 
+<?php
 class FeedbackModel extends CI_Model
 {
     function agentdata(){
@@ -10,11 +10,11 @@ class FeedbackModel extends CI_Model
         $insertqu = $this->db->insert($table,$data);
         if($insertqu){
             $this->session->set_flashdata('msg','<p style="color:green;font-size:18px;margin-left:3%;margin-top:3%;">Added Successfully!..');
-           
+
   	        return TRUE;
         }else{
             $this->session->set_flashdata('msg','<p style="color:red;margin-left:3%;margin-top:3%;">Not Added!..');
-            
+
   	        return FALSE;
         }
     }
@@ -23,11 +23,11 @@ class FeedbackModel extends CI_Model
         $updatetqu = $this->db->where('id',$id)->update($table,$data);
         if($updatetqu){
             $this->session->set_flashdata('msg','<p style="color:green;font-size:18px;margin-left:3%;margin-top:3%;">Updated Successfully!..');
-            
+
   	        return TRUE;
         }else{
             $this->session->set_flashdata('msg','<p style="color:red;margin-left:3%;margin-top:3%;">Not Updated!..');
-           
+
   	        return FALSE;
         }
     }
@@ -42,12 +42,13 @@ class FeedbackModel extends CI_Model
         if($userdata['role']  == 'agent'){
             $query = $this->db->query("Select * from $table where emp_id='".$userdata['emp_id']."'");
         }else if($userdata['role'] =='supervisor'){
-            $query = $this->db->query("Select * from $table where reviewer_id='".$userdata['emp_id']."'");
+            //$query = $this->db->query("Select * from $table where reviewer_id='".$userdata['emp_id']."'");
+            $query = $this->db->query("SELECT a.* FROM `manager_feedback_form` as a WHERE a.emp_id in (select emp_id from emp_separation_managers where manager_id='".$userdata['emp_id']."')");
         }
         else{
             $query = $this->db->query("Select * from $table");
         }
-        
+
         return $query->result();
     }
 
@@ -60,11 +61,11 @@ class FeedbackModel extends CI_Model
         $updatetqu = $this->db->where(['emp_id'=>$emp_id,"monthyear"=>$mY])->update($table,$data);
         if($updatetqu){
             $this->session->set_flashdata('msg','<p style="color:green;font-size:18px;margin-left:3%;margin-top:3%;">Updated Successfully!..');
-            
+
   	        return TRUE;
         }else{
             $this->session->set_flashdata('msg','<p style="color:red;margin-left:3%;margin-top:3%;">Not Updated!..');
-           
+
   	        return FALSE;
         }
     }

@@ -33,7 +33,6 @@
     display:none;
 }
 
-
 .more {
     background: #f8f9fa;
     color: red;
@@ -172,7 +171,7 @@
   <table class="table table-bordered table-responsive tableprint">
     <thead>
       <tr>
-      <?php if($userdata['department'] =='MANAGEMENT'){ ?>
+      <?php if($userdata['department'] =='MANAGEMENT' || $userdata['role'] == 'supervisor'){ ?>
         <th>Action</th>
       <?php } ?>
         <th>Emp ID/Name</th>
@@ -194,7 +193,7 @@
         <th>Employee Comments</th>
         <th>Reviewer Comments</th>
         <!-- <th>Revoke Date</th> -->
-        <?php if($userdata['department'] =='MANAGEMENT'){ ?>
+        <?php if($userdata['department'] =='MANAGEMENT'  || $userdata['role'] == 'supervisor'){ ?>
         <th>Action</th>
       <?php } ?>
       </tr>
@@ -206,7 +205,7 @@
 
       ?>
       <tr>
-      <?php if($userdata['department'] =='MANAGEMENT'){ ?>
+      <?php if($userdata['department'] =='MANAGEMENT'  || $userdata['role'] == 'supervisor'){ ?>
         <td ><i class="fa fa-pencil" aria-hidden="true" style="font-size:18px;color:#19a938;cursor:pointer"  onclick="viewstatusupdate(`<?php echo $a->id; ?>`)" ></i></td>
         <?php } ?>
         <td><?php echo ucfirst($a->emp_id."/".$a->name);?></td>
@@ -283,7 +282,7 @@
           <?php } ?>
         </td>
 
-        <?php if($userdata['department'] =='MANAGEMENT'){ ?>
+        <?php if($userdata['department'] =='MANAGEMENT'  || $userdata['role'] == 'supervisor'){ ?>
         <td ><i class="fa fa-pencil" aria-hidden="true" style="font-size:18px;color:#19a938;cursor:pointer"  onclick="viewstatusupdate(`<?php echo $a->id; ?>`)" ></i></td>
         <?php } ?>
 
@@ -522,7 +521,8 @@ function getattendanceview(){
 }
 $(document).ready( function () {
     var test="<?php echo $userdata['department'] ?>";
-  if(test == 'MANAGEMENT')
+    var role ="<?php echo $userdata['role'] ?>";
+  if(test == 'MANAGEMENT' || role == 'supervisor')
   {
     $('.tableprint').DataTable({
       dom: 'Bfrtip',

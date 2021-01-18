@@ -56,10 +56,10 @@
 			<div class="col-md-12 activity">IT Help Desk</div>
 		</div>
     <?php echo $this->session->flashdata('msg');?>
-    
+
 <div class="row emp-table ">
   <div class="col-md-12 table-responsive" ><br>
- 
+
   <br><br>
   <table>
         <tr>
@@ -68,10 +68,11 @@
         <?php if($userdata['role'] != 'agent' ){ ?>
         <select class="form-control useridname" id="useridemp" name="useridemp"  onchange="viewTicket()">
           <option style="display: none;" value="" selected>Select Employee ID</option>
+          <option value="<?php echo $userdata['emp_id'].'/'.$userdata['name']; ?>"><?php echo $userdata['emp_id'].'/'.$userdata['name']; ?></option>
             <?php foreach ($emp_data as $emp) { ?>
               <option value="<?php echo $emp->emp_id.'/'.$emp->name; ?>" ><?php echo ucfirst($emp->emp_id.'/'.$emp->name); ?></option>
             <?php } ?>
-         
+
         </select>
         <?php }else{ ?>
             <input id="useridempagent" name="useridempagent" value="<?php echo $userdata['emp_id'].'/'.$userdata['name']; ?>" readonly>
@@ -127,7 +128,7 @@
       </div>
     </div>
     <br><br>
-   
+
           <table class="table">
           <thead>
             <tr>
@@ -147,7 +148,7 @@
           <tbody id="getissuelist">
           </tbody>
           </table>
-   
+
   </div>
 </div>
 </body>
@@ -164,7 +165,7 @@ $('.useridname').select2();
 function nodesubmit(){
   $(".viewcont").toggle();
  if($('#uid').val() !='' && $('#deskno').val() !=''  && $('#report_team').val() !=''  && $('#issuetype').val() !=''  && $('#issueprb').val() !=''){
- 
+
   $.ajax({
     url : "<?php echo base_url(); ?>Ticket/addticket",
     method : "POST",
@@ -172,7 +173,7 @@ function nodesubmit(){
     success : function(datares){
       var res = JSON.parse(datares);
       if(res.status == 'Success'){
-       
+
       }else{
 
       }
@@ -185,12 +186,12 @@ function nodesubmit(){
 }
 viewTicket();
 function viewTicket(){
-  
+
   //$('#emp_Separtation').hide();
   var emp_id;
   var emp_id_get = $("#useridemp").children("option:selected").val();
   if(emp_id_get == undefined){
-    emp_id=$('#useridempagent').val();  
+    emp_id=$('#useridempagent').val();
   }else{
     emp_id=emp_id_get;
   }

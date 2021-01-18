@@ -227,7 +227,7 @@ a:hover,.dropdown-options:hover, li.active, a.active {
   </div>
   <div class="agent-type">
     <?php
-    if($userdata['role'] == 'agent'){
+    if($userdata['role'] == 'agent' || ($userdata['role']=='supervisor' && $userdata['department'] != 'MANAGEMENT')){
       echo ucfirst($userdata['role']);
     }else{
         echo ucfirst($userdata['department']);
@@ -291,6 +291,9 @@ a:hover,.dropdown-options:hover, li.active, a.active {
         <i class="fa fa-file fa-lg" aria-hidden="true"></i> Documents</a>
       </li>
 
+      <li class="<?php if($actlinks == "HrITpolicy") echo "active";?>">
+        <a class="<?php if($actlinks == "HrITpolicy") echo "active";?>" href="<?php echo base_url();?>HrITpolicy"><i class="fa fa-cog fa-lg" aria-hidden="true"></i> 4D HR/IT Policy</a>
+      </li>
 
       <?php if($userdata['role'] != 'agent'){ ?>
         <li class="<?php if($actlinks == "Onboarding_emp_view") echo "active";?>"><a class="<?php if($actlinks == "Onboarding_emp_view") echo "active";?>" href="<?php echo base_url();?>Candidate_interview/Onboarding_emp_view"><i class="fa fa-arrow-circle-right fa-lg" aria-hidden="true"></i> Onboarding New Emp</a></li>
@@ -299,7 +302,8 @@ a:hover,.dropdown-options:hover, li.active, a.active {
         <a class="<?php if($actlinks == "Candidate_interview") echo "active";?>" href="<?php echo base_url();?>Candidate_interview/index"><i class="fa fa-arrow-circle-right fa-lg" aria-hidden="true"></i> Candidates Interview</a>
       </li>
 
-      <li><a href=""><i class="fa fa-arrow-circle-right fa-lg" aria-hidden="true"></i> 4D HR/IT Policy</a></li>
+
+
 
       <li><a href=""><i class="fa fa-arrow-circle-right fa-lg" aria-hidden="true"></i> Leader Assessment</a></li>
 
