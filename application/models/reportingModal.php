@@ -3,7 +3,7 @@ class reportingModal extends CI_Model
 {
   function allagentdata(){
   //  $agentlist = $this->db->query("SELECT * FROM users WHERE role!='admin' and emp_id not in(SELECT emp_id from emp_separation_managers)");
-  $agentlist = $this->db->query("SELECT * FROM users WHERE role!='admin' and department!='MANAGEMENT'");
+  $agentlist = $this->db->query("SELECT * FROM users WHERE role!='admin'");
     return $agentlist->result();
   }
 

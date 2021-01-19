@@ -71,7 +71,7 @@
 	<div class="container-fluid p-0">
     <?php include('page_head.php') ?>
         <div class="row activity-row">
-    	    <div class="col-md-12 activity">Reporting Person</div>
+    	    <div class="col-md-12 activity">Team Mapping</div>
 		</div>
         <div class="row emp-table">
             <div class="col-md-12 table-responsive" >
@@ -85,7 +85,7 @@
                             <form action="<?php echo base_url(); ?>ReportingPerson/addreportingPerson" method="POST">
                                 <div  class="row" >
                                     <div class="col-md-4" style="border-right: 2px solid #cec4c4;">
-                                      <p>Reporting Person</p>
+                                      <p>Reporting Head</p>
                                       <select class="form-control useridselectbox1" id="managerSuper" name="managerSuper[]" multiple style="width:300px">
                                         <?php foreach ($managerdata as $a) { ?>
                                           <option value="<?php echo $a->emp_id."/".$a->name; ?>"><?php echo $a->emp_id."/".$a->name; ?></option>
@@ -93,7 +93,7 @@
                                       </select>
                                     </div>
                                     <div class="col-md-8"  style="border-right: 2px solid #cec4c4;">
-                                      <p>Employee</p>
+                                      <p>Employee Name</p>
                                       <select class="form-control useridselectbox" id="useridselectbox" name="useridselectbox[]" multiple style="width:500px">
                                         <?php foreach ($emp_data as $a) { ?>
                                           <option value="<?php echo $a->emp_id."/".$a->name; ?>"><?php echo $a->emp_id."/".$a->name; ?></option>
@@ -114,8 +114,8 @@
                 <table class="table table-bordered tableprint">
                     <thead>
                         <tr>
-                            <th>Reporting Person</th>
-                            <th>Agent List</th>
+                            <th>Reporting Head</th>
+                            <th>Employee Name</th>
                             <th>Action</th>
                         </tr>
                     </thead>

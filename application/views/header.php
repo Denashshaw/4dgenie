@@ -270,7 +270,7 @@ a:hover,.dropdown-options:hover, li.active, a.active {
         if($userdata['department'] == 'MANAGEMENT' || $userdata['role'] == 'admin'){ ?>
           <li class="<?php if($actlinks  == "reportingPerson") echo "active";?> dropMenu">
             <a class="<?php if($actlinks == "reportingPerson") echo "active";?>" href="<?php echo base_url();?>reportingPerson"><i class="fa fa-arrow-right" aria-hidden="true"></i>
-            Reporting Person</a>
+            Team Mapping</a>
           </li>
         <?php } ?>
 
