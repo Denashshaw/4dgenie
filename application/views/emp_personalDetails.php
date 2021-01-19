@@ -39,7 +39,7 @@
      
               <div class="col-md-3 secret_div">
                 <p >DOB</p>
-                  <input type="text"  id="dob" name="dob" class="form-control" required>
+                  <input type="date"  id="dob" name="dob" class="form-control" required>
               </div>
               <div class="col-md-3 secret_div">
                 <p >Mobile</p>
@@ -87,7 +87,7 @@
 
                   <div class="col-md-3">
                     <p >Joining Date</p>
-                    <input class="col-md-12 col-xs-12 form-control"  type="text"  id="joiningDate" name="joiningDate" >
+                    <input class="col-md-12 col-xs-12 form-control"  type="date"  id="joiningDate" name="joiningDate" >
                   </div>
 
                   <div class="col-md-3">
@@ -98,12 +98,12 @@
                 <div class="row">
                   <div class="col-md-3">
                     <p >Probation End Date</p>
-                    <input class="col-md-12 col-xs-12 form-control"  type="text"  id="probationEnd" name="probationEnd" readonly="">
+                    <input class="col-md-12 col-xs-12 form-control"  type="date"  id="probationEnd" name="probationEnd" readonly="">
                   </div>
                   
                   <div class="col-md-3">
                     <p >Term Date:</p>
-                    <input class="col-md-12 col-xs-12 form-control"  type="text"  id="termDate" name="termDate" >
+                    <input class="col-md-12 col-xs-12 form-control"  type="date"  id="termDate" name="termDate" >
                   </div>
                 </div>
               </div>
@@ -470,6 +470,29 @@
 
 
   $(document).ready(function() {  
+    /*setTimeout(() => {
+      var joiningDate = $('#joiningDate').val();
+      if(joiningDate == 'Jan 1, 1970'){
+        $('#joiningDate').val('');
+      }
+
+      var probationEnd = $('#probationEnd').val();
+      if(probationEnd == 'Jan 1, 1970'){
+        $('#probationEnd').val('');
+      }
+
+      var termDate = $('#termDate').val();
+      if(termDate == 'Jan 1, 1970'){
+        $('#termDate').val('');
+      }
+      
+      var dob = $('#dob').val();
+      if(dob == 'Jan 1, 1970'){
+        $('#dob').val('');
+      }
+    },500);*/
+
+
     var roleData = "<?php echo $_SESSION['role']; ?>";
   if(roleData == 'agent'){
     viewdata('');
@@ -495,9 +518,12 @@
     }
   });
 
-  $("#dob").datepicker({
+  /*$("#dob").datepicker({
       altField: "#dob",
-      altFormat: "M d, yy"
+      altFormat: "M d, yy",
+      changeYear: true,
+      yearRange: "1970:2020"
+      // showMonthAfterYear: true
     });
 
   $("#probationEnd").datepicker({
@@ -518,7 +544,7 @@
   $("#termDate").datepicker({
       altField: "#termDate",
       altFormat: "M d, yy"
-    });  
+    }); */ 
   $('#userid').select2({width: 'resolve'});
 });
 
@@ -591,8 +617,9 @@
     var today = new Date(joiningDate);
     today.setDate(today.getDate()+parseInt(probationPeriod));
     futureProbationDate = today.toISOString().split('T')[0];
-    $("#probationEnd").datepicker('setDate', formatDate(futureProbationDate));
-    },500)
+    // $("#probationEnd").datepicker('setDate', formatDate(futureProbationDate));
+    $("#probationEnd").val(futureProbationDate);
+    },200)
   });
 
 function formatDate(date) {
@@ -727,11 +754,17 @@ function viewdata(data){
       $('#aadharList').html("<embed src="+imgSrc+'address_proof/'+data[0]['aadhar']+" width='200' height='200' /><br/><h3 style='word-break: break-word;'><a href="+imgSrc+ 'address_proof/' +data[0]['aadhar']+">"+data[0]['aadhar']+"</a></h3>");
       $('#panList').html("<embed src="+imgSrc+'address_proof/'+data[0]['pan']+" width='200' height='200' /><br/><h3 style='word-break: break-word;'><a href="+imgSrc+ 'address_proof/' +data[0]['pan']+">"+data[0]['pan']+"</a></h3>");
       
-      $("#dob").datepicker('setDate', formatDate(data[0]['DOB']));
+      /*$("#dob").datepicker('setDate', formatDate(data[0]['DOB']));
       $('#probationEnd').datepicker('setDate', formatDate(data[0]['probationEnd']));
       $('#weddingAniver').datepicker('setDate', formatDate(data[0]['Anniversary']));
       $('#joiningDate').datepicker('setDate', formatDate(data[0]['joiningDate']));
-      $('#termDate').datepicker('setDate', formatDate(data[0]['termDate']));
+      $('#termDate').datepicker('setDate', formatDate(data[0]['termDate'])); */
+
+      $("#dob").val(data[0]['DOB']);
+      $('#probationEnd').val(data[0]['probationEnd']);
+      $('#weddingAniver').val(data[0]['Anniversary']);
+      $('#joiningDate').val(data[0]['joiningDate']);
+      $('#termDate').val(data[0]['termDate']);
 
       $('#bloodgrp').val(data[0]['Bloodgroup']);
       $('#phno').val(data[0]['Contact_phone']);
@@ -1028,5 +1061,9 @@ ul.list-group.shadow-lg.p-4.mb-5.bg-white.rounded{
 
 #loading-image {
   position: absolute;
+}
+.ui-datepicker-year{
+  width: 34% !important;
+  height: 30px !important;
 }
 </style>
