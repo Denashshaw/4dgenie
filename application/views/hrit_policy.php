@@ -8,7 +8,7 @@
     <script>
       tinymce.init({
         selector: '#mytextarea',
-        elements : "mytextarea",
+
         init_instance_callback : function(editor) {
            var freeTiny = document.querySelector('.tox .tox-notification--in');
           freeTiny.style.display = 'none';
@@ -40,7 +40,7 @@
                 <option value="Exit Policy">Exit Policy</option>
               </select>
               <br>
-              <?php if($userdata['role'] =='HR' || $userdata['department'] == 'MANAGEMENT'){ ?>
+              <?php if(($userdata['role'] =='supervisor' && $userdata['department'] == 'HR') || $userdata['department'] == 'MANAGEMENT'){ ?>
               <textarea id="mytextarea" name="policytextcontent" rows="30" ></textarea>
 
               <br>
@@ -61,14 +61,14 @@ function getPolicy(){
     data : {"selectedoption":$('#policytype').val()},
     success : function(datares){
       var res = JSON.parse(datares);
-      console.log(res);
       <?php if(($userdata['role'] =='supervisor' && $userdata['department'] == 'HR') || $userdata['department'] == 'MANAGEMENT'){ ?>
       if(res.length > 0){
         if(res[0]['viewcontent']){
-          tinyMCE.activeEditor.setContent(res[0]['viewcontent']);
+          var viewcont= res[0]['viewcontent'];
+          tinymce.activeEditor.setContent(viewcont);
         }
       }else{
-          tinyMCE.activeEditor.setContent('');
+         tinymce.activeEditor.setContent('');
       }
       <?php }else{ ?>
         if(res.length > 0){
