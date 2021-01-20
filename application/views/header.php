@@ -290,7 +290,6 @@ a:hover,.dropdown-options:hover, li.active, a.active {
         <a class="<?php  if($actlinks == "document") echo "active";?>" href="<?php echo base_url();?>document" >
         <i class="fa fa-file fa-lg" aria-hidden="true"></i> Documents</a>
       </li>
-
       <li class="<?php if($actlinks == "HrITpolicy") echo "active";?>">
         <a class="<?php if($actlinks == "HrITpolicy") echo "active";?>" href="<?php echo base_url();?>HrITpolicy"><i class="fa fa-cog fa-lg" aria-hidden="true"></i> 4D HR/IT Policy</a>
       </li>
