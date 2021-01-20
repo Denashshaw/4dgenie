@@ -6,7 +6,9 @@
 		<div class="container-fluid p-0">
 			<div class="row">
 				<div class="col-12 col-md-12 content" style="min-height:780px;">
-        <?php include('page_head.php') ?>
+        <?php include('page_head.php');
+				$datateam = getDatacount($agent_data);
+				?>
 
 					<div class="row activity-row">
 						<div class="col-md-10 activity">Agent List</div>
@@ -14,14 +16,46 @@
               <button class="btn btn-primary" onclick="openmodal()" style="float: right;">Add Agent</button>
             </div>
 					</div>
-<!--
-          <div class="form-group has-search">
-            <span class="fa fa-search form-control-feedback"></span>
-            <input type="text" class="search-input" placeholder="Search" id="search" style="width:15% !important;">
-          </div> -->
+					<div class="row activity-row">
+						<div class="col-md-2 activity">
+							<div class="card card-body shadow-lg h-1 bg-white rounded">
+								Total Employee
+								<h2 style="text-align:center"><?php echo sizeof($agent_data); ?></h2>
+							</div>
+						</div>
+						<div class="col-md-2 activity">
+							<div class="card card-body shadow-lg  bg-white rounded">
+								Voice Team
+								<h2 style="text-align:center"> <?php print_r($datateam['Voiceteamcount']); ?></h2>
+							</div>
+						</div>
+						<div class="col-md-2 activity">
+							<div class="card card-body shadow-lg  bg-white rounded">
+								Data Team
+								<h2 style="text-align:center"> <?php print_r($datateam['Datateamcount']); ?></h2>
+							</div>
+						</div>
 
-          <?php echo $this->session->flashdata('msg');?>
+						<div class="col-md-2 activity">
+							<div class="card card-body shadow-lg  bg-white rounded">
+								Management
+								<h2 style="text-align:center"> <?php print_r($datateam['Managementcount']); ?></h2>
+							</div>
+						</div>
+						<div class="col-md-4 activity">
+							<table class="table table-bordered shadow-lg  bg-white">
+								<tr>
+									<td>HR <h4 style="float:right"><?php print_r($datateam['hrcount']); ?></h4></td>
+									<td>Business Dev <h4 style="float:right"><?php print_r($datateam['Bsdeveopl']); ?></h4></td>
+								</tr>
+								<tr>
+									<td>Software <h4 style="float:right"><?php print_r($datateam['softwarecount']); ?></h4></td>
+									<td>IT  <h4 style="float:right"><?php print_r($datateam['Itcount']); ?></h4></td>
+								</tr>
+							</table>
+						</div>
 
+					</div>
 					<div class="row emp-table">
 						<div class="col-md-12 table-responsive">
 							<table class="table" id="tabledata">
@@ -130,7 +164,39 @@
 		</div>
 	</div>
 </main>
+<?php
 
+function getDatacount($obj){
+	$datacount=0;
+	$voicecount=0;
+	$managementcount=0;
+	$BScount=0;
+	$hrcount=0;
+	$softwarecount=0;
+	$itcount=0;
+	foreach($obj as $a){
+			if($a->department == 'DATA'){
+				$datacount++;
+			}else if($a->department == 'VOICE'){
+				$voicecount++;
+			}else if($a->department == 'MANAGEMENT'){
+				$managementcount++;
+			}else if($a->department == 'Business Development'){
+				$BScount++;
+			}else if($a->department == 'HR'){
+				$hrcount++;
+			}else if($a->department == 'SOFTWARE'){
+				$softwarecount++;
+			}else if($a->department == 'IT'){
+				$itcount++;
+			}else{
+
+			}
+	}
+	return array("Datateamcount"=>$datacount,"Voiceteamcount"=>$voicecount,"Managementcount"=>$managementcount,"Bsdeveopl"=>$BScount,"hrcount"=>$hrcount,"softwarecount"=>$softwarecount,"Itcount"=>$itcount);
+}
+
+ ?>
 
 </div>
 <script>
@@ -143,7 +209,25 @@ function doconfirm()
   }
 }
 
-
+$('#tabledata').DataTable({
+	dom: 'Bfrtip',
+	lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+	 buttons: [
+		'pageLength',
+		{
+		 extend:'excel',
+		 title: 'Agent Report',
+	 },
+	 {
+		 extend:'pdf',
+		 title: 'Agent Report',
+	 },
+	 {
+		 extend:'print',
+		 title: 'Agent Report',
+	 }
+	 ],
+});
 
 var $rows = $('#tabledata tr');
 $('#search').keyup(function(){
