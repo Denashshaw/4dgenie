@@ -20,18 +20,17 @@ line-height:25px;
 					</div>
 
 					<div class="row activity-table">
-						<div class="col-md-1"></div>
-						<div class="col-6 col-md-2 b-right">
+						<div class="col-6 col-md-3 b-right">
 							<div class="text-center"><img class="icon" src="<?php echo base_url();?>img/checkin.jpg"><br><br>
 							<a href="<?php echo base_url();?>Checkin_checkout/CheckIn"><button class="check-in" id="checkin">Check-In</button></a>
 							</div>
 						</div>
-						<div class="col-6 col-md-2 b-right">
+						<div class="col-6 col-md-3 b-right">
 							<div class="text-center"><img class="icon" src="<?php echo base_url();?>img/start-break.jpg"><br><br>
 							<a href="<?php echo base_url();?>Breakin_breakout/BreakIn"><button class="start-break" id="breakin" >Start Break</button></a>
 							</div>
 						</div>
-						<div class="col-6 col-md-2 b-right">
+						<!-- <div class="col-6 col-md-3 b-right">
 							<div class="text-center"><img class="icon" src="<?php echo base_url();?>img/permission.png"><br><br>
 							<input type="hidden" id="base_url" value="<?php echo base_url(); ?>">
 								<select class="permission start-break">
@@ -42,13 +41,13 @@ line-height:25px;
 									<option value="120 mins">120 Minutes</option>
 								</select>
 							</div>
-						</div>
-						<div class="col-6 col-md-2 b-right">
+						</div> -->
+						<div class="col-6 col-md-3 b-right">
 							<div class="text-center"><img class="icon" src="<?php echo base_url();?>img/end-break.jpg"><br><br>
 							<a href="<?php echo base_url();?>Breakin_breakout/BreakOut"><button class="start-break" id="breakout">End Break</button></a>
 							</div>
 						</div>
-						<div class="col-6 col-md-2">
+						<div class="col-6 col-md-3">
 							<div class="text-center"><img class="icon" src="<?php echo base_url();?>img/checkout.jpg"><br><br>
 							<a onclick="redirectUser()" style="color:#fff;"><button class="check-out" id="checkout" >Check-out</button></a>
 							</div>
@@ -181,30 +180,20 @@ function redirectUser(){
 
 $(document).ready(function(){
 	var base_url = $('#base_url').val();
-	/* $.ajax({
-		url: base_url+'Checkin_checkout/checkPermission',
-		method:'GET',
-		success: function(res){
-			if(res != ''){
-				$('.permission').html('<select><option value="'+res+'">"'+res+'"</option></select>');
-				$('.permission option[value='+res+']').prop('selected', 'selected');
-				$('.permission').attr('disabled', true);
-			} else {
-				setTimeout(function(){
-					var checkin = $('#checkin').prop('disabled');
-						if(checkin != false){
-							$('.permission').prop("disabled", false);
-						}else{
-							$('.permission').prop("disabled", true);
-						}
-				}, 100);
-			}
-			$('.permission_val').html($('.permission').val());
-		},
-		failed: function(err){
-			console.log(err)
-		}
-	}); */
+	$.ajax({	
+		url: base_url+'Checkin_checkout/checkPermission',	
+		method:'POST',	
+		success: function(res){	
+			if(res){	
+				var per_hr = JSON.parse(res);	
+				per_hr == 1 ? per_hr='1 hour' : per_hr=per_hr+' hours';	
+				$('.permission_val').html(per_hr);	
+			}			
+		},	
+		failed: function(err){	
+			console.log(err)	
+		}	
+	});
 	checkinstatus();
 	breakinstatus();
 });

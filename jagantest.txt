@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 work out jagan
 4d global
+=======
+this is edited by denash shaw
+>>>>>>> a0a4abf (date issue)
