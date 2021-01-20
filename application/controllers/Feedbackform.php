@@ -22,13 +22,13 @@ class Feedbackform extends CI_Controller {
     //     $this->load->view('emp_separation',$data);
     // }
     public function feedbackhr(){
-        $data['emp_data']   = $this->feedbackModel->agentdata();
+        $data['emp_data']   = $this->feedbackModel->agentdata_hrfeedback();
         $data['hr_feedback'] = $this->feedbackModel->getfeedback('hr_feedback_form');
         $this->load->view('emp_hr_feedback',$data);
     }
     public function addHRfeedback(){
-        date_default_timezone_set("Asia/Kolkata"); 
-        $splitdata=explode("/",$this->input->post('useridemp'));     
+        date_default_timezone_set("Asia/Kolkata");
+        $splitdata=explode("/",$this->input->post('useridemp'));
         $dataset = array(
             "emp_id" => $splitdata[0],
             "name" => $splitdata[1],
@@ -62,11 +62,11 @@ class Feedbackform extends CI_Controller {
         }
         $insertdata_resp = $this->feedbackModel->addfeedback('hr_feedback_form',$dataset);
         redirect('Feedbackform/feedbackhr');
-        
+
     }
 
     public function updatefeedbackhr(){
-        date_default_timezone_set("Asia/Kolkata");     
+        date_default_timezone_set("Asia/Kolkata");
         $dataset = array(
             "avg_absentdays" => $this->input->post('averageAbsentDays'),
             "reasonforabsent" => $this->input->post('ReasonforAbsent'),
@@ -99,10 +99,10 @@ class Feedbackform extends CI_Controller {
         $this->load->view('emp_manager_feedback',$data);
     }
 
-    public function addmonthlyfeedbackAgent(){  
+    public function addmonthlyfeedbackAgent(){
         date_default_timezone_set("Asia/Kolkata");
-        $splitdata=explode("/",$this->input->post('useridemp'));    
-        $mYear =date("m",strtotime("-1 month"))."-".date("Y");   
+        $splitdata=explode("/",$this->input->post('useridemp'));
+        $mYear =date("m",strtotime("-1 month"))."-".date("Y");
         $dataset = array(
             "emp_id" => $splitdata[0],
             "name" => $splitdata[1],
@@ -121,7 +121,7 @@ class Feedbackform extends CI_Controller {
         $query ="SELECT * FROM manager_feedback_form WHERE emp_id='$splitdata[0]' and monthyear = '$mYear'";
         $querytocheck = $this->db->query($query);
         if($querytocheck->num_rows() > 0){
- 
+
             $insertdata_resp = $this->feedbackModel->agent_updatefeedback('manager_feedback_form',$splitdata[0],$mYear,$dataset);
            // $this->session->set_flashdata('msg','<p style="color:blue;margin-left:3%;margin-top:3%;">Same Month you are aleady applied!..');
         }else{
@@ -142,7 +142,7 @@ class Feedbackform extends CI_Controller {
 
     public function getFeedbackdetails(){
         $this->feedbackModel->getviewpart('manager_feedback_form',$_POST['indexid']);
-    } 
+    }
 
     public function updatereviewer(){
         $userdata=$this->session->all_userdata();
@@ -180,7 +180,7 @@ class Feedbackform extends CI_Controller {
                 $file_data    = fopen($_FILES["uploadcsv"]["tmp_name"], 'r');
                    $column_count = count(fgetcsv($file_data));
                 while($row = fgetcsv($file_data))
-                {   
+                {
                     if($row[0] == ''){ continue; }
                     $this->feedbackModel->upexceldata($row);
                 }

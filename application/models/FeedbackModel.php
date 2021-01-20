@@ -6,6 +6,11 @@ class FeedbackModel extends CI_Model
         return $qu->result();
     }
 
+    function agentdata_hrfeedback(){
+        $qu = $this->db->query("SELECT a.`emp_id`,a.`name`,a.`role`,a.`department`,(select b.manager_id from emp_separation_managers b where a.emp_id=b.emp_id limit 1) as manager_id,(select b.reporting_manager from emp_separation_managers b where a.emp_id=b.emp_id limit 1) as reporting_manager,(select c.designation FROM emp_personal_details c where a.emp_id=c.emp_id limit 1) as designation from users a");
+        return $qu->result();
+    }
+
     function addfeedback($table,$data){
         $insertqu = $this->db->insert($table,$data);
         if($insertqu){

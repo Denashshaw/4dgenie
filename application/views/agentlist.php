@@ -6,10 +6,7 @@
 		<div class="container-fluid p-0">
 			<div class="row">
 				<div class="col-12 col-md-12 content" style="min-height:780px;">
-					<div class="row head-content">
-						<div class="col-9 col-md-4 logo"><img src="<?php echo base_url();?>img/logo.jpg"></div>
-						<div class="col-3 col-md-8 text-right logout"><a href="<?php echo base_url();?>login/signout">Logout</a></div>
-					</div>
+        <?php include('page_head.php') ?>
 
 					<div class="row activity-row">
 						<div class="col-md-10 activity">Agent List</div>
@@ -49,7 +46,7 @@
 								<td><?php echo ucfirst($agentdata->department);?></span></td>
 								<td><?php echo ucfirst($agentdata->client);?></span></td>
 								<td><span class="emp-break-in"><a href="javaScript:void(0)" class="" data-toggle="modal" data-target="#edit_Modal_<?php echo $agentdata->id;?>">Edit</a></span>
-								<span class="emp-break-out"><a href="<?php echo base_url()?>adduser/deleteuser/<?php echo $agentdata->id;?>" onClick="return doconfirm();" style="color:red;">Delete</a></span>
+								<!-- <span class="emp-break-out"><a href="<?php echo base_url()?>adduser/deleteuser/<?php echo $agentdata->id;?>" onClick="return doconfirm();" style="color:red;">Delete</a></span>	 -->
 								</td>
 								</tr>
 
@@ -76,7 +73,6 @@
             <option value="">--Select--</option>
             <option value="agent" <?php if($agentdata->role=="agent") echo 'selected="selected"'; ?>>Agent</option>
             <option value="supervisor" <?php if($agentdata->role=="supervisor") echo 'selected="selected"'; ?>>Supervisor</option>
-						<option value="MANAGEMENT" <?php if($agentdata->role=="MANAGEMENT") echo 'selected="selected"'; ?>>Management</option>
           </select><br>
           <?php
             $sql=$this->db->query("SELECT * FROM department");
@@ -183,8 +179,6 @@ $('#search').keyup(function(){
             <option value="">--Select--</option>
             <option value="agent">Agent</option>
             <option value="supervisor">Supervisor</option>
-						<option value="MANAGEMENT">Management</option>
-						<option value="Admin">Admin</option>
           </select>
           <br>
           <?php
