@@ -5,27 +5,27 @@
 	<main class="page-content">
 		<div class="container-fluid p-0">
 			<div class="row">
-				<div class="col-12 col-md-12 content" style="min-height:780px;">					
+				<div class="col-12 col-md-12 content" style="min-height:780px;">
 				<?php include('page_head.php');?>
 					<div class="row mt-5 ml-2">
 						<div class="col-md-10 activity">Employee Leave/Permission</div>
 					</div>
 		          	<?php echo $this->session->flashdata('msg');?>
-		          	
+
 		          	<div class="row activity-row">
-			          	<div class="col-md-12 activity">			          		
+			          	<div class="col-md-12 activity">
 						<ul class="nav nav-tabs" id="myTab" role="tablist" style="font-size:15px;text-decoration:none;">
 							<li class="nav-item">
 							  <a class="nav-link active tablink" data-toggle="tab" onclick="openPage('leave', this, 'white')" data-tab-index="0" id="defaultOpen">Leave</a>
 							</li>
 							<li class="nav-item">
 							  <a class="nav-link tablink" id="permission-tab" data-toggle="tab" data-tab-index="1" onclick="openPage('permission', this, 'white')">Permission</a>
-							</li>				 
+							</li>
 						</ul>
 
 							<div class="tabcontent"  id="leave" style="text-decoration:none;">
-								<?php if($_SESSION['role'] == 'agent'){ ?>
-								<div class="row activity-row">					
+								<?php if($_SESSION['role'] != 'admin'){ ?>
+								<div class="row activity-row">
 						            <div>
 						              <button class="btn btn-primary" data-toggle="modal" data-target="#leaveModal" onclick="get_leave_managers_list()">Request Leave</button>
 						            </div>
@@ -33,7 +33,7 @@
 							<?php } ?>
 
 								<div class="row emp-table">
-									<div class="col-md-12 table-responsive">              
+									<div class="col-md-12 table-responsive">
 										<table class="table" id="tabledata">
 											<thead>
 											<tr>
@@ -55,15 +55,15 @@
 							</div>
 
 						  <div class="tabcontent" id="permission" style="display: none;">
-						  	<?php if($_SESSION['role'] == 'agent'){ ?>
-						  	<div class="row activity-row">					
+						  	<?php if($_SESSION['role'] != 'admin'){ ?>
+						  	<div class="row activity-row">
 					            <div>
 					              <button class="btn btn-primary" data-toggle="modal"  onclick="get_managers_list()">Request Permission</button>
 					            </div>
 							</div>
 							<?php } ?>
 						    <div class="row emp-table">
-									<div class="col-md-12 table-responsive">              
+									<div class="col-md-12 table-responsive">
 										<table class="table">
 											<thead>
 											<tr>
@@ -102,7 +102,7 @@
 	            <div class="modal-body">
 	            	<div class="form-group">
             			<label for="">Employee Name:</label>
-            			<!-- <input type="hidden" id="emp_id" name="emp_id" value="<?php echo $_SESSION['emp_id']; ?>">  -->           	
+            			<!-- <input type="hidden" id="emp_id" name="emp_id" value="<?php echo $_SESSION['emp_id']; ?>">  -->
 	            		<select name="empLeaveName" id="empLeaveName" class="col-md-12 col-xs-12 form-control" readonly required>
 	            			<option value="<?php echo $_SESSION['emp_id']; ?>">
 	            				<?php echo $_SESSION['name']; ?>
@@ -145,14 +145,14 @@
 	            		<select name="managers_list" id="managers_list" class="form-control" required>
 	            		</select>
 	            	</div>
-		            
+
 		            <div class="modal-footer">
 		                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 		                <button type="submit" class="btn btn-primary">Submit</button>
 		                <input type="hidden" id="base_url" value="<?php echo base_url(); ?>">
 		            </div>
 				</div>
-	            </form>	            
+	            </form>
 	        </div>
 	    </div>
 	</div>
@@ -196,29 +196,29 @@
 	            		<select name="manager_id" id="manager_id" class="form-control" required>
 	            		</select>
 	            	</div>
-	            	
+
 				</div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 	                <button type="submit" class="btn btn-primary report_btn">Submit</button>
 	                <input type="hidden" id="base_url" value="<?php echo base_url(); ?>">
 	            </div>
-	            </form>	            
+	            </form>
 	        </div>
 	    </div>
 	</div>
 
 
-<script>	
+<script>
 	var base_url='';
 	base_url = $('#base_url').val();
 
 
-	$('#defaultOpen').click(()=> {		
+	$('#defaultOpen').click(()=> {
 		generate_leave_tbl();
 	});
 
-	$('#permission-tab').click(()=> {		
+	$('#permission-tab').click(()=> {
 		generate_permission_tbl();
 	});
 
@@ -257,7 +257,7 @@
 					}
 
 				tbody += `<tr><td>`+res.emp_name+`</td>
-				<td>`+res.permission_hours+` Hour</td>				
+				<td>`+res.permission_hours+` Hour</td>
 				<td>`+res.manager_name+`</td>
 				<td>`+res.reason_for_permission+`</td>
 				<td><span class="badge badge-`+badge_class+`">`+res.status+`</span></td>
@@ -265,7 +265,7 @@
 				<td>
 					`+buttons+`
 				</td></tr>`;
-				});		
+				});
 				$('#permission_table').html(tbody);
 			},failed: function(err){
 				console.log(err);
@@ -281,13 +281,13 @@
 			method: 'GET',
 			success: function(res){
 				var tbody ='';
-				var data = JSON.parse(res);				
+				var data = JSON.parse(res);
 				console.log(data);
 				if(data == ''){
 					$('#leave_table').html('<br><p>No Data Found!</p>');
 					return false;
 				}
-				data.forEach(res => {	
+				data.forEach(res => {
 					var badge_class = '';
 					var buttons = '';
 					if(res.leave_status == 'Pending'){
@@ -320,7 +320,7 @@
 					}
 
 				tbody += `<tr><td>`+res.emp_name+`</td>
-				<td>`+res.leave_start_date+`</td>				
+				<td>`+res.leave_start_date+`</td>
 				<td>`+res.leave_end_date+`</td>
 				<td>`+l_type+`</td>
 				<td>`+res.total_days+`</td>
@@ -330,7 +330,7 @@
 				<td style="display:flex !important;">
 					`+buttons+`
 				</td></tr>`;
-				});	
+				});
 				$('#leave_table').html(tbody);
 			},failed: function(err){
 				console.log(err);
@@ -346,7 +346,7 @@
 			data: {
 				"leave_id" : leave_id,
 				"leave_status" : leave_status
-			}, success: function(res){				
+			}, success: function(res){
 				get_badge_count();
 				generate_leave_tbl();
 			}, failed: function(err){
@@ -366,7 +366,7 @@
 				"pstatus" : pstatus
 			}, success: function(res){
 				get_badge_count();
-				generate_permission_tbl();					
+				generate_permission_tbl();
 			}, failed: function(err){
 				console.log(err);
 			}
@@ -398,7 +398,7 @@
 		if(lev_start_date != '' && lev_end_date != ''){
 			// alert(lev_start_date + '' +lev_end_date);
 			const diffTime = Math.abs(new Date(lev_end_date) - new Date(lev_start_date));
-			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 			var leave_type = $('#leave_type').val();
 			if(leave_type == 'hd'){
 				$('#day_count').val('1/2');
@@ -411,9 +411,9 @@
 
 
 	$('#emp_leave_form').submit((e) => {
-		e.preventDefault();		
+		e.preventDefault();
 		var leave_type = $('#leave_type').val();
-		var day_count = $('#day_count').val();		
+		var day_count = $('#day_count').val();
 		// console.log($("#emp_leave_form").serialize());
 
 		// First ajax call for checking leave validation
@@ -425,7 +425,7 @@
 			},
 			success: function(res){
 				var data = JSON.parse(res);
-				var leave_data = data[leave_type];			
+				var leave_data = data[leave_type];
 				if(leave_type == 'cl'){
 					if(leave_data != '0' || leave_data != ''){
 						if(day_count > 1){
@@ -444,7 +444,7 @@
 						alert('Your PL exceeds in this year!');
 					}else{
 						submit_leave_form();
-						// alert('Success PL');					
+						// alert('Success PL');
 					}
 				}else if(leave_type == 'hd'){
 					if(day_count > 1){
@@ -458,7 +458,7 @@
 			},failed: function(err){
 				console.log(err);
 			}
-		});	
+		});
 	});
 
 	function submit_leave_form(){
@@ -477,7 +477,7 @@
 			},failed: function(err){
 				console.log(err)
 			}
-		});	
+		});
 	}
 
 	function get_leave_managers_list(){
@@ -505,7 +505,7 @@
 			success: function(res){
 				if(res > 0){
 					alert('Already permision taken in this month! ');
-					$('.report_btn').attr('disabled', true);					
+					$('.report_btn').attr('disabled', true);
 				}else{
 					// $('#permissionModal').modal('show');
 					var options = '';
@@ -518,7 +518,7 @@
 							data.forEach(res => {
 								options += '<option value="'+res.emp_id+'">'+res.name+'</option>';
 									$('#permissionModal').modal('toggle');
-									$('#manager_id').html(options);								
+									$('#manager_id').html(options);
 							});
 						},failed: function(err){
 							console.log(err);
@@ -528,7 +528,7 @@
 			},failed: function(err){
 				console.log(err);
 			}
-		});		
+		});
 	}
 
 	$('#emp_permission_form').submit((e) => {
@@ -552,7 +552,7 @@
 	/*const date1 = new Date('12/17/2010');
 	const date2 = new Date('12/15/2010');
 	const diffTime = Math.abs(date1 - date2);
-	const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+	const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 	console.log(diffDays + " days");
 	alert(diffDays + " days");*/
 
