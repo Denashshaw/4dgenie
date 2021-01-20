@@ -48,7 +48,7 @@ class FeedbackModel extends CI_Model
             $query = $this->db->query("Select * from $table where emp_id='".$userdata['emp_id']."'");
         }else if($userdata['role'] =='supervisor'){
             //$query = $this->db->query("Select * from $table where reviewer_id='".$userdata['emp_id']."'");
-            $query = $this->db->query("SELECT a.* FROM `manager_feedback_form` as a WHERE a.emp_id in (select emp_id from emp_separation_managers where manager_id='".$userdata['emp_id']."')");
+            $query = $this->db->query("SELECT a.* FROM `manager_feedback_form` as a WHERE a.emp_id in (select emp_id from emp_separation_managers where manager_id='".$userdata['emp_id']."') ORDER BY id DESC");
         }
         else{
             $query = $this->db->query("Select * from $table");
@@ -76,7 +76,7 @@ class FeedbackModel extends CI_Model
     }
 
     function upexceldata($data){
-        $getdate_m = date_create($data[2]);
+        $getdate_m = date_create('01-'.$data[2]);
         $getmY = date_format($getdate_m,"m-Y");
         $dataset = array(
             "emp_id" => $data[0],

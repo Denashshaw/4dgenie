@@ -526,7 +526,10 @@ $(document).ready( function () {
   {
     $('.tableprint').DataTable({
       dom: 'Bfrtip',
-       buttons: [{
+      lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+       buttons: [
+        'pageLength',
+        {
          extend:'excel',
          title: 'One on One Feedback Report',
        },
