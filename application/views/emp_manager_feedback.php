@@ -61,29 +61,22 @@
     <div class="row activity-row">
 			<div class="col-md-12 activity">One on One Feedback</div>
 		</div>
-    <?php
-   // echo $this->session->flashdata('msg');
-    ?>
-<div class="row emp-table">
-<div class="col-md-12 table-responsive" >
-    <div class="row">
-    <!-- <form id="attendfilter"> -->
+    <div class="row emp-table">
+    <div class="col-md-3 table-responsive" >
 
-
-    <!-- </form> -->
-<br><br>
+  <button  onclick="viewhrfeedback()" style="padding-top:2%;margin-top:5%" class="check-out">Add</button>
+</div>
+<div class="col-md-9">
+  <?php if($userdata['department'] =='MANAGEMENT' || $userdata['role'] =='supervisor'){ ?>
+    <form method="POST" action="<?php echo base_url(); ?>Feedbackform/uploadcsv"  enctype="multipart/form-data">
+      <input type="file" id="uploadcsv" name="uploadcsv" style="margin-left:50%;width:250px;float:left" class="form-control" accept=".csv">
+      <input type="submit" class="btn btn-success">
+    </form>
+  <?php } ?>
+</div>
+</div>
+<div class="row">
 <div class="col-md-12">
-  <br>
-  <div>
-    <?php if($userdata['role'] == 'agent'){ ?>
-    <button  onclick="viewhrfeedback()" style="margin-left:90%" class="check-out">Add</button>
-    <?php } ?>
-    <?php if($userdata['department'] =='MANAGEMENT' || $userdata['role'] =='supervisor'){ ?>
-      <form method="POST" action="<?php echo base_url(); ?>Feedbackform/uploadcsv"  enctype="multipart/form-data">
-        <input type="file" id="uploadcsv" name="uploadcsv" style="margin-left:70%;width:250px;float:left" class="form-control" accept=".csv">
-        <input type="submit" class="btn btn-success">
-      </form>
-    <?php } ?>
     <div class="card card-body" style="display:none" id="viewoneononeform">
     <form action="<?php echo base_url(); ?>Feedbackform/addmonthlyfeedbackAgent" method="POST">
     <div  class="row" >
@@ -165,7 +158,8 @@
     </div>
 
    </div>
-</div>
+   <div class="row emp-table">
+   <div class="col-md-12 table-responsive" >
 
 <br>
   <table class="table table-bordered table-responsive tableprint">

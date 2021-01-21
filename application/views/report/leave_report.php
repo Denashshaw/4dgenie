@@ -88,12 +88,16 @@
         </td>
       </tr>
         </table>
+
       </div>
+      <div class="col-md-4" style="text-align:center;"><div class="card card rounded" style="padding:2%;background:#706FAC">Pending <h3 id="pendingcount"></h3></div></div>
+      <div class="col-md-4" style="text-align:center;"><div class="card card rounded" style="padding:2%;background:#3fc98e">Approved <h3 id="approvedcount"></h3></div></div>
+      <div class="col-md-4" style="text-align:center;"><div class="card card rounded" style="padding:2%;background:#ff5c4b">Rejected <h3 id="rejectedcount"></h3></div></div>
       </form>
 
     <br>
         <div id="leaveReport2">
-          <table class="table">
+          <table class="table table-responsive">
           <thead>
             <tr>
               <th>Emp ID</th>
@@ -162,13 +166,6 @@ function getexcelval(){
     method : "POST",
     data : $('#getvalfilter').serialize(),
     success : function(datares){
-    //   var res = JSON.parse(datares);
-    //   if(res.status == 'Success'){
-    //     $(".viewcont").toggle();
-    //   }else{
-
-    //   }
-    //   //viewTicket();
      }
   });
 
@@ -205,6 +202,9 @@ function getReport(){
         var pl_count=0;
         var hf_count=0;
         var lop_count=0;
+        var approvedcount=0;
+        var rejectedcount=0;
+        var pendingcount=0;
         var empid=[];
         for(var i=0;i<res.length;i++){
           var ltype=res[i].leave_type;
@@ -221,6 +221,14 @@ function getReport(){
             var leavetype='Loss Of Pay';
             lop_count = parseInt(lop_count)+ parseInt(res[i].total_days);
           }else{}
+
+          if(res[i].leave_status == 'Approved'){
+            approvedcount = parseInt(approvedcount)+ 1;
+          }else if(res[i].leave_status == 'Rejected'){
+            rejectedcount = parseInt(rejectedcount)+1;
+          }else{
+            pendingcount = parseInt(pendingcount)+1;
+          }
           out += '<tr>';
           out += '<td>'+res[i].emp_id+'</td>';
           out += '<td>'+res[i].emp_name+'</td>';
@@ -249,9 +257,23 @@ function getReport(){
         $('#halftotal').html('<p>Total Halfday Leaves (Days)</p><h3>'+hf_count+'</h3>');
         $('#loptotal').html('<p>Total LOP (Days)</p><h3>'+lop_count+'</h3>');
         $('#getissuelist1').html(out);
+
+        $('#approvedcount').html('<h3 >'+approvedcount+'</h3>');
+        $('#rejectedcount').html(rejectedcount);
+        $('#pendingcount').html(pendingcount);
       }else{
         var totper=0;
+        var approvedcount=0;
+        var rejectedcount=0;
+        var pendingcount=0;
         for(var i=0;i<res.length;i++){
+          if(res[i].status == 'Approved'){
+            approvedcount = parseInt(approvedcount)+ 1;
+          }else if(res[i].status == 'Rejected'){
+            rejectedcount = parseInt(rejectedcount)+1;
+          }else{
+            pendingcount = parseInt(pendingcount)+1;
+          }
           out += '<tr>';
           out += '<td>'+res[i].emp_id+'</td>';
           out += '<td>'+res[i].emp_name+'</td>';
@@ -266,6 +288,9 @@ function getReport(){
         $('#totalEmployee').html('<p>Total Employee</p><h3>'+res.length+'</h3>');
         $('#totalPermission').html('<p>Total Permission(Hrs)</p><h3>'+totper+'</h3>');
         $('#getissuelist2').html(out);
+        $('#approvedcount').html('<h3 >'+approvedcount+'</h3>');
+        $('#rejectedcount').html(rejectedcount);
+        $('#pendingcount').html(pendingcount);
       }
     }
     });
