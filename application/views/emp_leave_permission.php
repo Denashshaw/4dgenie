@@ -1,6 +1,11 @@
 <link rel="stylesheet" href="<?php echo base_url('css/jquery-ui.css') ?>" />
 <script src="<?php echo base_url();?>js/jquery-ui.min.js"></script>
 <body>
+	<style>
+	#show-sidebar {
+		display: none;
+	}
+	</style>
 <div class="page-wrapper chiller-theme toggled">
 	<main class="page-content">
 		<div class="container-fluid p-0">
