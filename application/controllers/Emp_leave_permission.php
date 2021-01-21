@@ -91,7 +91,8 @@ class Emp_leave_permission extends CI_Controller {
 		$fromdate=$_POST['fromdate'];
 		$todate=$_POST['todate'];
 		$table = $_POST['leavetype'];
-		$res = $this->empdetailsModel->getleaverep($table,$userid,$fromdate,$todate);
+		$status = $_POST['status'];
+		$res = $this->empdetailsModel->getleaverep($table,$userid,$fromdate,$todate,$status);
 		echo json_encode($res);
 	}
 	public function leaveExcelexport(){
@@ -103,7 +104,7 @@ class Emp_leave_permission extends CI_Controller {
 			$filename= 'Permission.xls';
 		}
 			$setData = '';
-			$rpt = $this->empdetailsModel->getleaverep_report($_GET['leavetype'],$_GET['useridemp'],$_GET['fromdate'],$_GET['todate']);
+			$rpt = $this->empdetailsModel->getleaverep_report($_GET['leavetype'],$_GET['useridemp'],$_GET['fromdate'],$_GET['todate'],$_GET['status']);
 			foreach ($rpt as $row) {
 			$rowData = '';
 			foreach ($row as $value) {
@@ -123,7 +124,7 @@ class Emp_leave_permission extends CI_Controller {
 
 		$reshtml='';
 		$date=date('d-m-Y');
-		$report_query = $this->empdetailsModel->getleaverep_report($_GET['leavetype'],$_GET['useridemp'],$_GET['fromdate'],$_GET['todate']);
+		$report_query = $this->empdetailsModel->getleaverep_report($_GET['leavetype'],$_GET['useridemp'],$_GET['fromdate'],$_GET['todate'],$_GET['status']);
 		if($_GET['leavetype'] == 'emp_leave_details'){$printTitle='Employee Leave Report';}else{$printTitle='Employee Permission Details';}
 		$reshtml .= '<br><table  class="table table-responsive" style="align:Center;border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr style="border: 1px solid black;font-size:14px;font-weight:bold;background-color:#e4e2e2;"><th colspan="3"><img src="'.base_url().'img/logo.jpg" style="width:120px;height150px;align:right"></th><th colspan="6" style="font-size:16px;text-align:center"><br>'.$printTitle.'</th><th colspan="1" style="text-align:right">'.$date.'</th></tr></thead></table><table  class="table table-responsive" style="border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr  style="border: 1px solid gray;">';
 

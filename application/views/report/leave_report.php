@@ -42,23 +42,33 @@
               <option value="All" selected>All</option>
               <?php
               foreach ($getagentlist as $emp) { ?>
-                <option value="<?php echo $emp->emp_id; ?>" ><?php echo ucfirst($emp->emp_id.'/'.$emp->name); ?></option>
+                <option value="<?php echo $emp->emp_id; ?>" ><?php echo ucfirst($emp->emp_id.'/'.$emp->agent_name); ?></option>
               <?php }
           }else{
               ?><option value="<?php echo $userdata['emp_id']; ?>" ><?php echo ucfirst($userdata['emp_id'].'/'.$userdata['name']); ?></option><?php
             } ?>
         </select>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <p>From Date</p>
             <input type="text" class="form-control fromdate" id="fromdate" name="fromdate" value='<?php echo date('m/01/Y'); ?>'>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <p>To Date</p>
             <input type="text" class="form-control todate" id="todate" name="todate" value='<?php echo date('m/d/Y'); ?>'>
         </div>
+        <div class="col-md-2">
+            <p>Staus</p>
+            <select class="form-control " id="status" name="status" >
+              <option value="All" selected>All</option>
+              <option value="Pending">Pending</option>
+                  <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+
+          </select>
+        </div>
         <div  class="col-md-1"><br>
-            <input type="button" class="check-in" value="Repot" onclick="getReport()">
+            <input type="button" class="check-in" value="Report" onclick="getReport()">
         </div>
 
     </div>

@@ -544,22 +544,32 @@
       return $query->result();
     }
 
-    public function getleaverep($table,$agent,$fromdate,$todate){
+    public function getleaverep($table,$agent,$fromdate,$todate,$search){
       $frmDt1=date_create($fromdate);
       $frmDt=date_format($frmDt1,'Y-m-d');
       $toDt1= date_create($todate);
       $toDt=date_format($toDt1,'Y-m-d');
+      if($search == 'All'){
+        $searchset = '';
+      }else{
+        if($table == 'emp_leave_details'){
+            $searchset = "leave_status='$search' and";
+        }else{
+            $searchset = "status='$search' and";
+        }
+      }
+
       if($agent == 'All'){
         if($table == 'emp_leave_details'){
-          $query = "select * from emp_leave_details where (leave_start_date > '$frmDt' or leave_start_date = '$frmDt') and (leave_end_date < '$toDt' or leave_end_date = '$toDt')";
+          $query = "select * from emp_leave_details where $searchset (leave_start_date > '$frmDt' or leave_start_date = '$frmDt') and (leave_end_date < '$toDt' or leave_end_date = '$toDt')";
         }else{
-            $query = "select * from emp_permission_details where permission_date BETWEEN '$frmDt' AND '$toDt'";
+            $query = "select * from emp_permission_details where $searchset permission_date BETWEEN '$frmDt' AND '$toDt'";
         }
       }else{
         if($table == 'emp_leave_details'){
-          $query = "select * from emp_leave_details where emp_id='$agent' and (leave_start_date > '$frmDt' or leave_start_date = '$frmDt') and (leave_end_date < '$toDt' or leave_end_date = '$toDt')";
+          $query = "select * from emp_leave_details where $searchset emp_id='$agent' and (leave_start_date > '$frmDt' or leave_start_date = '$frmDt') and (leave_end_date < '$toDt' or leave_end_date = '$toDt')";
         }else{
-          $query = "select * from emp_permission_details where emp_id='$agent' and (permission_date BETWEEN '$frmDt' AND '$toDt')";
+          $query = "select * from emp_permission_details where $searchset emp_id='$agent' and (permission_date BETWEEN '$frmDt' AND '$toDt')";
         }
       }
 
@@ -567,22 +577,31 @@
       return $exe->result();
 
     }
-      public function getleaverep_report($table,$agent,$fromdate,$todate){
+      public function getleaverep_report($table,$agent,$fromdate,$todate,$search){
         $frmDt1=date_create($fromdate);
         $frmDt=date_format($frmDt1,'Y-m-d');
         $toDt1= date_create($todate);
         $toDt=date_format($toDt1,'Y-m-d');
+        if($search == 'All'){
+          $searchset = '';
+        }else{
+          if($table == 'emp_leave_details'){
+              $searchset = "leave_status='$search' and";
+          }else{
+              $searchset = "status='$search' and";
+          }
+        }
         if($agent == 'All'){
             if($table == 'emp_leave_details'){
-              $query = "select emp_id,emp_name,leave_start_date,leave_end_date,total_days,leave_type,leave_reason,manager_id,manager_name,leave_status from emp_leave_details where (leave_start_date > '$frmDt' or leave_start_date = '$frmDt') and (leave_end_date < '$toDt' or leave_end_date = '$toDt')";
+              $query = "select emp_id,emp_name,leave_start_date,leave_end_date,total_days,leave_type,leave_reason,manager_id,manager_name,leave_status from emp_leave_details where $searchset (leave_start_date > '$frmDt' or leave_start_date = '$frmDt') and (leave_end_date < '$toDt' or leave_end_date = '$toDt')";
             }else{
-              $query = "select  emp_id,emp_name,permission_hours,reason_for_permission,manager_id,manager_name,status,permission_date from emp_permission_details where permission_date BETWEEN '$frmDt' AND '$toDt'";
+              $query = "select  emp_id,emp_name,permission_hours,reason_for_permission,manager_id,manager_name,status,permission_date from emp_permission_details where $searchset permission_date BETWEEN '$frmDt' AND '$toDt'";
             }
         }else{
           if($table == 'emp_leave_details'){
-            $query = "select emp_id,emp_name,leave_start_date,leave_end_date,total_days,leave_type,leave_reason,manager_id,manager_name,leave_status from emp_leave_details where emp_id='$agent' and (leave_start_date > '$frmDt' or leave_start_date = '$frmDt') and (leave_end_date < '$toDt' or leave_end_date = '$toDt')";
+            $query = "select emp_id,emp_name,leave_start_date,leave_end_date,total_days,leave_type,leave_reason,manager_id,manager_name,leave_status from emp_leave_details where $searchset emp_id='$agent' and (leave_start_date > '$frmDt' or leave_start_date = '$frmDt') and (leave_end_date < '$toDt' or leave_end_date = '$toDt')";
           }else{
-            $query = "select emp_id,emp_name,permission_hours,reason_for_permission,manager_id,manager_name,status,permission_date from emp_permission_details and (permission_date BETWEEN '$frmDt' AND '$toDt')";
+            $query = "select emp_id,emp_name,permission_hours,reason_for_permission,manager_id,manager_name,status,permission_date from emp_permission_details where $searchset emp_id='$agent' and (permission_date BETWEEN '$frmDt' AND '$toDt')";
           }
         }
         $exe=$this->db->query($query);
