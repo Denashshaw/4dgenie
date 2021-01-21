@@ -22,6 +22,9 @@ class attendanceModel extends CI_Model
 
 		for($i=1;$i<= $days; $i++){
 			$date = date(sprintf("%02d",$i)."-".$month."-".$year);
+      if($date == date('d-m-Y', time() + 86400)){
+        break;
+      }
 			$attendancearray[$index]["Date"] = $date;
 			$attendancearray[$index]["Day"] = date_format(date_create($year."-".$month."-".sprintf("%02d",$i)),"l");
 			$ckdate = date($year."-".$month."-".sprintf("%02d",$i));
