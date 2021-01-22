@@ -95,6 +95,13 @@
     }
 }
 
+//jagan 21-01-2021
+  public function getusermail($id){
+    $usermail =$this->db->query("SELECT * FROM officemail WHERE emp_id='$id'");
+    return $usermail->result();
+  }
+//jagan 21 end
+
  }
 
  ?>

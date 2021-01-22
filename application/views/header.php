@@ -256,12 +256,15 @@ a:hover,.dropdown-options:hover, li.active, a.active {
 
           <li class="<?php if($actlinks == "add_client") echo "active";?> dropMenu">
           <a class="<?php  if($actlinks == "add_client") echo "active";?>" href="<?php echo base_url();?>add_client"><i class="fa fa-arrow-right" aria-hidden="true"></i> Client</a></li>
-
+        <?php } ?>
+<!--          Muthu Asking this adding permission -->
+      <?php if($userdata['role']=='admin' || $userdata['role']=='supervisor' || $userdata['emp_id'] == 'M503'){ ?>
           <li class="<?php if($actlinks  == "agentlist") echo "active";?> dropMenu">
             <a class="<?php if($actlinks == "agentlist") echo "active";?>" href="<?php echo base_url();?>agentlist"><i class="fa fa-arrow-right" aria-hidden="true"></i>
             Agent List</a>
           </li>
-
+        <?php } ?>
+     <?php if($userdata['role']=='admin' || $userdata['role']=='supervisor'){ ?>
           <li>
             <a href="#" class="" data-toggle="modal" data-target="#resetPassword"><i class="fa fa-arrow-right" aria-hidden="true"></i>Reset Agent Password</a>
           </li>

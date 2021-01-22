@@ -34,6 +34,11 @@ class Login extends CI_Controller {
 				   	'role' 		=> $result[0]->role,
                    	'hrms_logged_in' => TRUE
                );
+					$getusermailid=$this->Mainmodel->getusermail($result[0]->emp_id);
+					if(sizeof($getusermailid) > 0){
+						$userdata['mailid'] = $getusermailid[0]->mail_id;
+						$userdata['mail_pw'] = base64_encode($getusermailid[0]->password);
+					}
 
 				$this->db->query("UPDATE users SET status='loggedin' WHERE user_id='".$userdata['user_id']."' ");
 
