@@ -55,7 +55,7 @@
     <div class="row activity-row">
 			<div class="col-md-12 activity">IT Help Desk</div>
 		</div>
-    <?php echo $this->session->flashdata('msg');?>
+    <!-- <?php echo $this->session->flashdata('msg');?> -->
 
 <div class="row emp-table ">
   <div class="col-md-12 table-responsive" ><br>
@@ -152,6 +152,7 @@
   </div>
 </div>
 </body>
+<?php include('sweetalert.php'); ?>
 
 <script>
 
@@ -173,7 +174,7 @@ function nodesubmit(){
     success : function(datares){
       var res = JSON.parse(datares);
       if(res.status == 'Success'){
-
+        swal("Success", "Ticket raised successfully", "success");
       }else{
 
       }
@@ -181,7 +182,8 @@ function nodesubmit(){
     }
   });
  }else{
-   alert('All fields are required');
+  // alert('All fields are required');
+  swal("Warning", "All fields are required", "warning");
  }
 }
 viewTicket();
