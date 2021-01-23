@@ -56,6 +56,7 @@ $userdata=$this->session->all_userdata();
       <select class="form-control useridvalattendance" id="useridemp" name="useridemp" required>
         <?php if($userdata['role'] != 'agent'){ ?>
         <option style="display: none;" value="" selected>Select Employee ID</option>
+        <option value="<?php echo $userdata['emp_id']; ?>" ><?php echo ucfirst($userdata['emp_id'].'/'.$userdata['name']); ?></option>
           <?php foreach ($emp_data as $emp) { ?>
             <option value="<?php echo $emp->emp_id; ?>" ><?php echo ucfirst($emp->emp_id.'/'.$emp->name); ?></option>
           <?php } ?>
