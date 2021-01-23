@@ -120,11 +120,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($reportingdetails as $dataset) { ?>
+                        <?php foreach ($reportingdetails as $dataset) {
+                            $agentlist=explode(",",$dataset->agent);
+                          ?>
                             <tr>
-                                <td><?php echo $dataset->manager_id."/".$dataset->reporting_manager; ?></td>
+                                <td><?php echo $dataset->manager_id."/".$dataset->reporting_manager; ?><br><?php if(count($agentlist) > 1){
+                                  echo "<b>( ".count($agentlist)." Agents )</b>";
+                                }else{
+                                  echo "<b>( ".count($agentlist)." Agent )</b>";
+                                }
+                                  ?></td>
                                 <td><?php
-                                  $agentlist=explode(",",$dataset->agent);
+
                                   foreach ($agentlist as $keyvalue) {
                                   ?><p id="agentview">
                                       <?php echo $keyvalue; ?>
