@@ -15,7 +15,7 @@
 					<div class="row mt-5 ml-2">
 						<div class="col-md-10 activity">Employee Leave/Permission</div>
 					</div>
-		          	<?php echo $this->session->flashdata('msg');?>
+		          	<!-- <?php echo $this->session->flashdata('msg');?> -->
 
 		          	<div class="row activity-row">
 			          	<div class="col-md-12 activity">
@@ -213,7 +213,7 @@
 	    </div>
 	</div>
 
-
+<?php include('sweetalert.php'); ?>
 <script>
 	var base_url='';
 	base_url = $('#base_url').val();
@@ -434,26 +434,30 @@
 				if(leave_type == 'cl'){
 					if(leave_data != '0' || leave_data != ''){
 						if(day_count > 1){
-							alert('One CL is available per month!');
+						//	alert('One CL is available per month!');
+							swal("Warning", "One CL is available per month!", "warning");
 							return false;
 						}
 						// alert('success CL');
 						submit_leave_form();
 					}else{
-						alert('Already took leave go fucker');
+						swal("Warning", "Already took leave", "error");
 					}
 				}else if(leave_type == 'pl'){
 					console.log('leave_data', leave_data, day_count);
 					var total_leave_days = parseInt(leave_data) + parseInt(day_count);
 					if(total_leave_days > 12 ){
-						alert('Your PL exceeds in this year!');
+					//	alert('Your PL exceeds in this year!');
+						swal("Warning", "Your PL exceeds in this year!", "warning");
 					}else{
 						submit_leave_form();
 						// alert('Success PL');
 					}
 				}else if(leave_type == 'hd'){
 					if(day_count > 1){
-						alert('Half Day leave is available for one day');
+					//	alert('Half Day leave is available for one day');
+						swal("Warning", "Half Day leave is available for one day", "warning");
+
 					}else{
 						submit_leave_form();
 					}
@@ -475,7 +479,8 @@
 			data: $("#emp_leave_form").serialize()+'&emp_name='+ empLeaveName +'&manager_name='+ manager_name,
 			success: function(res){
 			if(res){
-				alert('Leave requested!');
+				//alert('Leave requested!');
+				swal("Success", "Leave requested!", "success");
 				$('#leaveModal').modal('toggle');
 				generate_leave_tbl();
 			}
@@ -509,7 +514,8 @@
 			method: 'GET',
 			success: function(res){
 				if(res > 0){
-					alert('Already permision taken in this month! ');
+					//alert('Already permision taken in this month! ');
+					swal("Warning", "Already permision taken in this month!", "warning");
 					$('.report_btn').attr('disabled', true);
 				}else{
 					// $('#permissionModal').modal('show');
