@@ -17,16 +17,20 @@ public function agentdata_applied(){
     if($_SESSION['role'] != 'agent'){
       $updateVal = $this->db->where('emp_id', $id)->update($table,$data);
       if($updateVal){
-         $this->session->set_flashdata('msg','<p style="color:green;font-size:18px;margin-left:3%;margin-top:3%;">Updated Successfully!..');
+        setcookie("success","Updated Successfully", time() + 2, "/");
+        // $this->session->set_flashdata('msg','<p style="color:green;font-size:18px;margin-left:3%;margin-top:3%;">Updated Successfully!..');
       }else{
-          $this->session->set_flashdata('msg','<p style="color:red;font-size:18px;margin-left:3%;margin-top:3%;">Not Updated!..');
+        setcookie("error","Not Updated!", time() + 2, "/");
+        //  $this->session->set_flashdata('msg','<p style="color:red;font-size:18px;margin-left:3%;margin-top:3%;">Not Updated!..');
       }
     }else{
       $insertVal = $this->db->insert($table,$data);
       if($insertVal){
-         $this->session->set_flashdata('msg','<p style="color:green;font-size:18px;margin-left:3%;margin-top:3%;">Inserted Successfully!..');
+        setcookie("success","Inserted Successfully", time() + 2, "/");
+        // $this->session->set_flashdata('msg','<p style="color:green;font-size:18px;margin-left:3%;margin-top:3%;">Inserted Successfully!..');
       }else{
-          $this->session->set_flashdata('msg','<p style="color:red;font-size:18px;margin-left:3%;margin-top:3%;">Not Inserted!..');
+        setcookie("error","Not Inserted!", time() + 2, "/");
+        //  $this->session->set_flashdata('msg','<p style="color:red;font-size:18px;margin-left:3%;margin-top:3%;">Not Inserted!..');
       }
     }
   }
@@ -42,14 +46,14 @@ public function agentdata_applied(){
   }
 
   //insert only
-  public function insertonly($table,$id,$data){
-    $insertVal = $this->db->insert($table,$data);
-    if($insertVal){
-      $this->session->set_flashdata('msg','<p style="color:green;font-size:18px;margin-left:3%;margin-top:3%;">Inserted Successfully!..');
-    }else{
-        $this->session->set_flashdata('msg','<p style="color:red;font-size:18px;margin-left:3%;margin-top:3%;">Not Inserted!..');
-    }
-  }
+  // public function insertonly($table,$id,$data){
+  //   $insertVal = $this->db->insert($table,$data);
+  //   if($insertVal){
+  //     $this->session->set_flashdata('msg','<p style="color:green;font-size:18px;margin-left:3%;margin-top:3%;">Inserted Successfully!..');
+  //   }else{
+  //       $this->session->set_flashdata('msg','<p style="color:red;font-size:18px;margin-left:3%;margin-top:3%;">Not Inserted!..');
+  //   }
+  // }
 
   public function getallseparation(){
     $table = 'emp_resignation_revoke';
@@ -66,16 +70,29 @@ public function agentdata_applied(){
   public function updatedata($table,$index,$data){
     $updateVal = $this->db->where('id', $index)->update($table,$data);
     if($updateVal){
-       $this->session->set_flashdata('msg','<p style="color:green;font-size:18px;margin-left:3%;margin-top:3%;">Updated Successfully!..');
+      setcookie("success","Updated Successfully", time() + 2, "/");
+      // $this->session->set_flashdata('msg','<p style="color:green;font-size:18px;margin-left:3%;margin-top:3%;">Updated Successfully!..');
     }else{
-        $this->session->set_flashdata('msg','<p style="color:red;font-size:18px;margin-left:3%;margin-top:3%;">Not Updated!..');
+        setcookie("error","Not Updated!", time() + 2, "/");
+        //$this->session->set_flashdata('msg','<p style="color:red;font-size:18px;margin-left:3%;margin-top:3%;">Not Updated!..');
     }
   }
 
   public function getmanagermail(){
-    $id=$_POST["emp_id1"];
-    $getmanageremailid=$this->db->query("SELECT * from office_mailid where emp_id IN (SELECT manager_id from emp_separation_managers where emp_id='$id')");
+    if($_POST['empid1']){
+      $id=$_POST["empid1"];
+    }else{
+      $id=$_POST["emp_id1"];
+    }
+
+  //  $getmanageremailid=$this->db->query("SELECT * from office_mailid where emp_id IN (SELECT manager_id from emp_separation_managers where emp_id='$id')");
+    $getmanageremailid=$this->db->query("SELECT * from officemail where emp_id IN (SELECT manager_id from emp_separation_managers where emp_id='$id')");
+  //  return $this->db->last_query();die;
     return $getmanageremailid->result();
   }
 
+  public function agentmailid($id){
+    $query=$this->db->query("SELECT mail_id from officemail where emp_id='$id'");
+    return $query->result();
+  }
 }

@@ -41,7 +41,7 @@
     <div class="row activity-row">
 			<div class="col-md-12 activity">Employee Separation</div>
 		</div>
-    <?php echo $this->session->flashdata('msg');?>
+    <?php //echo $this->session->flashdata('msg');?>
 <div class="row emp-table">
 <div class="col-md-12 table-responsive" >
     <div class="row">
@@ -84,8 +84,8 @@
       <div class="modal-body">
         <form action="<?php echo base_url(); ?>Separation/separation_ResignUpload" method="POST" >
             <input type="hidden" id="emp_id1" name="emp_id1">
-            <p>Reason<span  style="padding-left:60%;"><i class="fa fa-calendar"></i> <?php echo "<span id='dtprint_resig'>".date('d-m-Y')."</span>"; ?></span></p>
-            <textarea  class="form-control" id="resignation_Reason" rows="3" name="resignation_Reason" required></textarea>
+            <p>Reason<span  style="padding-left:60%;"><i class="fa fa-calendar"></i> <?php echo date('d-m-Y'); ?></span></p>
+            <textarea  class="form-control" id="resignation_Reason" rows="3" value=" " name="resignation_Reason" required></textarea>
             <br>
             <input type="submit" id="rework_submit" class="check-in" style="margin-left:40%">
         </form>
@@ -100,6 +100,9 @@
   <table class="table table-bordered table-responsive tableprint">
     <thead>
       <tr>
+        <?php if($userdata['role'] =='supervisor' && ($userdata['department'] =='HR' || $userdata['department'] =='MANAGEMENT')){ ?>
+        <th>Action</th>
+      <?php } ?>
         <th>Emp ID/Name</th>
         <th>Resignation date</th>
         <th>Reason</th>
@@ -120,6 +123,19 @@
       $i=0;
       foreach($getdata as $a){ ?>
       <tr>
+        <?php if($userdata['department'] =='MANAGEMENT'){ ?>
+        <td  onclick="viewstatusupdate(`<?php echo $a->emp_id; ?>`,`<?php echo $a->name; ?>`,`<?php echo $a->id; ?>`,`<?php echo $a->Resign_Manager_status; ?>`,`<?php echo $a->Resign_Manager_remark; ?>`,`<?php echo $a->Resign_Lastworkdate; ?>`,`<?php echo $a->Revoke_reason; ?>`)" style="cursor:pointer"><i class="fa fa-pencil" aria-hidden="true" style="font-size:18px;color:#a91919"></i></td>
+      <?php } ?>
+      <?php if($userdata['role'] =='supervisor' && $userdata['department'] =='HR'){
+        if($a->Resign_Manager_status !=''){
+        ?>
+      <td  onclick="viewstatusupdateHR(`<?php echo $a->emp_id; ?>`,`<?php echo $a->name; ?>`,`<?php echo $a->id; ?>`,`<?php echo $a->Resign_HR_status; ?>`,`<?php echo $a->Resign_HR_remark; ?>`)" style="cursor:pointer"><i class="fa fa-pencil" aria-hidden="true" style="font-size:18px;color:#a91919"></i></td>
+    <?php }else{
+      echo '<td>-</td>';
+    }
+  } ?>
+
+
         <td><?php echo ucfirst($a->emp_id."/".$a->name);?></td>
         <td><?php echo ucfirst($a->Resignation_date);?></td>
         <td><?php echo ucfirst($a->Resignation_reason);?></td>
@@ -129,13 +145,19 @@
         <td><?php echo ucfirst($a->Resign_HR_status);?></td>
         <td><?php echo ucfirst($a->Resign_HR_remark);?></td>
         <td><?php echo ucfirst($a->Revoke_reason);?></td>
-        <!-- <td><?php if($a->Revoke_date != '0000-00-00'){echo $a->Revoke_date; } ?></td> -->
+
+
         <?php if($userdata['department'] =='MANAGEMENT'){ ?>
         <td  onclick="viewstatusupdate(`<?php echo $a->emp_id; ?>`,`<?php echo $a->name; ?>`,`<?php echo $a->id; ?>`,`<?php echo $a->Resign_Manager_status; ?>`,`<?php echo $a->Resign_Manager_remark; ?>`,`<?php echo $a->Resign_Lastworkdate; ?>`,`<?php echo $a->Revoke_reason; ?>`)" style="cursor:pointer"><i class="fa fa-pencil" aria-hidden="true" style="font-size:18px;color:#a91919"></i></td>
       <?php } ?>
-      <?php if($userdata['role'] =='supervisor' && $userdata['department'] =='HR'){ ?>
+      <?php if($userdata['role'] =='supervisor' && $userdata['department'] =='HR'){
+        if($a->Resign_Manager_status !=''){ ?>
       <td  onclick="viewstatusupdateHR(`<?php echo $a->emp_id; ?>`,`<?php echo $a->name; ?>`,`<?php echo $a->id; ?>`,`<?php echo $a->Resign_HR_status; ?>`,`<?php echo $a->Resign_HR_remark; ?>`)" style="cursor:pointer"><i class="fa fa-pencil" aria-hidden="true" style="font-size:18px;color:#a91919"></i></td>
-    <?php } ?>
+    <?php }else{
+      echo '<td>-</td>';
+    }
+  }?>
+
       </tr>
 
 
@@ -165,7 +187,7 @@
                 </div>
                 <p><br>Remark</p>
                 <textarea  class="form-control" id="statustext" name="statustext"></textarea>
-                
+
                   <br>
                   <div class="row">
                   <?php if($userdata['role'] =='supervisor' && $userdata['department'] =='HR'){?>
@@ -175,8 +197,8 @@
                     </div>
                   <?php }
                   if($userdata['department'] == 'MANAGEMENT'){ ?>
-                    <div class="col-md-6">
-                      <p>Revoke</p>
+                    <div class="col-md-12">
+                      <p>Revoke (If Candidate Request To Revoke)</p>
                       <textarea  class="form-control" id="revoke_Reason"  name="revoke_Reason"></textarea>
                     </div>
 
@@ -216,8 +238,9 @@
 </div>
 </div>
 </body>
-
+<?php include('sweetalert.php'); ?>
 <script>
+
 function viewstatusupdate(emp_id,name,i,manager_accepReject,manager_remark,lastworkingdate,revoke){
   $('#indexid').val(i);
   $('#empid1').val(emp_id);
@@ -293,7 +316,7 @@ function viewSeparation(){
         var data = JSON.parse(datares);
         console.log(data);
         if(data.length > 0){
-          $('#resignation_Reason').val(data[0].Resignation_reason);
+        //  $('#resignation_Reason').val(data[0].Resignation_reason);
           $('#revoke_Reason').val(data[0].Revoke_reason);
           var user_role = "<?php echo $userdata['role']; ?>";
           if(user_role != 'agent'){
