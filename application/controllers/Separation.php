@@ -77,6 +77,15 @@ class Separation extends CI_Controller {
         $subject = 'Employee: '.$_POST['empid1'].'-'.$getuserdetails[0]->name.' Resignation/Revoke';
         $message = '<p>Hi '.$getuserdetails[0]->name.',<br>&nbsp;&nbsp;HR Status: <h3>'. $status.'</h3>&nbsp;&nbsp;HR Remark:<br>&nbsp;&nbsp;&nbsp;&nbsp;'.$_POST["statustext"].'<br>&nbsp;&nbsp;<b>Last Working Date: '.$dt_format.'</b><p>Department - '.$getuserdetails[0]->department.'</p><br><br><a href="http://192.168.2.193/4dgenie">Goto HRMS</a><br><br>Regards,<br>'.$userdata['name'];
 			$this->officemail->sendmail($usermailid,$usermailpw,$to,$cc,$subject,$message);
+				//Agent send notification
+				$nofi_data = array(
+						"emp_id" => $getagentmailid[0]->emp_id,
+						"name" => $getagentmailid[0]->name,
+						"module_name" => "Emp Separation",
+						"details" => $subject.' - STATUS',
+						"status" => 0
+				);
+				$this->separationModel->addfeedback('notification',$nofi_data);
 			}
 			$this->separationModel->updatedata('emp_resignation_revoke',$_POST['indexid'],$dataset);
 			redirect('Separation');
@@ -106,6 +115,15 @@ class Separation extends CI_Controller {
              	"Resignation_date" => date('Y-m-d')
            	);
 				}
+				$nofi_data = array(
+						"emp_id" => $getmanageremailid[0]->emp_id,
+						"name" => $getmanageremailid[0]->name,
+						"module_name" => "Emp Separation",
+						"details" => $subject,
+						"status" => 0
+				);
+				$this->separationModel->addfeedback('notification',$nofi_data);
+
      		$this->separationModel->insertupdatedata('emp_resignation_revoke',$_POST['emp_id1'],$dataset);
      		redirect('Separation');
      }

@@ -58,7 +58,7 @@ function getnoficiation_hrmsView(){
         var count=0;
         for(var i=0;i<res.length;i++){
             var postedtime = diffDateAndToString(res[i]["created_date"]);
-            console.log(postedtime)
+            console.log(postedtime);
             var days = parseInt(postedtime['Days']);
             var hours = parseInt(postedtime['Hours']);
             var minsget = parseInt(postedtime['Mins']);
@@ -86,6 +86,10 @@ function getnoficiation_hrmsView(){
             else if(res[i]["module_name"] == 'IT Help Desk'){
                 hreflink = '<a href="<?php echo base_url(); ?>Ticket" onclick="updatethestatus('+res[i]["id"]+')">';
                 linkhref_notification = "<?php echo base_url(); ?>Ticket";
+            }
+            else if(res[i]["module_name"] == 'Emp Separation'){
+                hreflink = '<a href="<?php echo base_url(); ?>Separation" onclick="updatethestatus('+res[i]["id"]+')">';
+                linkhref_notification = "<?php echo base_url(); ?>Separation";
             }
             else{
                 hreflink = '<a href="#">';

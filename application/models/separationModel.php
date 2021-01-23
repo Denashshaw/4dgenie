@@ -92,7 +92,16 @@ public function agentdata_applied(){
   }
 
   public function agentmailid($id){
-    $query=$this->db->query("SELECT mail_id from officemail where emp_id='$id'");
+    $query=$this->db->query("SELECT * from officemail where emp_id='$id'");
     return $query->result();
+  }
+
+  function addfeedback($table,$data){
+      $insertqu = $this->db->insert($table,$data);
+      if($insertqu){
+          return TRUE;
+      }else{
+          return FALSE;
+      }
   }
 }
