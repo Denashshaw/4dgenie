@@ -28,7 +28,7 @@
     <div class="col-2 col-md-1 text-right logout"><a href="<?php echo base_url();?>login/signout">Logout</a></div>
 </div>
 <div class="viewnotification_part" style="display:none;">
-    <div class="card" style="margin-left: 800px;position: absolute;width:360px;z-index: 1;    margin-top: -21px;">
+    <div class="card" style="margin-left: 800px;position: absolute;width:360px;z-index: 1;    margin-top: -21px;max-height:400px; overflow-y: scroll;">
     <ul class="list-group list-group-flush viewnotification_hrms_text">
         <!-- <li class="list-group-item">Cras justo odio</li>
         <li class="list-group-item">Dapibus ac facilisis in</li>
