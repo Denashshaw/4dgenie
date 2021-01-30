@@ -144,4 +144,16 @@ class Separation extends CI_Controller {
         $this->separationModel->getentireuser('emp_resignation_revoke',$_POST);
     }
 
+
+		//jagan start
+		public function Separation_report(){
+			$this->load->view('report/Separation_report');
+		}
+		public function getseparationreportview(){
+			$data = $this->separationModel->reportview($_POST);
+			echo json_encode($data);
+		}
+
+		//jagan end
+
   }

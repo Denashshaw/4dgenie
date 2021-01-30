@@ -96,12 +96,26 @@ public function agentdata_applied(){
     return $query->result();
   }
 
-  function addfeedback($table,$data){
+  public function addfeedback($table,$data){
       $insertqu = $this->db->insert($table,$data);
       if($insertqu){
           return TRUE;
       }else{
           return FALSE;
       }
+  }
+
+  public function reportview($data){
+    $fromdate=date_create($data['fromdate']);
+    $fromdt=date_format($fromdate,'Y-m-d');
+    $todate=date_create($data['todate']);
+    $todt=date_format($todate,'Y-m-d');
+    $empid=$data['useridemp'];
+    $status=$data['status'];
+
+    $query="SELECT a.*,b.name FROM emp_resignation_revoke as a left join users b on a.emp_id=b.emp_id WHERE a.Resignation_date between '$fromdt' and '$todt'";
+
+    $res = $this->db->query($query);
+    return $res->result();
   }
 }

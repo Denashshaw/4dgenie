@@ -26,7 +26,11 @@
             <a class="<?php  if($actlinks == "Internal_transfer") echo "active";?>" href="<?php echo base_url();?>empinfoControl/Internal_transfer">Emp Internal Transfer Report</a>
           </li>
 
-           <li class="list-group-item">Attendance Report</li>
+          <li class="list-group-item <?php if($actlinks == "Separation_report") echo "active";?> dropMenu_rep">
+            <a class="<?php  if($actlinks == "Separation_report") echo "active";?>" href="<?php echo base_url();?>Separation/Separation_report">Emp Separation Report</a>
+          </li>
+
+           <!-- <li class="list-group-item">Attendance Report</li> -->
          </ul>
       </div>
     </div>
