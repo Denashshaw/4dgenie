@@ -118,4 +118,18 @@ public function agentdata_applied(){
     $res = $this->db->query($query);
     return $res->result();
   }
+
+  public function reportview_export($data){
+    $fromdate=date_create($data['fromdate']);
+    $fromdt=date_format($fromdate,'Y-m-d');
+    $todate=date_create($data['todate']);
+    $todt=date_format($todate,'Y-m-d');
+    $empid=$data['useridemp'];
+    $status=$data['status'];
+
+    $query="SELECT a.emp_id as `Emp ID`,b.name as `Name`,a.Resignation_reason as `Resignation Reason`,a.Resignation_date as `Applied Date`,a.Resign_Manager_status as `Manager Status`,a.Resign_Manager_remark as `Manager Remark`,a.Resign_Lastworkdate as `Last Working Date`,a.Resign_HR_status as `HR Staus`,a.Resign_HR_remark as `HR Remark`,a.Revoke_reason as `Revoke Reason`,a.Revoke_date as `Revoke Date`  FROM emp_resignation_revoke as a left join users b on a.emp_id=b.emp_id WHERE a.Resignation_date between '$fromdt' and '$todt'";
+
+    $res = $this->db->query($query);
+      return $res;
+  }
 }

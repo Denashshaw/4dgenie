@@ -106,8 +106,10 @@
         <th>Emp ID/Name</th>
         <th>Resignation date</th>
         <th>Reason</th>
+        <th> Manager ID/Name</th>
         <th>Manager Status</th>
         <th>Manager Remark</th>
+        <th> HR ID/Name</th>
         <th>Last Working Date</th>
         <th>HR Status</th>
         <th>HR Remark</th>
@@ -139,9 +141,12 @@
         <td><?php echo ucfirst($a->emp_id."/".$a->name);?></td>
         <td><?php echo ucfirst($a->Resignation_date);?></td>
         <td><?php echo ucfirst($a->Resignation_reason);?></td>
+        <td><?php echo ucfirst($a->Manager_idname);?></td>
         <td><?php echo ucfirst($a->Resign_Manager_status);?></td>
         <td><?php echo ucfirst($a->Resign_Manager_remark);?></td>
+        <td><?php echo ucfirst($a->HR_idname);?></td>
         <td><?php if($a->Resign_Lastworkdate != '0000-00-00'){ echo $a->Resign_Lastworkdate; }?></td>
+
         <td><?php echo ucfirst($a->Resign_HR_status);?></td>
         <td><?php echo ucfirst($a->Resign_HR_remark);?></td>
         <td><?php echo ucfirst($a->Revoke_reason);?></td>

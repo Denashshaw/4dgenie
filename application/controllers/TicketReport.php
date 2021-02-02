@@ -85,7 +85,7 @@ class TicketReport extends CI_Controller {
 		$reshtml='';
 		$date =date('d-m-Y');
 		$f=$_POST['fields'];
-		$reshtml .= '<br><table  class="table table-responsive" style="align:Center;border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr style="border: 1px solid black;font-size:14px;font-weight:bold;background-color:#e4e2e2;"><th colspan="4"><img src="'.base_url().'img/logo.jpg" style="width:120px;height150px;align:right"></th><th colspan="10" style="font-size:16px;text-align:center"><br>Employee Information</th><th colspan="4" style="text-align:right">'.$date.'</th></tr></thead></table><table  class="table table-responsive" style="border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr  style="border: 1px solid gray;">';
+		$reshtml .= '<br><table  class="table table-responsive" style="align:Center;border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr style="border: 1px solid black;font-size:14px;font-weight:bold;background-color:#e4e2e2;"><th colspan="4"><img src="'.base_url().'img/logo.jpg" style="width:120px;height150px;align:right"></th><th colspan="10" style="font-size:16px;text-align:center"><br>Employee IT Help Desk</th><th colspan="4" style="text-align:right">'.$date.'</th></tr></thead></table><table  class="table table-responsive" style="border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr  style="border: 1px solid gray;">';
 
 		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Emp ID</th>');
 		$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Emp Name</th>');
@@ -115,7 +115,7 @@ class TicketReport extends CI_Controller {
 
 		$this->load->library('Pdf');
 	 	$pdf = new Pdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-	 	$pdf->SetTitle('Employee Information');
+	 	$pdf->SetTitle('IT Help Desk Report');
 	 	$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 	 	$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 	 	$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
@@ -128,7 +128,7 @@ class TicketReport extends CI_Controller {
 		// }
 		$pdf->AddPage();
 	  	$pdf->writeHTML($reshtml, true, 0, true, 0);
-	 	$pdf->Output('EmpInformation.pdf', 'I');
+	 	$pdf->Output('IT Help Desk.pdf', 'I');
 		// }
 	}
 }

@@ -41,7 +41,8 @@ class Separation extends CI_Controller {
 
 					$dataset = array(
 						"Resign_Manager_status" => $status,
-						"Resign_Manager_remark" => $_POST['statustext']
+						"Resign_Manager_remark" => $_POST['statustext'],
+						"Manager_idname" => $_SESSION['emp_id']."/".$_SESSION['name']
 					);
 
 					if($_POST['revoke_Reason'] !=''){
@@ -67,6 +68,7 @@ class Separation extends CI_Controller {
 					$status = 'Accepted';
 				}else{ $status = 'Rejected'; }
 				$dataset = array(
+					"HR_idname" => $_SESSION['emp_id']."/".$_SESSION['name'],
 					"Resign_HR_status" => $status,
           "Resign_HR_remark" => $_POST['statustext'],
           "Resign_Lastworkdate" =>  $dt_format
@@ -98,6 +100,7 @@ class Separation extends CI_Controller {
 				$usermailid=$userdata['mailid'];
 				$usermailpw=base64_decode($userdata['mail_pw']);
         $getmanageremailid = $this->separationModel->getmanagermail();
+			
         $getuserdetails= $this->separationModel->getentireusername('users',$_POST['emp_id1']);
 				$reporting_person_mailid = $getmanageremailid[0]->mail_id;
 
@@ -152,6 +155,67 @@ class Separation extends CI_Controller {
 		public function getseparationreportview(){
 			$data = $this->separationModel->reportview($_POST);
 			echo json_encode($data);
+		}
+
+		public function separationExcelexport(){
+			$data = $this->separationModel->reportview_export($_GET);
+			$this->load->dbutil();
+    //  $this->load->helper('file');
+		//	$this->load->helper('download');
+			$delimiter = "\t";
+      $newline = "\r\n";
+      $dataset = $this->dbutil->csv_from_result($data, $delimiter, $newline);
+			$file = 'filename.xls';
+			force_download($file, $dataset);
+		}
+
+		public function separationPdfexport(){
+			$data = $this->separationModel->reportview_export($_GET);
+			$res= $data->result();
+			$reshtml='';
+			$date =date('d-m-Y');
+			$reshtml .= '<br><table  class="table table-responsive" style="align:Center;border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr style="border: 1px solid black;font-size:14px;font-weight:bold;background-color:#e4e2e2;"><th colspan="3"><img src="'.base_url().'img/logo.jpg" style="width:120px;height150px;align:right"></th><th colspan="5" style="font-size:16px;text-align:center"><br>Employee Separation Report</th><th colspan="3" style="text-align:right">'.$date.'</th></tr></thead></table><table  class="table table-responsive" style="border: 1px solid black;overflow-x: scroll;max-width:750px;font-size:9px;border: 1px solid gray;text-align:Center;" >	<thead  style="border: 1px solid gray;font-size:8px;"><tr  style="border: 1px solid gray;">';
+
+
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Emp ID</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Emp Name</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Resignation Reason</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Applied Date</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Manager Status</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Manager Remark</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Last Working Date</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">HR Staus</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">HR Remark</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Revoke Reason</th>');
+			$reshtml .= trim('<th style="border: 1px solid gray;font-weight:bold;">Revoke Date</th>');
+
+			$reshtml .='</tr>	</thead><tbody style="font-size:8px;">';
+			foreach (	$res as $row) {
+				$rowData = '<tr style="border: 1px solid gray;">';
+	//			$flag=True;
+					foreach ($row as $value) {
+//					if($flag){$flag=False; continue; }
+						$value = '<td  style="border: 1px solid gray;">' . $value . '</td>' ;
+						$rowData .= $value;
+					}
+					$reshtml .= $rowData . "</tr>";
+			}
+			$reshtml .='</tbody></table>';
+
+
+			$this->load->library('Pdf');
+			$pdf = new Pdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+			$pdf->SetTitle('Employee Separation Report');
+			$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+			$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+			$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+			$pdf->SetDisplayMode('real', 'default');
+			$pdf->AddPage();
+		  $pdf->writeHTML($reshtml, true, 0, true, 0);
+			ob_end_clean();
+		 	$pdf->Output('SeparationReport.pdf', 'I');
+
 		}
 
 		//jagan end

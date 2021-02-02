@@ -3,10 +3,8 @@
 #statusview{
   background:gray;
   text-align:center;
-	padding: 2%;
-	border-radius: 30%;
+	border-radius: 50%;
 	color:white;
-	border: 2px solid #3d48c7;
 }
 </style>
 <div class="page-wrapper chiller-theme toggled">
@@ -74,14 +72,14 @@
     <div class="col-md-12" >
       <table class="table table-bordered">
         <tr id="leaveReport1">
-          <td id="totalcount"></td>
-          <td id="pendingcount"></td>
-          <td id="acceptedcount"></td>
-          <td id="rejectedcount"></td>
+          <td id="totalcount"  onclick="$('#status').val('All');getseparationReport();"></td>
+          <td id="pendingcount" onclick="$('#status').val('Pending');getseparationReport();"></td>
+          <td id="acceptedcount"  onclick="$('#status').val('Approved');getseparationReport();"></td>
+          <td id="rejectedcount"  onclick="$('#status').val('Rejected');getseparationReport();"></td>
           <td>
-            <button type="submit" class="check-out" formaction="<?php echo base_url(); ?>Emp_leave_permission/leaveExcelexport">Excel</button>
+            <button type="submit" class="check-out" formaction="<?php echo base_url(); ?>Separation/separationExcelexport">Excel</button>
             <br>
-            <button type="submit" class="check-out" style="background:#706FAC;margin-top:10%" formaction="<?php echo base_url(); ?>Emp_leave_permission/leavePdfexport">PDF</button>
+            <button type="submit" class="check-out" style="background:#706FAC;margin-top:10%"  formaction="<?php echo base_url(); ?>Separation/separationPdfexport">PDF</button>
           </td>
         </tr>
       </table>
@@ -96,8 +94,10 @@
               <th>Reason</th>
               <th>Resignation date</th>
               <th>Current Status</th>
+                <th> Manager ID/Name</th>
               <th>Manager Status</th>
               <th>Manager Remark</th>
+                <th> HR ID/Name</th>
               <th>HR Status</th>
               <th>HR Remark</th>
               <th>Last Working Date</th>
@@ -166,29 +166,44 @@ function getseparationReport(){
          if((res[i].Resign_Manager_status =='' || res[i].Resign_Manager_status == undefined)  && (res[i].Resign_HR_status =='' || res[i].Resign_HR_status == undefined)){
            pendingcount  = parseInt(pendingcount)+1;
            var overallstatus='Pending';
+           var bg = "style='background:#706FAC;'";
          }else if(res[i].Resign_Manager_status =='Accepted' && res[i].Resign_HR_status =='Accepted'){
            approvedcount = parseInt(approvedcount)+1;
            var overallstatus='Accepted';
+           var bg = "style='background:#3fc98e;'";
+
          }else if(res[i].Resign_Manager_status =='Rejected' || res[i].Resign_HR_status =='Rejected'){
            rejectedcount =parseInt(rejectedcount)+1;
            var overallstatus='Rejected';
+           var bg = "style='background:#ff5c4b;'";
+
          }else{
            var overallstatus='Pending';
+           var bg = "style='background:#706FAC;'";
+
          }
 
-         if($('#status').val() == 'Pending' && (res[i].Resign_Manager_status =='' || res[i].Resign_Manager_status == undefined)  && (res[i].Resign_HR_status =='' || res[i].Resign_HR_status == undefined)){
-            //  continue;
+         if($('#status').val() == 'Pending' && overallstatus == 'Pending'){
+         }else if($('#status').val() == 'All'){
+         }
+         else if($('#status').val() == 'Approved' && overallstatus == 'Accepted'){
+         }
+         else if($('#status').val() == 'Rejected' && overallstatus == 'Rejected'){
          }
       else{
-      //  break;
+          continue;
          }
          out += '<tr>';
          out += '<td>'+res[i].emp_id+'/'+res[i].name+'</td>';
          out += '<td>'+res[i].Resignation_reason+'</td>';
          out += '<td>'+res[i].Resignation_date+'</td>';
-         out += '<td id="statusview">'+overallstatus+'</td>';
+
+         out += '<td id="statusview" '+bg+'>'+overallstatus+'</td>';
+         out += '<td>'+res[i].Manager_idname+'</td>';
          out += '<td>'+res[i].Resign_Manager_status+'</td>';
          out += '<td>'+res[i].Resign_Manager_remark+'</td>';
+         out += '<td>'+res[i].HR_idname+'</td>';
+
          out += '<td>'+res[i].Resign_HR_status+'</td>';
          out += '<td>'+res[i].Resign_HR_remark+'</td>';
          out += '<td>'+res[i].Resign_Lastworkdate+'</td>';
