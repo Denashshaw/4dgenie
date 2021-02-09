@@ -79,4 +79,23 @@ class Candidate_interview extends CI_Controller{
 		echo json_encode($get_onboard_data);
 	}
 
+	public function getworkexpeience(){
+		$data = $this->Client_model->getothersdata('candidate_past_work',$_GET['temp_id']);
+		echo json_encode($data);
+	}
+
+	public function geteducation(){
+		$data = $this->Client_model->getothersdata('candidate_education',$_GET['temp_id']);
+		echo json_encode($data);
+	}
+	public function acceptedorrejected(){
+		$this->Client_model->updatestatus('candidate_interview');
+		redirect('Candidate_interview/index');
+	}
+
+	public function gettestview(){
+		$data = $this->Client_model->getothersdata_test('interviewresult',$_GET['tempid']);
+		echo json_encode($data);
+	}
+
 }

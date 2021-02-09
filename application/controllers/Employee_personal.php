@@ -11,7 +11,7 @@ class Employee_personal extends CI_Controller {
 		$this->load->model("Mainmodel");
 		$this->load->library('pagination');
 		$this->load->library('session');
-		
+
 		$userdata=$this->session->all_userdata();
 		if($userdata["hrms_logged_in"] != TRUE){
 			redirect('login/index');
@@ -263,7 +263,7 @@ class Employee_personal extends CI_Controller {
 				"Other_startyr2" =>  $_POST['empstartdateOther2'],
 				"Other_endyr2" =>  $_POST['empenddateOther2'],
 			);
-			
+
 			if ( $this->upload->do_upload('empDocument1')){
 				$dataset['Doc1'] = $this->upload->data('file_name');
 			}
@@ -286,14 +286,14 @@ class Employee_personal extends CI_Controller {
 			if ( $this->upload->do_upload('empDocumentOther2')){
 				$dataset['Other_doc2'] = $this->upload->data('file_name');
 			}
-		
+
 			$empid =$splitid[0];
 
 			$finduserid = $this->db->select('*')->from('emp_education')->where('Emp_id',$empid)->get()->result();
 			if(count($finduserid) > 0){
 				$updateVal = $this->db->where('Emp_id', $empid)->update('emp_education',$dataset);
 					 if($updateVal){
-	
+
 						$this->session->set_flashdata('msg','<p style="color:green;font-size:18px;margin-left:3%;margin-top:3%;">Updated Successfully!..');
 					 }else{
 						$this->session->set_flashdata('msg','<p style="color:red;font-size:18px;margin-left:3%;margin-top:3%;">Not Updated!..');
@@ -369,7 +369,7 @@ class Employee_personal extends CI_Controller {
 			"doj3" => date("Y-m-d", strtotime($_POST['joiningdate3'])),
 			"termdate3" => date("Y-m-d", strtotime($_POST['termdate3'])),
 		);
-		
+
 		if ( $this->upload->do_upload('expcertificate1')){
 			$dataset['Doc1'] = $this->upload->data('file_name');
 		}
@@ -379,7 +379,7 @@ class Employee_personal extends CI_Controller {
 		if ( $this->upload->do_upload('expcertificate3')){
 			$dataset['Doc3'] = $this->upload->data('file_name');
 		}
-	
+
 		$empid =$splitid[0];
 
 		$finduserid = $this->db->select('*')->from('emp_experience')->where('Emp_id',$empid)->get()->result();
@@ -406,7 +406,7 @@ class Employee_personal extends CI_Controller {
 	}
 
 
-	// pre-screening 
+	// pre-screening
 
 	public function addprescreening(){
 		$config['upload_path'] = './documents/prescreening/';
@@ -436,7 +436,7 @@ class Employee_personal extends CI_Controller {
 			"InterviewDate2" => $_POST['interdate2'],
 			"Feedback2" => $_POST['feedback2'],
 		);
-		
+
 		if ( $this->upload->do_upload('emp_photo')){
 			$dataset['emp_photo'] = $this->upload->data('file_name');
 		}
@@ -470,8 +470,8 @@ class Employee_personal extends CI_Controller {
 				"Emp_id" => $_POST['empidmana'],
 				"Emp_name" => $_POST['empnameman'],
 				"Work_email" => $_POST['workemail'],
-			  "Process" =>$_POST['process'],
-				"Designation" => $_POST['designation'],
+			 // "Process" =>$_POST['process'],
+			//	"Designation" => $_POST['designation'],
 			  "Exp_in_MB" =>$_POST['expinMB'],
 			 	"First_MB_Employer" =>$_POST['firstMBEmployee'],
 			  "Start_Date_WithFirst_MB_Employer" =>$_POST['StartDate_FirstMB'],
@@ -479,8 +479,8 @@ class Employee_personal extends CI_Controller {
 			  "MB_Softwares_Worked_On" =>  implode(",",$_POST['MBSoftwareon']),
 			 	"MB_Specialties_Worked_On" =>  implode(",",$_POST['MBSpecial']),
 			 	"MB_Processed_Worked_On" =>$_POST['MBProcessWork'],
-			  "LinkedIn" =>$_POST['Linkedin'],
-			  "Facebook" =>$_POST['Facebookid']
+			 // "LinkedIn" =>$_POST['Linkedin'],
+			 // "Facebook" =>$_POST['Facebookid']
 			);
 			$empid=$_POST['empidmana'];
 			$finduserid = $this->db->select('*')->from('emp_management')->where('Emp_id',$empid)->get()->result();

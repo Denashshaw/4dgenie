@@ -139,9 +139,9 @@ $userdata=$this->session->all_userdata();
 				      <li class="nav-item">
                   <a class="nav-link tablink" id="profile-tab" data-toggle="tab" data-tab-index="3" onclick="openPage('workexp', this, 'white')">Professional Experience</a>
                 </li>
-				         <!--  <li class="nav-item">
+				          <li class="nav-item">
                   <a class="nav-link tablink" id="profile-tab" data-toggle="tab" data-tab-index="4" onclick="openPage('management', this, 'white')">Management</a>
-                </li> -->
+                </li>
 
                 <!-- <li class="nav-item">
                   <a class="nav-link tablink" id="contact-tab" data-toggle="tab" data-tab-index="6" onclick="openPage('contact', this, 'white')" >Attendance</a>

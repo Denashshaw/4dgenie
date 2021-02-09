@@ -181,7 +181,7 @@ function getDatacount($obj){
 				$voicecount++;
 			}else if($a->department == 'MANAGEMENT'){
 				$managementcount++;
-			}else if($a->department == 'Business Development'){
+			}else if($a->department == 'BUSINESS DEVELOPMENT'){
 				$BScount++;
 			}else if($a->department == 'HR'){
 				$hrcount++;

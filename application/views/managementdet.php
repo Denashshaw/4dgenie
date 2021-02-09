@@ -1,10 +1,6 @@
-<?php if($userdata['role'] == 'admin' || $userdata['role']=='supervisor'){ ?>
-        <div class="row activity-row">
-            <div class="col-md-12 activity"><button class="add_button start-break" onclick="addmanBtn()" style="background-color:#007bff;font-size:12px;"> Add / Edit Management</button></div>
-        </div>
-      <?php } ?>
+
           <div class="row  activity-row">
-          <div id="addmanagebox" class="col-md-12" style="border: 1px solid #e1e5e6;margin:1px 15px;max-width:1028px;display:none;">
+          <div id="addmanagebox" class="col-md-12" style="border: 1px solid #e1e5e6;margin:1px 15px;">
             <div class="row" style="border-bottom:2px solid #e1e5e6;" >
               <div class="col-md-3"></div>
               <div class="col-md-6">
@@ -12,9 +8,13 @@
                 <p style="text-align:center">Employee ID</p>
                 <select class="form-control useridval" id="userid"  onchange="viewdatamanage(this)" style="width:100%">
                   <option value="">Select Emp ID</option>
+                  <?php if($userdata['role'] != 'agent'){ ?>
                   <?php foreach ($emp_data as $emp) { ?>
                       <option value="<?php echo $emp->emp_id.'/'.$emp->name; ?>" ><?php echo ucfirst($emp->emp_id).'/'.ucfirst($emp->name); ?></option>
                   <?php } ?>
+                <?php }else{ ?>
+                  <option value="<?php echo $userdata['emp_id'].'/'.$userdata['name']; ?>" ><?php echo ucfirst($userdata['emp_id'].'/'.$userdata['name']); ?></option>
+                <?php } ?>
                 </select>
               </div>
             </div><br>
@@ -24,23 +24,21 @@
             <br>
               <div class="row" style="margin-left:2%;margin-right:2%">
 
-                <div class="col-md-12" style="text-align:center;padding-top:5%;color:gray"><h3><span  class="fa fa-cog" style="font-size:35px;" aria-hidden="true"></span>&nbsp;&nbsp;Management Details</h3><br></div>
-                <div class="col-md-3">
+                <div class="col-md-12" style="text-align:center;color:gray"><h3><span  class="fa fa-cog" style="font-size:35px;" aria-hidden="true"></span>&nbsp;&nbsp;Management Details</h3><br></div>
+                <div class="col-md-3" style="padding-top:1%">
+
                   <p >Work Email ID:<span id="start">*</span></p>
                   <input class="col-md-12 col-xs-12 form-control" type="email" id="workemail" name="workemail"   required="">
                     <br>
                     <p >First Medical Billing Employer:</p>
-                    <input class="col-md-12 col-xs-12 form-control" style="margin-top:16%" type="text" id="firstMBEmployee" name="firstMBEmployee" >
+                    <input class="col-md-12 col-xs-12 form-control"  type="text" id="firstMBEmployee" name="firstMBEmployee" >
                     <br>
 
-                    <p >Medical Billing Specialties Worked On:</p>
-                    <select class="mbSpecialWorked" name="MBSpecial[]"  id="MBSpecial" multiple="multiple"   style="width: 100%">
-                    </select>
 
                 </div>
                 <div class="col-md-3">
-                  <p >Process:<span id="start">*</span></p>
-                    <select class="col-md-12 col-xs-12 form-control" id="process" name="process">
+                  <!--<p >Process:<span id="start">*</span></p>
+                     <select class="col-md-12 col-xs-12 form-control" id="process" name="process">
                       <option  style="display: none;" value="" selected>Select Process</option>
                       <option value="HR">HR</option>
                       <option value="IT">IT</option>
@@ -54,8 +52,8 @@
                       <option value="VOB's">VOB's</option>
                       <option value="AR QA">AR QA</option>
                       <option value="Patient Calling">Patient Calling</option>
-                  </select>
-                    <br>
+                  </select> -->
+
                     <p >Start Date With First Medical Billing Employer :</p>
                     <input class="col-md-12 col-xs-12 form-control" type="date" id="StartDate_FirstMB" name="StartDate_FirstMB">
                     <br>
@@ -63,15 +61,21 @@
                     <input class="col-md-12 col-xs-12 form-control" type="text" id="MBProcessWork" name="MBProcessWork"  >
                 </div>
                 <div class="col-md-3">
-                  <p >Designation:<span id="start">*</span></p>
-                  <input class="col-md-12 col-xs-12 form-control" type="text" id="designation" name="designation"   required="">
-                    <br>
+                  <!-- <p >Designation:<span id="start">*</span></p>
+                  <input class="col-md-12 col-xs-12 form-control" type="text" id="designation" name="designation"   required=""> -->
+
                     <p style="padding-top:3%">Other Past Medical Billing Employers:</p>
                     <input class="col-md-12 col-xs-12 form-control" type="text" id="OtherPastMB" name="OtherPastMB" >
                     <br>
-                    <p >LinkedIn Profile ID:</p>
+
+                    <p >Medical Billing Specialties Worked On:</p>
+                    <select class="mbSpecialWorked" name="MBSpecial[]"  id="MBSpecial" multiple="multiple"   style="width: 100%">
+                    </select>
+                    <!-- <p >LinkedIn Profile ID:</p>
                     <input class=" col-md-12 col-xs-12 form-control" type="text" style="margin-top:16%" id="Linkedin" name="Linkedin"  >
-                    <i class="fa fa-linkedin-square errspan"  style="color:#0e76a8"></i>
+                    <i class="fa fa-linkedin-square errspan"  style="color:#0e76a8"></i> -->
+
+                    <br>
                 </div>
 
                 <div class="col-md-3">
@@ -81,11 +85,10 @@
                   <p >Medical Billing Softwares Worked On:</p>
                   <select class="mbSoftwareWorked" name="MBSoftwareon[]"  id="mbsoftware" multiple="multiple"  style="width: 100%">
                   </select>
-                  <!-- <input class="col-md-12 col-xs-12 form-control" type="text" id="MBSoftwareon" name="MBSoftwareon" placeholder="Enter Medical Billing Softwares Worked On" > -->
-                  <br>	<br>
-                  <p >Facebook Profile ID:</p>
+                	<br>
+                  <!-- <p >Facebook Profile ID:</p>
                   <input class="col-md-12 col-xs-12 form-control" type="text" style="margin-top:16%" id="Facebookid" name="Facebookid" >
-                  <span class="fa fa-facebook-square  errspan" style="color:#3b5998"></span>
+                  <span class="fa fa-facebook-square  errspan" style="color:#3b5998"></span> -->
                 </div>
 
                 <div align="col-md-12" style="padding-top:5%;padding-left: 40%">
@@ -134,8 +137,10 @@
           $('#firstMBEmployee').val(data[0]['First_MB_Employer']);
           $('#StartDate_FirstMB').val(data[0]['Start_Date_WithFirst_MB_Employer']);
           $('#OtherPastMB').val(data[0]['Other_Past_MB_Employers']);
-          $('#mbsoftware').val(data[0]['MB_Softwares_Worked_On']);
-          $('#MBSpecial').val(data[0]['MB_Specialties_Worked_On']);
+          $('#mbsoftware').val(data[0]['MB_Softwares_Worked_On'].split(",")).trigger('change');
+         var mbspe =data[0]['MB_Specialties_Worked_On'].split(",");
+          $('#MBSpecial').val(mbspe).trigger('change');
+
           $('#MBProcessWork').val(data[0]['MB_Processed_Worked_On']);
           $('#Linkedin').val(data[0]['LinkedIn']);
           $('#Facebookid').val(data[0]['Facebook']);

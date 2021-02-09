@@ -338,6 +338,11 @@ a:hover,.dropdown-options:hover, li.active, a.active {
 
       <?php //} ?>
 
+      <?php if($userdata['role']=='admin'){ ?>
+            <li><a class="<?php  if($actlinks == "leaderAssessment") echo "active";?>" href="<?php echo base_url();?>leaderAssessment"><i class="fa fa-cog  fa-lg" aria-hidden="true"></i>Leader Assessment &nbsp;
+            </a></li>
+      <?php } ?>
+
     <?php if($userdata['role']=='admin' || $userdata['role']=='supervisor'){?>
       <span class="viewhover dropdown-btn dropdown-options" onclick="viewreport()">Reports
         <i class="fa fa-caret-right fa-lg" style="float: right;"></i>
