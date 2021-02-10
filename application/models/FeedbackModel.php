@@ -75,19 +75,18 @@ class FeedbackModel extends CI_Model
         }
     }
 
-    function upexceldata($data){
-        $getdate_m = date_create('01-'.$data[2]);
-        $getmY = date_format($getdate_m,"m-Y");
+    function upexceldata($data,$monthyeardate){
+
         $dataset = array(
             "emp_id" => $data[0],
             "name" => $data[1],
-            "monthyear" => $getmY,
-            "produnction_perc" => $data[3],
-            "quality_perc" => $data[4],
-            "attendance" => $data[5],
+            "monthyear" => $monthyeardate,
+            "produnction_perc" => $data[2],
+            "quality_perc" => $data[3],
+            "attendance" => $data[4],
             "date_apply" => date("Y-m-d")
         );
-        $check=$this->db->query("SELECT * FROM manager_feedback_form where emp_id='$data[0]'");
+        $check=$this->db->query("SELECT * FROM manager_feedback_form where emp_id='$data[0]' and monthyear='$monthyeardate'");
         if($check->num_rows() > 0){
             $this->db->where("emp_id",$data[0])->update("manager_feedback_form",$dataset);
         }else{

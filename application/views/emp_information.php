@@ -140,7 +140,7 @@ $userdata=$this->session->all_userdata();
                   <a class="nav-link tablink" id="profile-tab" data-toggle="tab" data-tab-index="3" onclick="openPage('workexp', this, 'white')">Professional Experience</a>
                 </li>
 				          <li class="nav-item">
-                  <a class="nav-link tablink" id="profile-tab" data-toggle="tab" data-tab-index="4" onclick="openPage('management', this, 'white')">Management</a>
+                  <a class="nav-link tablink" id="profile-tab" data-toggle="tab" data-tab-index="4" onclick="openPage('management', this, 'white')">Other Details</a>
                 </li>
 
                 <!-- <li class="nav-item">

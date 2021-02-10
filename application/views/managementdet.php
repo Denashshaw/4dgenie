@@ -24,7 +24,7 @@
             <br>
               <div class="row" style="margin-left:2%;margin-right:2%">
 
-                <div class="col-md-12" style="text-align:center;color:gray"><h3><span  class="fa fa-cog" style="font-size:35px;" aria-hidden="true"></span>&nbsp;&nbsp;Management Details</h3><br></div>
+                <div class="col-md-12" style="text-align:center;color:gray"><h3><span  class="fa fa-cog" style="font-size:35px;" aria-hidden="true"></span>&nbsp;&nbsp;Other Details</h3><br></div>
                 <div class="col-md-3" style="padding-top:1%">
 
                   <p >Work Email ID:<span id="start">*</span></p>

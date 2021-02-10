@@ -182,7 +182,7 @@ class Feedbackform extends CI_Controller {
                 while($row = fgetcsv($file_data))
                 {
                     if($row[0] == ''){ continue; }
-                    $this->feedbackModel->upexceldata($row);
+                    $this->feedbackModel->upexceldata($row,$_POST['mypickerview']);
                 }
                 $this->session->set_flashdata('msg', '<p style="color:green">File uploaded successfully</p>');
             }

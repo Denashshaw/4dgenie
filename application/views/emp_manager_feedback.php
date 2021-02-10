@@ -69,7 +69,10 @@
 <div class="col-md-9">
   <?php if($userdata['department'] =='MANAGEMENT' || $userdata['role'] =='supervisor'){ ?>
     <form method="POST" action="<?php echo base_url(); ?>Feedbackform/uploadcsv"  enctype="multipart/form-data">
-      <input type="file" id="uploadcsv" name="uploadcsv" style="margin-left:50%;width:250px;float:left" class="form-control" accept=".csv">
+      <p>Month & Year</p>
+      <input type="text" id="mypickerview" name="mypickerview" style="float:left" value="<?php echo date("m-Y"); ?>">
+
+      <input type="file" id="uploadcsv" name="uploadcsv" style="width:250px;float:left" class="form-control" accept=".csv">
       <input type="submit" class="btn btn-success">
     </form>
   <?php } ?>
@@ -393,6 +396,8 @@
 
 <?php if($userdata['department'] != 'MANAGEMENT'){ ?>
   <script>
+
+
     $('.menu1 input').prop("readonly", true);
     $('#monthdatepicker').attr('disabled', true);
     $('.menu2 input').prop("readonly", true);
@@ -400,6 +405,11 @@
   </script>
 <?php } ?>
 <script>
+$("#mypickerview").datepicker( {
+    format: "mm-yyyy",
+    viewMode: "months",
+    minViewMode: "months"
+});
 $(".more").click(function(){
 
 }, function(){
