@@ -88,8 +88,8 @@
             // "emp_photo" => $emp_file_name,
             //"resume" => $resume_file_name,
             // "insurance" => $insurance_file_name,
-            // "aadhar" => $aadhar_file_name,
-            // "pan" => $pan_file_name,
+             "aadhar_no" => $data['aadhar_no'],
+             "pan_no" => $data['pan_no'],
             "Shift" => $data['selectshift']
     );
 

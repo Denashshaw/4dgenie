@@ -8,10 +8,10 @@
         <!-- <div class="col-md-12 activity">
           <button class="btn btn-sm btn-primary" onclick="addinfoBtn()"> Show / Hide Personal Details</button>
           <br><br>
-        </div> -->      
+        </div> -->
     <!-- <div class="row activity-row"> -->
       <div class=" col-md-12 addinfobox" style="display: none;">
-        <!-- display:none; -->        
+        <!-- display:none; -->
         <form autocomplete="off" method="POST" id="addform" enctype="multipart/form-data" action="<?php echo base_url('EmpDetailsAdd');?>">
           <input type="hidden" id="empid" name="empid" value="" />
           <input type="hidden" id="base_url" value="<?php echo base_url(); ?>" />
@@ -28,15 +28,15 @@
                   <?php } ?>
                 </select>
                 <?php } else { ?>
-                  <input type="text" name="" value="<?php echo $_SESSION['emp_id'] .'/'. $_SESSION['name']; ?>" class="form-control useridval" id="userid">                   
+                  <input type="text" name="" value="<?php echo $_SESSION['emp_id'] .'/'. $_SESSION['name']; ?>" class="form-control useridval" id="userid">
                   <?php } ?>
               </div>
- 
+
               <div class="col-md-3 secret_div">
                 <p >Name</p>
                 <input type="text" id="empname" name="empname" class="form-control" required>
               </div>
-     
+
               <div class="col-md-3 secret_div">
                 <p >DOB</p>
                   <input type="date"  id="dob" name="dob" class="form-control" required>
@@ -52,7 +52,7 @@
                   <p >Email</p>
                     <input type="email"  id="personalEmail" name="personalEmail" class="form-control">
                 </div>
-   
+
                 <div class="col-md-3">
                   <p >Transportation</p>
                   <!-- <input type="text"   id="transOffice" name="transOffice" class="form-control"> -->
@@ -63,7 +63,7 @@
                     <option value="public">Public Transportation</option>
                   </select>
                 </div>
-     
+
               <div class="col-md-3 transRoute">
                 <p>Route</p>
                     <input type="text" id="transRoute" name="transRoute" class="form-control">
@@ -78,7 +78,7 @@
                   <div class="col-md-3">
                     <p >Current Team</p>
                     <input class="col-md-12 col-xs-12 form-control"  type="text"  id="currentTeam" name="currentTeam" >
-                      
+
                   </div>
                   <div class="col-md-3">
                     <p >Designation</p>
@@ -100,7 +100,7 @@
                     <p >Probation End Date</p>
                     <input class="col-md-12 col-xs-12 form-control"  type="date"  id="probationEnd" name="probationEnd" readonly="">
                   </div>
-                  
+
                   <div class="col-md-3">
                     <p >Term Date:</p>
                     <input class="col-md-12 col-xs-12 form-control"  type="date"  id="termDate" name="termDate" >
@@ -111,7 +111,7 @@
 
             <div class="row secret_div">
               <div class="col-md-4">
-                
+
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded">
                     <div class="card-header"><b>Current Residential Address</b></div>
                     <div class="card-body">
@@ -228,7 +228,7 @@
                   <!-- <li class="list-group-item">
                     <input type="submit" class="check-in" style="margin-left:10px;float:left">
                     <input type="reset" class="check-in" style="background-color: red">
-                  </li>  -->  
+                  </li>  -->
                 <?php //} ?>
                   <!-- <li class="list-group-item"><b><a href="#" class="show-modal" style="color: black;" data-toggle="modal" data-target="#changePassword" data-backdrop="static"><i class="fa fa-key" ></i>&nbsp;&nbsp;Change Password</a></b></li> -->
                 </ul>
@@ -241,7 +241,7 @@
                   <div class="col-md-3">
                     <p >Blood Group</p>
                     <input class="col-md-12 col-xs-12 form-control"  type="text"  id="bloodgrp" name="bloodgrp" >
-                      
+
                   </div>
                   <div class="col-md-3">
                     <p >Emergency Contact Person</p>
@@ -264,7 +264,7 @@
                       <option value="Married">Married</option>
                       <option value="Unmarried">Unmarried</option>
                     </select>
-                      
+
                   </div>
 
                   <div class="col-md-3 weddingAniver">
@@ -286,6 +286,17 @@
                       <span class="empty_img_err">No document selected</span>
                   </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <p >PAN Number</p>
+                    <input type="text" id="pan_no" name="pan_no" class="form-control" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" placeholder="XXXXX1234X" >
+                  </div>
+                  <div class="col-md-3">
+                    <p >Aadhar Number</p>
+                    <input type="text" id="aadhar_no" name="aadhar_no" class="form-control" pattern="[0-9]{12}">
+
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -299,7 +310,7 @@
           </form>
           </div>
         </div>
-          
+
 
 <!-- Employee Photo Modal -->
       <div class="modal fade" id="emp_photo_modal">
@@ -322,7 +333,7 @@
 
           </div>
         </div>
-      </div>  
+      </div>
 
       <!-- Resume View Modal -->
       <div class="modal fade" id="resume_view_modal">
@@ -348,7 +359,7 @@
 
           </div>
         </div>
-      </div>  
+      </div>
 
       <!-- Insurance View Modal -->
       <div class="modal fade" id="insurance_view_modal">
@@ -374,7 +385,7 @@
 
           </div>
         </div>
-      </div>  
+      </div>
 
       <!-- Aadhar View Modal -->
       <div class="modal fade" id="aadhar_view_modal">
@@ -400,7 +411,7 @@
 
           </div>
         </div>
-      </div>  
+      </div>
 
       <!-- PAN View Modal -->
       <div class="modal fade" id="pan_view_modal">
@@ -426,7 +437,7 @@
 
           </div>
         </div>
-      </div>  
+      </div>
 
       <!-- Social Links Modal -->
       <div class="modal fade" id="social_modal">
@@ -465,11 +476,11 @@
             </div> -->
           </div>
         </div>
-      </div>    
-<script>  
+      </div>
+<script>
 
 
-  $(document).ready(function() {  
+  $(document).ready(function() {
     /*setTimeout(() => {
       var joiningDate = $('#joiningDate').val();
       if(joiningDate == 'Jan 1, 1970'){
@@ -485,7 +496,7 @@
       if(termDate == 'Jan 1, 1970'){
         $('#termDate').val('');
       }
-      
+
       var dob = $('#dob').val();
       if(dob == 'Jan 1, 1970'){
         $('#dob').val('');
@@ -499,7 +510,7 @@
   }
     $('.addinfobox,#empdetailadd').show();
     // addinfoBtn();
-  // $('#social_modal').on('hidden.bs.modal', function(){    
+  // $('#social_modal').on('hidden.bs.modal', function(){
   //   $('.modal-backdrop').remove();
   // });
 
@@ -544,7 +555,7 @@
   $("#termDate").datepicker({
       altField: "#termDate",
       altFormat: "M d, yy"
-    }); */ 
+    }); */
   $('#userid').select2({width: 'resolve'});
 });
 
@@ -605,7 +616,7 @@
     });
   });
 
-  $('#probationEnd').css('pointer-events',' none');  
+  $('#probationEnd').css('pointer-events',' none');
   $('#joiningDate').change(function(){
     /*if($('#probationPeriod').val() == ''){
       return
@@ -613,7 +624,7 @@
     $('#probationPeriod').val('90');
     setTimeout(() => {
     var probationPeriod = $('#probationPeriod').val();
-    var joiningDate = $('#joiningDate').val(); 
+    var joiningDate = $('#joiningDate').val();
     var today = new Date(joiningDate);
     today.setDate(today.getDate()+parseInt(probationPeriod));
     futureProbationDate = today.toISOString().split('T')[0];
@@ -623,16 +634,16 @@
   });
 
 function formatDate(date) {
-  
+
   if(date == '0000-00-00') return '';
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
 
-    if (month.length < 2) 
+    if (month.length < 2)
         month = '0' + month;
-    if (day.length < 2) 
+    if (day.length < 2)
         day = '0' + day;
     return [month, day, year].join('/');
 }
@@ -669,7 +680,7 @@ function viewdata(data){
     $('.first_div input,.second_div input').prop('readonly', true);
     $('#transOffice, #transRoute, #personalEmail, #joiningDate, #termDate, #probationEnd, #dob').prop('readonly', true);
     $('#transOffice, #personalEmail, #joiningDate, #termDate, #probationEnd, #dob').css("pointer-events","none");
-    $('#transOffice').css('background-color', '#e9ecef');    
+    $('#transOffice').css('background-color', '#e9ecef');
     /*$("input").prop("disabled", false);
     $("input[type='text']").prop("readonly", true);
     $("input[type='file']").prop("readonly", false);
@@ -677,15 +688,15 @@ function viewdata(data){
     $("#new_password, #confirm_password").prop("readonly", false);
     $(".apply").prop("readonly", false);*/
   }
-  
+
   $('#loading').show();
 
   /*setTimeout(() => {
-   
+
   },1000)*/
   $('.secret_div').show();
   setTimeout(()=>{
-    checkMaritalStatus();    
+    checkMaritalStatus();
   },500);
 
   $("#marriage").change(() => {
@@ -694,7 +705,7 @@ function viewdata(data){
 
  // $('#empdetailadd').show();
   // document.getElementById("addform").reset();
-  
+
 
   var userrole = "<?php echo $_SESSION['role']; ?>";
   if(userrole == 'agent'){
@@ -721,7 +732,7 @@ function viewdata(data){
     data   : {id:ajax_id},
     dataType: 'json',
     success : function(data){
-      $("#dob").val('');      
+      $("#dob").val('');
       if(data?.[0]){
       $('.empty_img_err').show();
       $('.view_img, .view_resume, .view_insurance, .view_aadhar, .view_pan').hide();
@@ -753,7 +764,7 @@ function viewdata(data){
       $('#insuranceList').html("<embed src="+imgSrc+'insurance/'+data[0]['insurance']+" width='200' height='200' /><br/><h3 style='word-break: break-word;'><a href="+imgSrc+ 'insurance/' +data[0]['insurance']+">"+data[0]['insurance']+"</a></h3>");
       $('#aadharList').html("<embed src="+imgSrc+'address_proof/'+data[0]['aadhar']+" width='200' height='200' /><br/><h3 style='word-break: break-word;'><a href="+imgSrc+ 'address_proof/' +data[0]['aadhar']+">"+data[0]['aadhar']+"</a></h3>");
       $('#panList').html("<embed src="+imgSrc+'address_proof/'+data[0]['pan']+" width='200' height='200' /><br/><h3 style='word-break: break-word;'><a href="+imgSrc+ 'address_proof/' +data[0]['pan']+">"+data[0]['pan']+"</a></h3>");
-      
+
       /*$("#dob").datepicker('setDate', formatDate(data[0]['DOB']));
       $('#probationEnd').datepicker('setDate', formatDate(data[0]['probationEnd']));
       $('#weddingAniver').datepicker('setDate', formatDate(data[0]['Anniversary']));
@@ -777,7 +788,7 @@ function viewdata(data){
       $('#transOffice').val(findTransport(data[0]['Transportation']));
 
       $('#transRoute').val(data[0]['Route']);
-      $('#marriage').val(data[0]['MarriedUnMarried']);      
+      $('#marriage').val(data[0]['MarriedUnMarried']);
       $('#address1').val(data[0]['Current_Address1']);
       $('#address2').val(data[0]['Current_Address2']);
       $('#landmark').val(data[0]['Current_Landmark']);
@@ -790,10 +801,12 @@ function viewdata(data){
       $('#Perspincode').val(data[0]['Perm_Pincode']);
       $('#currentTeam').val(data[0]['currentTeam']);
       $('#designation').val(data[0]['designation']);
-      $('#probationPeriod').val(data[0]['probationPeriod']);            
+      $('#probationPeriod').val(data[0]['probationPeriod']);
       $('#linkedin').val(data[0]['linkedin']);
       $('#facebook').val(data[0]['facebook']);
       $('#selectshift').val(data[0]['Shift']);
+      $('#aadhar_no').val(data[0]['aadhar_no']);
+      $('#pan_no').val(data[0]['pan_no']);
       }else{
         $('.empty_img_err').show();
       }
@@ -802,7 +815,7 @@ function viewdata(data){
 }
 
 $('#emp_photo').on("change", function(){
-    if($('#emp_photo').val() == ''){ 
+    if($('#emp_photo').val() == ''){
       $('.view_img').hide();
       $('.emp_img_div .empty_img_err').show();
     }
@@ -829,7 +842,7 @@ $('#emp_photo').on("change", function(){
   });
 
 $('#resume').on("change", function(){
-    if($('#resume').val() == ''){ 
+    if($('#resume').val() == ''){
       $('.view_resume').hide();
       $('.empty_img_err').show();
     } else {
@@ -858,7 +871,7 @@ $('#resume').on("change", function(){
   });
 
 $('#insurance').on("change", function(){
-    if($('#insurance').val() == ''){ 
+    if($('#insurance').val() == ''){
       $('.view_insurance').hide();
       $('.empty_img_err').show();
     } else {
@@ -882,7 +895,7 @@ $('#insurance').on("change", function(){
     }
 
     var insurance = document.getElementById('insurance');
-    var output = document.getElementById('insuranceList'); 
+    var output = document.getElementById('insuranceList');
     output.innerHTML = '<br/><h3>'+insurance.files.item(0).name+'</h3>';
 
       // output.innerHTML = '<ul>';
@@ -893,7 +906,7 @@ $('#insurance').on("change", function(){
   });
 
 $('#aadhar').on("change", function(){
-    if($('#aadhar').val() == ''){ 
+    if($('#aadhar').val() == ''){
       $('.view_aadhar').hide();
     } else {
       $('.view_aadhar').show();
@@ -916,7 +929,7 @@ $('#aadhar').on("change", function(){
     }
 
     var aadhar = document.getElementById('aadhar');
-    var output = document.getElementById('aadharList'); 
+    var output = document.getElementById('aadharList');
     output.innerHTML = '<br/><h3>'+aadhar.files.item(0).name+'</h3>';
       /*output.innerHTML = '<ul>';
       for (var i = 0; i < aadhar.files.length; ++i) {
@@ -927,7 +940,7 @@ $('#aadhar').on("change", function(){
 
 $('#pan').on("change", function(){
     if($('#pan').val() == ''){
-      $('.view_pan').hide();      
+      $('.view_pan').hide();
     } else {
       $('.view_pan').show();
       $('.pan_div .empty_img_err').hide();
@@ -1053,9 +1066,9 @@ ul.list-group.shadow-lg.p-4.mb-5.bg-white.rounded{
 }
 #loading {
   width: 100px;
-  height: 100px;  
+  height: 100px;
   position: fixed;
-  display: block;  
+  display: block;
   text-align: center;
 }
 
