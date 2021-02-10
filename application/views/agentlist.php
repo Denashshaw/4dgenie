@@ -71,18 +71,25 @@
 								</thead>
 								<tbody>
 								<?php if($agent_data!=''){?>
-								<tr>
+
 								<?php foreach($agent_data as $agentdata){ ?>
+									<tr >
 								<th scope="row"><span class="emp-id"><?php echo $agentdata->emp_id;?></span></th>
 								<td><?php echo ucfirst($agentdata->name);?></td>
 								<td><?php echo ucfirst($agentdata->username);?></span></td>
 								<td><?php echo ucfirst($agentdata->role);?></span></td>
 								<td><?php echo ucfirst($agentdata->department);?></span></td>
 								<td><?php echo ucfirst($agentdata->client);?></span></td>
-								<td><span class="emp-break-in"><a href="javaScript:void(0)" class="" data-toggle="modal" data-target="#edit_Modal_<?php echo $agentdata->id;?>">Edit</a></span>
+								<td>
+										<?php if($userdata['role'] == 'admin' || ($userdata['role'] == 'supervisor' && $userdata['department'] == 'HR')){ ?>
+									<span style="cursor:pointer"><a onclick="Deactivate(`<?php echo $agentdata->emp_id;?>`)">Deactivate</a></span>
+								<?php } ?>
+									<span class="emp-break-in"><a href="javaScript:void(0)" class="" data-toggle="modal" data-target="#edit_Modal_<?php echo $agentdata->id;?>">Edit</a></span>
 								<!-- <span class="emp-break-out"><a href="<?php echo base_url()?>adduser/deleteuser/<?php echo $agentdata->id;?>" onClick="return doconfirm();" style="color:red;">Delete</a></span>	 -->
 								</td>
 								</tr>
+
+
 
 <!-- Modal -->
 <div style="padding-top:1px;" class="modal fade" id="edit_Modal_<?php echo $agentdata->id;?>" role="dialog">
@@ -155,7 +162,28 @@
   </div>
 </div>
 
-								<?php } } ?>
+								<?php } ?>
+
+									<?php foreach ($agent_data_deactive as $a_deactuv) { ?>
+										<tr style="background:#ead5dc">
+											<th scope="row"><span class="emp-id"><?php echo $a_deactuv->emp_id;?></span></th>
+											<td><?php echo ucfirst($a_deactuv->name);?></td>
+											<td><?php echo ucfirst($a_deactuv->username);?></span></td>
+											<td><?php echo ucfirst($a_deactuv->role);?></span></td>
+											<td><?php echo ucfirst($a_deactuv->department);?></span></td>
+											<td><?php echo ucfirst($a_deactuv->client);?></span></td>
+											<td>
+												<?php if($userdata['role'] == 'admin' || ($userdata['role'] == 'supervisor' && $userdata['department'] == 'HR')){ ?>
+												<span style="cursor:pointer"><a  onclick="Activate(`<?php echo $a_deactuv->emp_id;?>`)">Activate</a></span>
+											<?php } ?>
+												<span class="emp-break-in"><a href="javaScript:void(0)" class="" data-toggle="modal" data-target="#edit_Modal_<?php echo $a_deactuv->id;?>">Edit</a></span>
+											<!-- <span class="emp-break-out"><a href="<?php echo base_url()?>adduser/deleteuser/<?php echo $a_deactuv->id;?>" onClick="return doconfirm();" style="color:red;">Delete</a></span>	 -->
+											</td>
+
+										</tr>
+								<?php	} ?>
+
+							<?php } ?>
 							</tbody>
 						</table>
 					</div>
@@ -348,6 +376,33 @@ function fixtiming(){
     $('#checkintiming').val('');
     $('#checkouttiming').val('');
   }
+}
+
+
+function Deactivate(client){
+	$.ajax({
+		method : 'post',
+		url    : '<?php echo base_url();?>Adduser/Deactivate',
+		data   : {emp_id:client},
+		dataType: 'json',
+		success : function(data){
+			console.log(data);
+			window.location.reload();
+		}
+	});
+}
+
+function Activate(client){
+	$.ajax({
+		method : 'post',
+		url    : '<?php echo base_url();?>Adduser/Activate',
+		data   : {emp_id:client},
+		dataType: 'json',
+		success : function(data){
+			console.log(data);
+		 window.location.reload();
+		}
+	});
 }
 </script>
 </body>

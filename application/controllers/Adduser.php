@@ -13,6 +13,17 @@ class Adduser extends CI_Controller {
 		}
 	}
 
+	public function Deactivate(){
+		$activedeactive=$this->Mainmodel->activedeactive('users','hideusers',$_POST['emp_id']);
+		echo json_encode([$res=>'1']);
+			 exit;
+	}
+	public function Activate(){
+		$activedeactive=$this->Mainmodel->activedeactive('hideusers','users',$_POST['emp_id']);
+		echo json_encode([$res=>'1']);
+			 exit;
+	}
+
 	public function adduser()
 	{
 		$userdata=$this->session->all_userdata();

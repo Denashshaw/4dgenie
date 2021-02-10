@@ -7,13 +7,13 @@ class Home extends CI_Controller {
 		parent::__construct();
 		$this->load->model("Mainmodel");
 		$userdata=$this->session->all_userdata();
-		
-		if($userdata["hrms_logged_in"] != TRUE){ 
+
+		if($userdata["hrms_logged_in"] != TRUE){
 		//redirect('Logindetails/login_details');
 		 	redirect('login/index');
-		} 
+		}
 	}
-	
+
 	public function index()
 	{
 		$data['login_data'] = $this->Mainmodel->logindata();
@@ -23,13 +23,14 @@ class Home extends CI_Controller {
 
 	public function agentlist(){
 		$data['agent_data']=$this->Mainmodel->agentdata();
+		$data['agent_data_deactive']=$this->Mainmodel->deactive_agent();
 		$this->load->view('agentlist',$data);
 	}
 
 	public function assign_break(){
 		$this->load->view('assign_break');
 	}
-	
+
 	public function get_user(){
 
 		$department = $this->db->query("SELECT * FROM users WHERE role NOT IN ('admin','supervisor') and created_by = '".$_POST["department"]."'");
@@ -37,7 +38,7 @@ class Home extends CI_Controller {
 			<option value="">Select Agent</option>
         <?php foreach($res_depart as $depart){?>
             <option value="<?php echo $depart->user_id;?>"><?php echo $depart->name;?></option>
-        <?php }  
+        <?php }
 	}
 
 

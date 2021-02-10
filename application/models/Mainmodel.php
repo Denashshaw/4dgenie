@@ -26,6 +26,10 @@
 		$user =$this->db->query("SELECT * FROM users WHERE role!='admin' ");
 		return $user->result();
 	}
+  public function deactive_agent(){
+    $user =$this->db->query("SELECT * FROM hideusers WHERE role!='admin' ");
+    return $user->result();
+  }
 
   public function change_password($details){
 
@@ -99,6 +103,12 @@
 public function getusermail($id){
     $usermail =$this->db->query("SELECT * FROM officemail WHERE emp_id='$id'");
     return $usermail->result();
+  }
+
+  public function activedeactive($from,$to,$empid){
+      $query = $this->db->query("INSERT INTO $to (`user_id`, `emp_id`, `name`, `username`,`password`,`created_on`,`role`,`department`,`client`,`doj`,`created_by`,`status`,`transferred_status`,`checkin`,`checkout`) SELECT user_id,emp_id,name,username,password,created_on,role,department,client,doj,created_by,status,transferred_status,checkin,checkout FROM $from WHERE `emp_id`='$empid'");
+      //delted from mysql_list_tables
+      $this->db->query("DELETE FROM $from where emp_id='$empid'");
   }
 //jagan 21 end
 
