@@ -90,6 +90,9 @@ function getnoficiation_hrmsView(){
             else if(res[i]["module_name"] == 'Emp Separation'){
                 hreflink = '<a href="<?php echo base_url(); ?>Separation" onclick="updatethestatus('+res[i]["id"]+')">';
                 linkhref_notification = "<?php echo base_url(); ?>Separation";
+            }else if(res[i]["module_name"] == 'Assessment'){
+                hreflink = '<a href="<?php echo base_url(); ?>leaderAssessment" onclick="updatethestatus('+res[i]["id"]+')">';
+                linkhref_notification = "<?php echo base_url(); ?>leaderAssessment";
             }
             else{
                 hreflink = '<a href="#">';

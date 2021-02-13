@@ -30,6 +30,10 @@
             <a class="<?php  if($actlinks == "Separation_report") echo "active";?>" href="<?php echo base_url();?>Separation/Separation_report">Emp Separation Report</a>
           </li>
 
+          <li class="list-group-item <?php if($actlinks == "Accessment_report") echo "active";?> dropMenu_rep">
+            <a class="<?php  if($actlinks == "Accessment_report") echo "active";?>" href="<?php echo base_url();?>leaderAssessment/Accessment_report">Accessment Report</a>
+          </li>
+
            <!-- <li class="list-group-item">Attendance Report</li> -->
          </ul>
       </div>

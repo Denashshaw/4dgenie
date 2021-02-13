@@ -20,19 +20,53 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="<?php echo base_url('multiplesectplugin/js/jquery.transfer.js?v=0.0.6');?>"></script>
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+
+  <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.jqueryui.min.css">
+  	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowgroup/1.1.2/css/rowGroup.jqueryui.min.css">
+
+
+  <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.22/js/dataTables.jqueryui.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/rowgroup/1.1.2/js/dataTables.rowGroup.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.flash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
   <div class="container-fluid p-0">
     <?php include('page_head.php');?>
-   
+    <div class="row activity-row">
+			<div class="col-md-12 activity">Assessment</div>
+		</div>
+    <div class="row activity-row">
+			<div class="col-md-12 activity">
+    <button class="check-in viewadddiv">Add Question</button>
+    <div class="addquestionview" style="display:none">
      <div class="row emp-table ">
       <div class="col-md-7 table-responsive" >
         <p>Add Agents</p>
-          <div id="transfer1" class="transfer-demo"></div>
+          <div id="transfer1" class="transfer-demo" style="font-size:12px"></div>
 
       </div>
       <div class="col-md-5" >
+        <div class="row" style="background:#f1f3f1">
+          <div class="col-md-6">
+            <p>Title/Assessment ID<span style="color:red">*</span></p>
+            <input type="text" id="title" name="title" class="form-control">
+          </div>
+          <div class="col-md-6" style="text-align:right">
+            <p>Created Date</p>
+            <?php echo date('F d Y'); ?>
+          </div>
+        </div>
+        <br>
         <p>Add Questions</p>
         <!-- <button class="btn btn-success" onclick="addquestion()">Add Question</button> -->
-        <i class="fa fa-plus" style="font-size:60px;margin-top:30%;margin-left:45%;color:green;cursor:pointer;" onclick="addquestion()"></i>
+        <i class="fa fa-plus" style="font-size:60px;margin-top:10%;margin-left:45%;color:green;cursor:pointer;" onclick="addquestion()"></i>
       </div><br>
       <div class="col-md-12">
         <table class="table table-bordered">
@@ -48,12 +82,50 @@
             </tr>
           </thead>
           <tbody id="questionprint">
-            
+
           </tbody>
         </table>
       </div>
       <div class="col-md-12">
-        <input type="button" value="Submit" class="btn btn-primary submitbtn">
+        <input type="button" value="Submit" onclick="getdata()" class="btn btn-primary submitbtn">
+      </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="row emp-table">
+      <div class="col-md-12  table-responsive">
+        <table class="table table-bordered dt">
+          <thead>
+            <tr>
+              <td>Title/Assessment ID</td>
+              <td>No of Questions</td>
+              <td>No of Employees</td>
+              <td>Date of Creation</td>
+              <!-- <td></td> -->
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($getdata as $a) { ?>
+              <tr>
+                <td> <?php echo $a->title; ?></td>
+                <td>
+                  <p style="background:#3f76c9;padding:2%;border-radius:50%;width:20%;text-align:center;color:white" onclick="viewquestions(`<?php echo $a->questions; ?>`)">
+                     <?php echo $a->noof_questions; ?>
+                  </p>
+                </td>
+                <td>
+                  <p style="background:#c93f58;padding:2%;border-radius:50%;width:20%;text-align:center;color:white"  onclick="viewagent(`<?php echo $a->title; ?>`,`<?php echo $a->emp_id; ?>`)">
+                    <?php echo $a->noof_emp_id; ?>
+                  </p>
+                </td>
+              <td> <?php echo date_format(date_create($a->created_date),"F d-Y"); ?></td>
+            </tr>
+              <?php
+            }
+            ?>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -63,7 +135,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title" id="exampleModalLongTitle">Add Quiestions</h3>
+        <h3 class="modal-title" id="exampleModalLongTitle">Add Questions</h3>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -85,7 +157,7 @@
               <td>D <input type="text" name="d" id="d"></td>
           </tr>
         </table>
-      
+
       <div>
         <p>Correct Answer</p>
         <select id="correctans" name="correctans" class="form-control">
@@ -110,12 +182,21 @@
 <?php include('sweetalert.php'); ?>
 
 <script>
+$('.dt').DataTable({
+//  dom: 'lrtip',
+  "orderFixed": [ 3, 'desc' ],
+  "searching": true
+});
+
 $('#transfer1 .param-item').html('Agents');
+$( ".viewadddiv" ).click(function() {
+  $( ".addquestionview" ).toggle();
+});
 </script>
 <script type="text/javascript">
 
 var data = [];
-
+var selectedagent;
 
   $.ajax({
     'async': false,
@@ -131,25 +212,43 @@ var data = [];
     "itemName": "name",
     "valueName": "emp_id",
     "callable": function (items) {
-      console.dir(items)
+      console.dir(items);
+      selectedagent=items;
     }
   };
   $("#transfer1").transfer(settings1);
 
-</script>
-<script>
+
   var questions=[];
   var a=[];
   var b=[];
   var c=[];
   var d=[];
   var correc=[];
+
   function addquestion(){
-    $('.addquestion').modal('show');
+    if($('#title').val() !=''){
+      $.ajax({
+        url : "<?php echo base_url(); ?>leaderAssessment/checktitle",
+        method : "POST",
+        data:{"titleval":$('#title').val()},
+        success : function(datares){
+          if(JSON.parse(datares).length > 0){
+             swal("Error", "Title Already Exists", "error");
+          }else{
+              $('.addquestion').modal('show');
+          }
+        }
+      });
+
+    }else{
+       swal("Error", "Title Field Required", "error");
+    }
+
   }
 
   function addandclose(res){
- 
+
     if($('#addingquestion #question').val() !='' && $('#addingquestion #a').val() != '' && $('#addingquestion #b').val() != '' && $('#addingquestion #c').val() != '' && $('#addingquestion #d').val() != '' && $('#addingquestion #correctans').val() != null){
     questions.push($('#addingquestion #question').val());
       a.push($('#addingquestion #a').val());
@@ -211,5 +310,163 @@ function removefromtable(indexplace){
 }
   printtable();
 }
+function getdata(){
+  var emp=[];
+  selectedagent.forEach((item, i) => {
+    //emp.push(item['emp_id']);
+    emp.push(item['name']);
+  });
+  empids=emp.toString();
+  $.ajax({
+    url : "<?php echo base_url(); ?>leaderAssessment/addquestions",
+    method : "POST",
+    data:{"empid":empids,"title":$('#title').val(),"questions":questions,"correct":correc,"a":a,"b":b,"c":c,"d":d},
+    success : function(datares){
+      console.log(datares);
+      if(datares == '"Success"'){
+          swal("Success", "Question Added Successfully", "success");
+      }else{
+        swal("Error", "Question Not Added!!!", "error");
+      }
+      window.location.reload();
+      questions.length = 0;
+      correc.length = 0;
+      a.length = 0;
+      b.length = 0;
+      c.length = 0;
+      d.length = 0;
+      $('#title').val('');
+      printtable();
+      // window.location.reload();
+    }
+  });
+
+}
+
+function viewquestions(question){
+  $('.questionview').modal('show');
+  $.ajax({
+    url : "<?php echo base_url(); ?>leaderAssessment/getquestion",
+    method : "POST",
+    data:{"questions":question},
+    success : function(datares){
+      console.log(datares);
+      var data = JSON.parse(datares);
+      var out='';
+      for(var i=0;i<data.length;i++){
+        out +='<div class="card">';
+        out +='<div class="card-body">';
+        out += (i+1)+'). '+data[i]['question'];
+        out +='<table class="table table-responsive">';
+        out +='<tr><td>A)'+data[i]['a']+'</td>';
+        out +='<td>B)'+data[i]['b']+'</td>';
+        out +='<td>C)'+data[i]['c']+'</td>';
+        out +='<td>D)'+data[i]['d']+'</td></tr>';
+        out +='</table>';
+        out +='<p style="text-align:right">Correct Answer: <span style="color:green;font-size:18px"> '+data[i]['correct'].toUpperCase()+'</span></p>';
+        out +='</div>';
+        out +='</div>';
+      }
+      $('.questionview #mainview').html(out);
+    }
+  });
+}
+
 </script>
 </div>
+<div class="modal fade bd-example-modal-lg questionview" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Questions</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="mainview"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal fade bd-example-modal-lg agentview" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Agents</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="searchagent" style="float:right" placeholder="Search..">
+        <table class="table table-bordered agentviewdt" id="agentviewdt">
+          <thead>
+            <tr>
+              <th>Emp ID</th>
+              <th>Emp Name</th>
+              <th>Status</th>
+              <th>Mark</th>
+              <th>Date of Complete</th>
+            </tr>
+          </thead>
+          <tbody id="agentviewtable">
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+
+function viewagent(title,emp){
+  $('.agentview').modal('show');
+  var getagent= emp.split(",");
+
+  $.ajax({
+    url : "<?php echo base_url(); ?>leaderAssessment/getagentview",
+    method : "POST",
+    data:{"empids":getagent,"title":title},
+    success : function(datares){
+      var getdata= JSON.parse(datares);
+      var agentview='';
+
+      for(var i=0;i<getdata.length;i++){
+        var status=getdata[i].status;
+        if(status == 'Completed'){
+          var st='style="margin:5%;padding:5%;border-radius:50%;background:#3fc98e;color:white;text-align:center"';
+        }else{
+          var st='style="margin:5%;padding:5%;border-radius:50%;background:#3f89c9;color:white;text-align:center"';
+        }
+        agentview +='<tr>';
+        agentview +='<td>'+getdata[i].empid+'</td>';
+        agentview +='<td>'+getdata[i].name+'</td>';
+        agentview +='<td >'+status+'</td>';
+        agentview +='<td>'+getdata[i].mark+'</td>';
+        agentview +='<td>'+getdata[i].date+'</td>';
+        agentview +='</tr>';
+      }
+
+      $('#agentviewtable').html(agentview);
+
+    }
+  });
+
+}
+
+
+$('#searchagent').keyup(function(){
+  var search = $(this).val();
+  $('#agentviewdt tbody tr').hide();
+  var len = $('#agentviewdt tbody tr:not(.notfound) td:contains("'+search+'")').length;
+  if(len > 0){
+    $('#agentviewdt tbody tr:not(.notfound) td:contains("'+search+'")').each(function(){
+      $(this).closest('tr').show();
+    });
+  }else{
+    $('.notfound').show();
+  }
+});
+</script>

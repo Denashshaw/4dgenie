@@ -305,11 +305,6 @@ a:hover,.dropdown-options:hover, li.active, a.active {
       </li>
 
 
-
-
-      <li><a href=""><i class="fa fa-arrow-circle-right fa-lg" aria-hidden="true"></i> Leader Assessment</a></li>
-
-
       <li class="<?php if($actlinks == "Notification") echo "active";?>"><a class="<?php if($actlinks == "Notification") echo "active";?>" href="<?php echo base_url();?>Notification"><i class="fa fa-bullhorn fa-lg" aria-hidden="true"></i> Announcement</a></li>
 
       <?php } ?>
@@ -320,6 +315,9 @@ a:hover,.dropdown-options:hover, li.active, a.active {
 
     <li><a class="<?php  if($actlinks == "Ticket") echo "active";?>" href="<?php echo base_url();?>Ticket"><i class="fa fa-cogs fa-lg" aria-hidden="true"></i> IT Help Desk</a></li>
 
+    <li><a class="<?php  if($actlinks == "leaderAssessment") echo "active";?>" href="<?php echo base_url();?>leaderAssessment"><i class="fa fa-check-circle  fa-lg" aria-hidden="true"></i> Assessment &nbsp;
+    </a></li>
+    
     <?php
     //if($userdata['role'] != 'agent' && ($userdata['department'] == 'MANAGEMENT' || $userdata['department'] == 'HR' ||  $userdata['role'] == 'admin')){ ?>
         <span class="dropdown-btn dropdown-options">Emp Feedback/Appraisal
@@ -338,10 +336,9 @@ a:hover,.dropdown-options:hover, li.active, a.active {
 
       <?php //} ?>
 
-      <?php if($userdata['role']=='admin'){ ?>
-            <li><a class="<?php  if($actlinks == "leaderAssessment") echo "active";?>" href="<?php echo base_url();?>leaderAssessment"><i class="fa fa-cog  fa-lg" aria-hidden="true"></i>Leader Assessment &nbsp;
-            </a></li>
-      <?php } ?>
+
+
+
 
     <?php if($userdata['role']=='admin' || $userdata['role']=='supervisor'){?>
       <span class="viewhover dropdown-btn dropdown-options" onclick="viewreport()">Reports
