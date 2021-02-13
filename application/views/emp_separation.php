@@ -290,7 +290,7 @@ $(document).ready( function () {
        ],
     });
   }else{
-    $('.tableprint').DataTabl();
+    $('.tableprint').DataTable();
   }
 });
 $('.useridSeparation').select2();
