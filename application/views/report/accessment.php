@@ -92,11 +92,26 @@
                   }
                   echo "</tr>";
                   //$flag=false;
-                  if($flag == 1){break;}
+                  if($flag == 0){break;}
                   $flag++;
 
               }
               echo "</thead><tbody>";
+              $flagtest =0;
+              foreach ($rawdata as $data) {
+                if($flagtest == 0){ $flagtest++; continue; }
+                  echo "<tr style='background:#dcdcdc'>";
+                  for($i=0;$i<sizeof($data);$i++){
+                  ?>
+                    <td><?php echo $data[$i]; ?></td>
+                  <?php
+                  }
+                  echo "</tr>";
+                  //$flag=false;
+                  if($flagtest == 1){break;}
+                  $flagtest++;
+
+              }
               $flag=0;
               foreach ($rawdata as $data) {
                 if($flag < 2){ $flag++; continue; }
@@ -123,7 +138,7 @@
 <script>
 $('.dt').DataTable({
   dom: 'Bfrtip',
-// /  "bSortCellsTop": true,
+  "bSortCellsTop": true,
   buttons: [
   {
      extend:'excel',
