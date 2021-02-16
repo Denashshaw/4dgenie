@@ -125,8 +125,16 @@ class assessmentModel extends CI_Model
               }else{
                 $getans='';
               }
+
+              if($agent_ans[$j] == $q[$k][1]){
+                $questionans=1;
+              }else{
+                $questionans=0;
+              }
+            //  $questionval[$k]=$questionans;
               $agent_answer_final = $q[$k][$getans];
-              $datarow_second[$ind][$k+2]=$agent_answer_final;
+              $datarow_second[$ind][$k+2]=array($agent_answer_final,$questionans);
+
 
             }else{
             }
@@ -137,6 +145,7 @@ class assessmentModel extends CI_Model
       }
       $ind++;
       array_push($dataset,$datarow_second);
+      //array_push($dataset,$questionval);
     }
     return $dataset;
   }

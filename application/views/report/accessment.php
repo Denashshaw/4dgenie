@@ -80,6 +80,8 @@
 
 
             <?php if($rawdata){
+              //print_r($rawdata);
+              $Q_head=sizeof($rawdata[2][0])-2;
               echo "<thead>";
               $flag=0;
               foreach ($rawdata as $data) {
@@ -89,6 +91,9 @@
                   ?>
                     <td><?php echo $data[$i]; ?></td>
                   <?php
+                  }
+                  for($header=0;$header<$Q_head;$header++){
+                    echo "<td>-</td>";
                   }
                   echo "</tr>";
                   //$flag=false;
@@ -106,6 +111,9 @@
                     <td><?php echo $data[$i]; ?></td>
                   <?php
                   }
+                  for($header=0;$header < $Q_head;$header++){
+                    echo "<td>Q".$header."</td>";
+                  }
                   echo "</tr>";
                   //$flag=false;
                   if($flagtest == 1){break;}
@@ -114,12 +122,38 @@
               }
               $flag=0;
               foreach ($rawdata as $data) {
+
                 if($flag < 2){ $flag++; continue; }
+              //  if($flag == sizeof($rawdata)-1){ break;}
                   echo "<tr>";
+
                   for($i=0;$i<sizeof($data);$i++){
-                    for($j=0;$j<sizeof($data[0]);$j++) { ?>
-                      <td><?php echo $data[0][$j]; ?></td>
-                    <?php  }
+                    $Questionanswered=array();
+                    for($j=0;$j<sizeof($data[0]);$j++) {
+                      $ansval=$data[0][$j];
+                      if($j==0 || $j ==1){
+                        ?><td><?php echo $ansval; ?></td><?php
+                      }else{
+                        $t=0;
+                        foreach ($ansval as $ks) {
+                          if($t == 0){
+                            ?>
+                            <td><?php echo $ks; ?></td>
+
+                            <?php
+                            $t++;
+                            }else{
+                              array_push($Questionanswered,$ks);
+
+                            }
+                          }
+                      }
+
+                    }
+                    //echo "<td>".$Questionanswered."</td>";
+                    foreach ($Questionanswered as $res){
+                      echo "<td>".$res."</td>";
+                    }
                   }
                   echo "</tr>";
                   $flag++;
