@@ -31,7 +31,7 @@
           </li>
 
           <li class="list-group-item <?php if($actlinks == "Accessment_report") echo "active";?> dropMenu_rep">
-            <a class="<?php  if($actlinks == "Accessment_report") echo "active";?>" href="<?php echo base_url();?>leaderAssessment/Accessment_report">Accessment Report</a>
+            <a class="<?php  if($actlinks == "Accessment_report") echo "active";?>" href="<?php echo base_url();?>leaderAssessment/Accessment_report">Assessment Report</a>
           </li>
 
            <!-- <li class="list-group-item">Attendance Report</li> -->

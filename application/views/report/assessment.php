@@ -95,6 +95,7 @@
                   for($header=0;$header<$Q_head;$header++){
                     echo "<td>-</td>";
                   }
+                  echo "<td>-</td>";
                   echo "</tr>";
                   //$flag=false;
                   if($flag == 0){break;}
@@ -112,8 +113,9 @@
                   <?php
                   }
                   for($header=0;$header < $Q_head;$header++){
-                    echo "<td>Q".$header."</td>";
+                    echo "<td>Q".($header+1)."</td>";
                   }
+                  echo "<td>Total</td>";
                   echo "</tr>";
                   //$flag=false;
                   if($flagtest == 1){break;}
@@ -151,9 +153,12 @@
 
                     }
                     //echo "<td>".$Questionanswered."</td>";
+                    $totalvalue=0;
                     foreach ($Questionanswered as $res){
                       echo "<td>".$res."</td>";
+                      $totalvalue=$totalvalue+$res;
                     }
+                    echo "<td>".$totalvalue."</td>";
                   }
                   echo "</tr>";
                   $flag++;

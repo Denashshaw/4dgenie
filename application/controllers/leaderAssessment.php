@@ -134,7 +134,7 @@ class leaderAssessment extends CI_Controller {
 
 			}
 		}
-		$this->load->view('report/accessment',$data);
+		$this->load->view('report/assessment',$data);
 
 	}
 
