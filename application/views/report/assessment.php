@@ -80,7 +80,7 @@
 
 
             <?php if($rawdata){
-              //print_r($rawdata);
+            //  print_r($rawdata);
               $Q_head=sizeof($rawdata[2][0])-2;
               echo "<thead>";
               $flag=0;
@@ -131,14 +131,22 @@
 
                   for($i=0;$i<sizeof($data);$i++){
                     $Questionanswered=array();
+
                     for($j=0;$j<sizeof($data[0]);$j++) {
                       $ansval=$data[0][$j];
+
                       if($j==0 || $j ==1){
                         ?><td><?php echo $ansval; ?></td><?php
                       }else{
+                        if($ansval == '-'){
+                          echo "<td>-</td>";
+                          array_push($Questionanswered,0);
+                          continue;
+                        }
                         $t=0;
                         foreach ($ansval as $ks) {
                           if($t == 0){
+
                             ?>
                             <td><?php echo $ks; ?></td>
 
