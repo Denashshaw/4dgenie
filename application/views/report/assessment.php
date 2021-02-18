@@ -181,15 +181,15 @@ $('.dt').DataTable({
   buttons: [
   {
      extend:'excel',
-     title: 'Accessment Report',
+     title: 'Assessment Report',
    },
    {
      extend:'pdf',
-     title: 'Accessment Report',
+     title: 'Assessment Report',
    },
    {
      extend:'print',
-     title: 'Accessment Report',
+     title: 'Assessment Report',
    }
    ],
 });
