@@ -8,8 +8,6 @@
 ?>
 
 <main class="page-content">
-
-
   <div class="container-fluid p-0">
     <?php $this->load->view('page_head');?>
     <div class="row activity-row">
@@ -146,7 +144,6 @@
                         $t=0;
                         foreach ($ansval as $ks) {
                           if($t == 0){
-
                             ?>
                             <td><?php echo $ks; ?></td>
 
@@ -154,11 +151,9 @@
                             $t++;
                             }else{
                               array_push($Questionanswered,$ks);
-
                             }
                           }
                       }
-
                     }
                     //echo "<td>".$Questionanswered."</td>";
                     $totalvalue=0;
