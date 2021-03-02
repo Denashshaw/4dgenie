@@ -6,10 +6,10 @@ class Breakin_breakout extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model("Mainmodel");	
-		$this->load->model("Break_inout_model");	
+		$this->load->model("Mainmodel");
+		$this->load->model("Break_inout_model");
 		$userdata=$this->session->all_userdata();
-		if($userdata["hrms_logged_in"] != TRUE){ 
+		if($userdata["hrms_logged_in"] != TRUE){
 			redirect('login/index');
 		}
 	}
@@ -19,7 +19,7 @@ class Breakin_breakout extends CI_Controller {
 
 		date_default_timezone_set('Asia/Kolkata');
 		$time = date('Y-m-d H:i:s');
-				
+
 		$data = array(
 			'user_id'     => $userdata['user_id'],
         	'emp_id'      => $userdata['emp_id'],
@@ -31,7 +31,7 @@ class Breakin_breakout extends CI_Controller {
 			'created_date'=> $time,
 			'break_inout_flag'=>1
 		);
-    	
+
     	$result = $this->Break_inout_model->breakin_data($data);
 	}
 
@@ -48,6 +48,8 @@ class Breakin_breakout extends CI_Controller {
 		$from_time = strtotime($time);
 		$tot_mins  = round(abs($to_time - $from_time) / 60,2). " minute";
 		$final     = $tot_mins*60;
+
+
 		$hours     = floor($final / 3600);
 		$minutes   = floor(($final / 60) % 60);
 		$seconds   = $final % 60;
@@ -57,7 +59,7 @@ class Breakin_breakout extends CI_Controller {
 		$this->db->query("UPDATE breakin_breakout SET breakout_time='".$time."',break_inout_diff='".$check_inout_diff."',break_inout_flag=0 WHERE user_id='".$userdata['user_id']."' and id='".$res[0]->id."' ");
 
 		redirect('home/index');
-	
+
 	}
 
 	public function BreakStatus(){

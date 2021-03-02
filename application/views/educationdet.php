@@ -16,7 +16,7 @@ select{
   height:50px;
 }
 </style>
-     
+
 <div class="row activity-row" >
   <?php if($userdata['role'] == 'admin' || $userdata['role']=='supervisor'){ ?>
     <div class="col-md-12 activity">
@@ -36,6 +36,7 @@ select{
               <?php if($userdata['role'] != 'agent'){ ?>
                 <select class="form-control useridvaledu" id="userid" required name="userid"  onchange="viewempdataedu()">
                   <option style="display: none;" value="" selected>Select Employee ID</option>
+                    <option value="<?php echo $userdata['emp_id'].'/'.$userdata['name']; ?>" ><?php echo  $userdata['emp_id'].'/'.$userdata['name']; ?></option>
                   <?php foreach ($emp_data as $emp) { ?>
                   <option value="<?php echo $emp->emp_id.'/'.$emp->name; ?>"><?php echo ucfirst($emp->emp_id.'/'.$emp->name); ?></option>
                   <?php } ?>
@@ -74,7 +75,7 @@ select{
                         <?php foreach($years as $year) : ?>
                           <option value="<?php echo $year; ?>" ><?php echo $year; ?></option>
                         <?php endforeach; ?>
-                      </select>  
+                      </select>
                     </td>
                     <td>
                     <select  class="dis_readonly" id="empenddate1" name="empenddate1">
@@ -82,7 +83,7 @@ select{
                         <?php foreach($years as $year) : ?>
                           <option value="<?php echo $year; ?>" ><?php echo $year; ?></option>
                         <?php endforeach; ?>
-                      </select>  
+                      </select>
                     </td>
                     <td>
                       <input type="file" id="empDocument1" name="empDocument1"><p id="eduDoc1" accept=".jpg, .jpeg, .png, .gif, .pdf, .doc"><p></td>
@@ -97,7 +98,7 @@ select{
                         <?php foreach($years as $year) : ?>
                           <option value="<?php echo $year; ?>" ><?php echo $year; ?></option>
                         <?php endforeach; ?>
-                      </select>  
+                      </select>
                     </td>
                     <td>
                       <select  class="dis_readonly" id="empenddate2" name="empenddate2">
@@ -105,7 +106,7 @@ select{
                         <?php foreach($years as $year) : ?>
                         <option value="<?php echo $year; ?>" ><?php echo $year; ?></option>
                         <?php endforeach; ?>
-                      </select>  
+                      </select>
                       </td>
                       <td><input type="file" id="empDocument2" name="empDocument2"><p id="eduDoc2" accept=".jpg, .jpeg, .png, .gif, .pdf, .doc"><p></td>
                     </tr>
@@ -119,7 +120,7 @@ select{
                           <?php foreach($years as $year) : ?>
                             <option value="<?php echo $year; ?>" ><?php echo $year; ?></option>
                           <?php endforeach; ?>
-                        </select> 
+                        </select>
                       </td>
                       <td>
                         <select  class="dis_readonly" id="empenddate3" name="empenddate3" >
@@ -127,7 +128,7 @@ select{
                           <?php foreach($years as $year) : ?>
                             <option value="<?php echo $year; ?>" ><?php echo $year; ?></option>
                           <?php endforeach; ?>
-                        </select>  
+                        </select>
                       </td>
                       <td><input type="file" id="empDocument3" name="empDocument3"><p id="eduDoc3"><p></td>
                     </tr>
@@ -141,7 +142,7 @@ select{
                           <?php foreach($years as $year) : ?>
                             <option value="<?php echo $year; ?>" ><?php echo $year; ?></option>
                           <?php endforeach; ?>
-                        </select> 
+                        </select>
                       </td>
                       <td>
                         <select  class="dis_readonly" id="empenddate4" name="empenddate4" >
@@ -149,7 +150,7 @@ select{
                           <?php foreach($years as $year) : ?>
                             <option value="<?php echo $year; ?>" ><?php echo $year; ?></option>
                           <?php endforeach; ?>
-                        </select> 
+                        </select>
                       </td>
                       <td><input type="file" id="empDocument4" name="empDocument4"><p id="eduDoc4" accept=".jpg, .jpeg, .png, .gif, .pdf, .doc"><p></td>
                     </tr>
@@ -163,7 +164,7 @@ select{
                           <?php foreach($years as $year) : ?>
                             <option value="<?php echo $year; ?>" ><?php echo $year; ?></option>
                           <?php endforeach; ?>
-                        </select> 
+                        </select>
                       </td>
                       <td>
                         <select  class="dis_readonly" id="empenddate5" name="empenddate5" >
@@ -171,12 +172,12 @@ select{
                           <?php foreach($years as $year) : ?>
                             <option value="<?php echo $year; ?>" ><?php echo $year; ?></option>
                           <?php endforeach; ?>
-                        </select> 
+                        </select>
                       </td>
                       <td><input type="file" id="empDocument5" name="empDocument5"><p id="eduDoc5" accept=".jpg, .jpeg, .png, .gif, .pdf, .doc"><p></td>
                     </tr>
                   </tbody>
-                </table>   
+                </table>
                 <br>
                 <h3>Other Professional Certifications</h3>
                 <table class="table table-bordered" >
@@ -201,7 +202,7 @@ select{
                           <?php foreach($years as $year) : ?>
                             <option value="<?php echo $year; ?>" ><?php echo $year; ?></option>
                           <?php endforeach; ?>
-                        </select> 
+                        </select>
                       </td>
                       <td>
                         <select  class="dis_readonly"  id="empenddateOther1" name="empenddateOther1" >
@@ -209,7 +210,7 @@ select{
                           <?php foreach($years as $year) : ?>
                             <option value="<?php echo $year; ?>" ><?php echo $year; ?></option>
                           <?php endforeach; ?>
-                        </select> 
+                        </select>
                       </td>
                       <td><input type="file" id="empDocumentOther1" name="empDocumentOther1"><p id="othereduDoc1"  accept=".jpg, .jpeg, .png, .gif, .pdf, .doc"><p></td>
                     </tr>
@@ -223,7 +224,7 @@ select{
                           <?php foreach($years as $year) : ?>
                            <option value="<?php echo $year; ?>" ><?php echo $year; ?></option>
                           <?php endforeach; ?>
-                        </select> 
+                        </select>
                       </td>
                       <td>
                         <select  class="dis_readonly" id="empenddateOther2" name="empenddateOther2" >
@@ -231,12 +232,12 @@ select{
                           <?php foreach($years as $year) : ?>
                             <option value="<?php echo $year; ?>" ><?php echo $year; ?></option>
                           <?php endforeach; ?>
-                        </select> 
+                        </select>
                       </td>
                       <td><input type="file" id="empDocumentOther2" name="empDocumentOther2"  accept=".jpg, .jpeg, .png, .gif, .pdf, .doc"><p id="othereduDoc2"><p></td>
                     </tr>
                   </tbody>
-                </table>         
+                </table>
               </div>
             </div>
           </div>
@@ -251,7 +252,7 @@ select{
 </div>
 
 
-<script>  
+<script>
 function addeducationBtn(){
  $('.addeducationbox').toggle();
 }
@@ -262,15 +263,15 @@ $(document).ready(function() {
 });
 viewempdataedu()
 function viewempdataedu(){
-  
+
   var selectedValue;
   var emp_id_get = $(".useridvaledu").children("option:selected").val();
   if(emp_id_get == undefined || emp_id_get == ''){
-    selectedValue=$('#useridempagent').val();  
+    selectedValue=$('#useridempagent').val();
   }else{
     selectedValue=emp_id_get;
   }
-  
+
   var dataset =selectedValue.split("/");
 
   $('#empnameedu').val(dataset[1]);
@@ -304,7 +305,7 @@ function viewempdataedu(){
        $('#empPercen3').val(data[0]['Percentage3']);
        $('#empPercen4').val(data[0]['Percentage4']);
        $('#empPercen5').val(data[0]['Percentage5']);
-       
+
        $('#empPercenOther1').val(data[0]['Other_Percentage1']);
        $('#empPercenOther2').val(data[0]['Other_Percentage2']);
 
@@ -408,7 +409,7 @@ function viewempdataedu(){
        $('#empPercen3').val('');
        $('#empPercen4').val('');
        $('#empPercen5').val('');
-       
+
        $('#empPercenOther1').val('');
        $('#empPercenOther2').val('');
 
@@ -430,7 +431,7 @@ function viewempdataedu(){
        $('#empenddateOther1').val('');
        $('#empenddateOther2').val('');
 
-      
+
         $('#eduDoc1').html('');
         $('#eduDoc2').html('');
         $('#eduDoc3').html('');
@@ -440,9 +441,8 @@ function viewempdataedu(){
         $('#othereduDoc1').html('');
         $('#othereduDoc2').html('');
       }
-        
+
     }
   });
 }
 </script>
-

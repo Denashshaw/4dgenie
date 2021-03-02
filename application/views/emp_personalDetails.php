@@ -23,6 +23,7 @@
                 <?php if($userdata['role'] == 'admin' || $userdata['role']=='supervisor'){ ?>
                 <select class="form-control useridval" id="userid" required onchange="viewdata(this)">
                   <option style="display: none;" value="" selected>Select Employee ID</option>
+                  <option value="<?php echo $userdata['emp_id'].'/'.$userdata['name']; ?>" ><?php echo  $userdata['emp_id'].'/'.$userdata['name']; ?></option>
                   <?php foreach ($emp_data as $emp) { ?>
                       <option value="<?php echo $emp->emp_id.'/'.$emp->name; ?>" ><?php echo $emp->emp_id.'/'.$emp->name; ?></option>
                   <?php } ?>

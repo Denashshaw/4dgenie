@@ -300,9 +300,11 @@ a:hover,.dropdown-options:hover, li.active, a.active {
       <?php if($userdata['role'] != 'agent'){ ?>
         <li class="<?php if($actlinks == "Onboarding_emp_view") echo "active";?>"><a class="<?php if($actlinks == "Onboarding_emp_view") echo "active";?>" href="<?php echo base_url();?>Candidate_interview/Onboarding_emp_view"><i class="fa fa-arrow-circle-right fa-lg" aria-hidden="true"></i> Onboarding New Emp</a></li>
 
-        <li class="<?php if($actlinks == "Candidate_interview") echo "active";?>">
-        <a class="<?php if($actlinks == "Candidate_interview") echo "active";?>" href="<?php echo base_url();?>Candidate_interview/index"><i class="fa fa-arrow-circle-right fa-lg" aria-hidden="true"></i> Candidates Interview</a>
-      </li>
+        <?php if($userdata['department'] == 'HR' || $userdata['department'] == 'MANAGEMENT'){ ?>
+          <li class="<?php if($actlinks == "Candidate_interview") echo "active";?>">
+          <a class="<?php if($actlinks == "Candidate_interview") echo "active";?>" href="<?php echo base_url();?>Candidate_interview/index"><i class="fa fa-arrow-circle-right fa-lg" aria-hidden="true"></i> Candidates Interview</a>
+        </li>
+      <?php } ?>
 
 
       <li class="<?php if($actlinks == "Notification") echo "active";?>"><a class="<?php if($actlinks == "Notification") echo "active";?>" href="<?php echo base_url();?>Notification"><i class="fa fa-bullhorn fa-lg" aria-hidden="true"></i> Announcement</a></li>
@@ -317,7 +319,7 @@ a:hover,.dropdown-options:hover, li.active, a.active {
 
     <li><a class="<?php  if($actlinks == "leaderAssessment") echo "active";?>" href="<?php echo base_url();?>leaderAssessment"><i class="fa fa-check-circle  fa-lg" aria-hidden="true"></i> Assessment &nbsp;
     </a></li>
-    
+
     <?php
     //if($userdata['role'] != 'agent' && ($userdata['department'] == 'MANAGEMENT' || $userdata['department'] == 'HR' ||  $userdata['role'] == 'admin')){ ?>
         <span class="dropdown-btn dropdown-options">Emp Feedback/Appraisal

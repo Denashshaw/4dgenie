@@ -9,6 +9,7 @@
                 <select class="form-control useridval" id="userid"  onchange="viewdatamanage(this)" style="width:100%">
                   <option value="">Select Emp ID</option>
                   <?php if($userdata['role'] != 'agent'){ ?>
+                      <option value="<?php echo $userdata['emp_id'].'/'.$userdata['name']; ?>" ><?php echo  $userdata['emp_id'].'/'.$userdata['name']; ?></option>
                   <?php foreach ($emp_data as $emp) { ?>
                       <option value="<?php echo $emp->emp_id.'/'.$emp->name; ?>" ><?php echo ucfirst($emp->emp_id).'/'.ucfirst($emp->name); ?></option>
                   <?php } ?>

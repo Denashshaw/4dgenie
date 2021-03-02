@@ -141,21 +141,27 @@
     $candidateanswer = explode(",",$data[0]->candidate_answer);
     $index=0;
     $correct=0;$wrong=0;
+
     foreach($questions as $q){
       $dt = $this->db->query("SELECT * FROM interviewtest where id=$q");
       $datasetres=$dt->result();
+
       $answer =$datasetres[0]->answer;
+
       $cand_answer =  $candidateanswer[$index];
       if($cand_answer!='' && $answer == $cand_answer){
         $setcorrect=1;
       }else{
         $setcorrect=0;
       }
+
       if($cand_answer!=''){
-        $question_array[$index]=array("question"=>$datasetres[0]->question,"correct_answer"=>$datasetres[0]->$answer,"candidate_answer"=>$datasetres[0]->$cand_answer,"correst"=>$setcorrect);
+        $question_array[$index]=array("question"=>$datasetres[0]->question,"correct_answer"=>$datasetres[0]->answer,"candidate_answer"=>$cand_answer,"correst"=>$setcorrect);
       }else{
-            $question_array[$index]=array("question"=>$datasetres[0]->question,"correct_answer"=>$datasetres[0]->$answer,"candidate_answer"=>'-',"correst"=>$setcorrect);
+            $question_array[$index]=array("question"=>$datasetres[0]->question,"correct_answer"=>$datasetres[0]->answer,"candidate_answer"=>'-',"correst"=>$setcorrect);
       }
+
+
       $index++;
     }
 

@@ -28,7 +28,7 @@ select{
 
     <!-- <div class="row activity-row"> -->
       <div class=" col-md-12 addexpbox" style="display: none;">
-        <!-- display:none; -->        
+        <!-- display:none; -->
         <form action="<?php echo base_url(); ?>Employee_personal/addworkexpenice" method="POST" id="addform" enctype="multipart/form-data">
         <!-- <input type="hidden" id="empid" name="empid"> -->
           <div  id="empdetailadd">
@@ -51,6 +51,7 @@ select{
                 <?php if($userdata['role'] != 'agent'){ ?>
                 <select class="form-control useridvalexp" id="userid" required name="userid"  onchange="viewempdataexp()">
                   <option style="display: none;" value="" selected>Select Employee ID</option>
+                    <option value="<?php echo $userdata['emp_id'].'/'.$userdata['name']; ?>" ><?php echo  $userdata['emp_id'].'/'.$userdata['name']; ?></option>
                   <?php foreach ($emp_data as $emp) { ?>
                   <option value="<?php echo $emp->emp_id.'/'.$emp->name; ?>"><?php echo ucfirst($emp->emp_id.'/'.$emp->name); ?></option>
                   <?php } ?>
@@ -59,7 +60,7 @@ select{
                 <input id="useridempagent" name="useridempagent" value="<?php echo $userdata['emp_id'].'/'.$userdata['name']; ?>" readonly>
               <?php } ?>
               </div>
- 
+
               <div class="col-md-3" style="display:none">
                 <p >Name</p>
                 <input type="text" id="empnameexp" name="empnameexp" class="form-control" readonly>
@@ -102,13 +103,13 @@ select{
                         <td><input type="file" id="expcertificate3" name="expcertificate3"><p id="expDoc3"><p></td>
                       </tr>
                     </tbody>
-                </table>   
+                </table>
                 <br>
-              
+
               </div>
               </div>
             </div>
-        
+
             <div class="col-md-12 viewforadmin" style="padding-left: 40%">
                 <input type="submit" class="check-in" style="margin-left:10px;float:left">
                 <input type="reset" class="check-in" style="background-color: red">
@@ -118,7 +119,7 @@ select{
           </div>
         </div>
 
-<script>  
+<script>
 function addexpeniceBtn(){
  $('.addexpbox').toggle();
 }
@@ -157,7 +158,7 @@ function viewempdataexp(){
 
   var emp_id_get = $(".useridvalexp").children("option:selected").val();
   if(emp_id_get == undefined || emp_id_get == ''){
-    selectedValue=$('#useridempagent').val();  
+    selectedValue=$('#useridempagent').val();
   }else{
     selectedValue=emp_id_get;
   }
@@ -227,17 +228,14 @@ function viewempdataexp(){
         $('#termdate3').val('');
 
         $('#expDoc1').html('');
-    
+
         $('#expDoc2').html('');
-     
+
         $('#expDoc3').html('');
-     
+
       }
-        
+
     }
   });
 }
 </script>
-
-
-
