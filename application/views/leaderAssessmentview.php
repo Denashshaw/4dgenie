@@ -59,8 +59,10 @@
             <input type="text" id="title" name="title" class="form-control">
           </div>
           <div class="col-md-6" style="text-align:right">
-            <p>Created Date</p>
-            <?php echo date('F d Y'); ?>
+            <!-- <p>Created Date</p>
+            <?php echo date('F d Y'); ?> -->
+            <p> Test Timing</p>
+            <input type="number" min="1" max="120" id="timing" name="timing" >
           </div>
         </div>
         <br>
@@ -311,6 +313,10 @@ function removefromtable(indexplace){
   printtable();
 }
 function getdata(){
+  if(!$('#timing').val()){
+    swal("Error","Please set test timing");
+    return;
+  }
   $('.submitbtn').prop('disabled', true);
   var emp=[];
   selectedagent.forEach((item, i) => {
@@ -321,7 +327,7 @@ function getdata(){
   $.ajax({
     url : "<?php echo base_url(); ?>leaderAssessment/addquestions",
     method : "POST",
-    data:{"empid":empids,"title":$('#title').val(),"questions":questions,"correct":correc,"a":a,"b":b,"c":c,"d":d},
+    data:{"empid":empids,"title":$('#title').val(),"questions":questions,"correct":correc,"a":a,"b":b,"c":c,"d":d,"timing":$('#timing').val()},
     success : function(datares){
       console.log(datares);
       if(datares == '"Success"'){

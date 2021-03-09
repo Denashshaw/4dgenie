@@ -59,8 +59,10 @@
                 <tr>
                   <td><input type="radio"  value="a" id="q<?php echo $i; ?>" name="q<?php echo $i; ?>"><?php echo $val->a; ?></td>
                   <td><input type="radio"  value="b" id="q<?php echo $i; ?>" name="q<?php echo $i; ?>"><?php echo $val->b; ?></td>
-                  <td><input type="radio"  value="c" id="q<?php echo $i; ?>" name="q<?php echo $i; ?>"><?php echo $val->c; ?></td>
-                  <td><input type="radio"  value="d" id="q<?php echo $i; ?>" name="q<?php echo $i; ?>"><?php echo $val->d; ?></td>
+                  <?php if(!in_array(strtoupper($val->a),array('TRUE','FALSE'))) { ?>
+                    <td><input type="radio"  value="c" id="q<?php echo $i; ?>" name="q<?php echo $i; ?>"><?php echo $val->c; ?></td>
+                    <td><input type="radio"  value="d" id="q<?php echo $i; ?>" name="q<?php echo $i; ?>"><?php echo $val->d; ?></td>
+                  <?php } ?>
                 </tr>
               </table>
             </div>
@@ -83,7 +85,7 @@
 <script>
 
  var now = moment(); // get "now"
- var thirty = moment(now).add(30,"minutes"); // clone "now" object and add 30 minutes, taking into account weirdness like crossing
+ var thirty = moment(now).add(<?php echo $question[0]->timing; ?>,"minutes"); // clone "now" object and add 30 minutes, taking into account weirdness like crossing
  localStorage.setItem("30minstime", thirty);
 
 setInterval(function()
@@ -98,8 +100,7 @@ var getloca = moment(new Date(localStorage.getItem("30minstime"))).format('h:mm:
 },500);
 
 
-
-var sec         = 1800,
+var sec         = (parseInt(<?php echo $question[0]->timing; ?>)*60),
     countDiv    = document.getElementById("timer"),
     secpass,
     countDown   = setInterval(function () {

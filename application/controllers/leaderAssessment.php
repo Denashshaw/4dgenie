@@ -51,7 +51,8 @@ class leaderAssessment extends CI_Controller {
 				"a"=>$_POST['a'][$i],
 				"b"=>$_POST['b'][$i],
 				"c"=>$_POST['c'][$i],
-				"d"=>$_POST['d'][$i]
+				"d"=>$_POST['d'][$i],
+				"timing"=>$_POST['timing']
 			);
 			$i++;
 			array_push($question_data,$dataset);
