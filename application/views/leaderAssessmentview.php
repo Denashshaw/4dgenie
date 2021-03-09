@@ -311,6 +311,7 @@ function removefromtable(indexplace){
   printtable();
 }
 function getdata(){
+  $('.submitbtn').prop('disabled', true);
   var emp=[];
   selectedagent.forEach((item, i) => {
     //emp.push(item['emp_id']);

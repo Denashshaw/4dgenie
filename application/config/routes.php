@@ -68,5 +68,5 @@ $route['training'] = 'Training';
 
 $route['attendance'] = 'Attendance';
 $route['document'] = 'Documents';
-
+$route['training'] = 'Training';
 // $route['translate_uri_dashes'] = FALSE;

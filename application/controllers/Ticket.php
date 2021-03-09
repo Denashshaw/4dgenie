@@ -39,15 +39,20 @@ class Ticket extends CI_Controller {
         $this->load->library('email');
 
         $from = $this->config->item('smtp_user');
-        $to = 'it@4dglobalinc.com';
-    //    $to ='v.jaganathan93@gmail.com';
+
+      //  $to = 'it@4dglobalinc.com';
+       $to ='v.jaganathan93@gmail.com';
         $this->email->set_newline("\r\n");
         $this->email->set_mailtype("html");
         $this->email->from($from);
         $this->email->to($to);
         $this->email->subject($subject);
         $this->email->message($message);
-        $this->email->send();
+        if($this->email->send()){
+					echo "mail send";
+				}else{
+					echo "mail notsend";
+				}
     }
 
     public function getticket_agent(){
