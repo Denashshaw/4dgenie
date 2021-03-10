@@ -6,7 +6,7 @@ class Notification extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model("NotificationModel");	
+		$this->load->model("NotificationModel");
 		$userdata=$this->session->all_userdata();
 
 	}
@@ -33,10 +33,10 @@ class Notification extends CI_Controller {
     public function updatenotification(){
         $this->NotificationModel->updatenotification($_POST['indexid']);
 	}
-	
+
 	public function addannouncement(){
 		$userdata=$this->session->all_userdata();
-		
+
 		$empid_set = $_POST['useridselectbox'];
 		$dataset=array();
 		$notificationsend=array();
@@ -50,20 +50,25 @@ class Notification extends CI_Controller {
 				"details" => $_POST['details'],
 				"creater_id" => $userdata['emp_id'],
 				"creater_name" => $userdata['name'],
-				"created_date" => $_POST['getdate']			
+				"created_date" => $_POST['getdate']
 			));
 			array_push($notificationsend,array(
 				"emp_id" => $getemp[0],
 				"name" => $getemp[1],
 				"module_name" => $_POST['module_name'],
-				"details" => $_POST['details']		
+				"details" => $_POST['details']
 			));
 		}
 		$dataset1 = $this->NotificationModel->insertdataset('announcement',$dataset);
 		$dataset2 = $this->NotificationModel->insertdataset('notification',$notificationsend);
 		redirect('Notification');
 	}
-  
+
+	//timerdata
+	public function viewcheckinduriation(){
+		$res = $this->NotificationModel->fetchandinsert('checkin_checkout');
+		echo json_encode($res);
+	}
 }
 
 ?>

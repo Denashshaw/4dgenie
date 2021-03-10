@@ -14,11 +14,24 @@
   min-width:2em;
   font-weight:bold;
 }
+#timerview{
+  font-family: 'Montserrat', sans-serif;
+    background: #5caddc;
+    box-shadow: none !important;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 25px;
+    color: #fff;
+    font-size: 15px;
+}
 </style>
 
 <div class="row head-content">
 	<div class="col-8 col-md-4 logo"><img src="<?php echo base_url(); ?>img/logo.jpg"></div>
-	<div class="col-2 col-md-7  text-right logout">
+  <div class="col-md-4">
+    <p id="timer" style="padding-top:5%;padding-left:10%;"></p>
+  </div>
+	<div class="col-1 col-md-3  text-right logout">
 
     <span class="fa-stack fa-2x has-badge" data-count="0" onclick="viewnotification()">
         <i class="fa fa-circle fa-stack-2x"></i>
@@ -40,6 +53,20 @@
     </div>
 </div>
 <script>
+$(document).ready(function(){
+setInterval(function(){
+  var base_url = "<?php echo base_url(); ?>";
+  $.ajax({
+    url : base_url+"Notification/viewcheckinduriation",
+    method : "POST",
+    success : function(datares){
+      var res=JSON.parse(datares);
+      $('#timer').html('<b id="timerview"><i class="fa fa-clock" aria-hidden="true"></i> '+res[0]['timedifferent']+'</b>');
+    }
+  });
+}, 1000);
+});
+
 function viewnotification(){
     $('.viewnotification_part').toggle();
 }
@@ -169,6 +196,7 @@ if (Mins < 60) {
 else result = Days + 'd'
 return { result, Days, Mins, Hours }
 }
+
 
 
 </script>

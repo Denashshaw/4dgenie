@@ -1,4 +1,4 @@
-<?php 
+<?php
 class NotificationModel extends CI_Model
 {
     public function getnotification($data){
@@ -31,6 +31,12 @@ class NotificationModel extends CI_Model
     public function getannouncement($empid){
         $getannouncement = $this->db->query("SELECT * FROM announcement where creater_id='$empid'");
         return $getannouncement->result();
+    }
+
+    public function fetchandinsert($table){
+      $empid=$_SESSION['emp_id'];
+      $resage = $this->db->query("SELECT TIMEDIFF(now(),`checkin_time`) as timedifferent FROM $table where emp_id='$empid' and  check_inout_flag=1");
+      return $resage->result();
     }
 }
 ?>
