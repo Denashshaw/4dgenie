@@ -17,7 +17,7 @@ class leaderAssessment extends CI_Controller {
 	}
 
 	public function index(){
-		if($_SESSION['role'] == 'admin' || $_SESSION['department'] == 'MANAGEMENT'){
+		if($_SESSION['role'] == 'admin' || $_SESSION['department'] == 'MANAGEMENT'  || $_SESSION['emp_id'] =='M348'){
 			$data['getdata']=$this->assessmentModel->getallreport();
 			$this->load->view('leaderAssessmentview',$data);
 		}else{

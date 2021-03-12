@@ -34,7 +34,7 @@
             </div>
             <?php if($selectassess){ ?>
             <div class="col-md-4">
-              <label id="timer" style="margin-left:20%;font-size: 22px;margin-top:5%; "></label>
+              <label id="timerviewtest" style="margin-left:20%;font-size: 22px;margin-top:5%; "></label>
             </div>
           <?php } ?>
           </div>
@@ -46,7 +46,7 @@
     <?php if($selectassess){ ?>
     <div class="row emp-table">
       <div class="col-md-12  table-responsive">
-        <form method="POST" action="<?php base_url(); ?>leaderAssessment/submittest">
+        <form method="POST" action="<?php base_url(); ?>leaderAssessment/submittest" id="formsubmit">
         <?php
 
         $i=1;
@@ -93,7 +93,6 @@ setInterval(function()
 var now = moment().format('h:mm:ss');
 
 var getloca = moment(new Date(localStorage.getItem("30minstime"))).format('h:mm:ss');
-
      if(now == getloca){
     	$('#formsubmit').submit();
      }
@@ -101,7 +100,7 @@ var getloca = moment(new Date(localStorage.getItem("30minstime"))).format('h:mm:
 
 
 var sec         = (parseInt(<?php echo $question[0]->timing; ?>)*60),
-    countDiv    = document.getElementById("timer"),
+    countDiv    = document.getElementById("timerviewtest"),
     secpass,
     countDown   = setInterval(function () {
         'use strict';

@@ -66,9 +66,16 @@
           </div>
         </div>
         <br>
-        <p>Add Questions</p>
-        <!-- <button class="btn btn-success" onclick="addquestion()">Add Question</button> -->
-        <i class="fa fa-plus" style="font-size:60px;margin-top:10%;margin-left:45%;color:green;cursor:pointer;" onclick="addquestion()"></i>
+        <div class="row">
+          <div class="col-md-6">
+            <p>Add Questions</p>
+            <i class="fa fa-plus" style="font-size:60px;margin-top:10%;margin-left:45%;color:green;cursor:pointer;" onclick="addquestion()"></i>
+          </div>
+          <div class="col-md-6">
+            <p> Upload Questions</p>
+            <input id="csv" type="file" class="form-control" style="margin-top:15%;">
+          </div>
+        </div>
       </div><br>
       <div class="col-md-12">
         <table class="table table-bordered">
@@ -476,4 +483,47 @@ $('#searchagent').keyup(function(){
     $('.notfound').show();
   }
 });
+
+//csv upload
+var fileInput = document.getElementById("csv"),
+
+    readFile = function () {
+    	var dtaset=new Array();
+        var reader = new FileReader();
+        reader.onload = function () {
+          var lines = reader.result.split('\n');
+          for(var i = 0; i < lines.length; i++){
+            console.log(lines[i]);
+            var getline = lines[i].split("\t");
+            for(var j=0;j<getline.length; j++){
+              if(j == 0){
+                questions.push(getline[j]);
+              }
+              if(j == 1){
+                a.push(getline[j]);
+              }
+              if(j == 2){
+                b.push(getline[j]);
+              }
+              if(j == 3){
+                c.push(getline[j]);
+              }
+              if(j == 4){
+                d.push(getline[j]);
+              }
+              if(j == 5){
+                correc.push(getline[j]);
+              }
+
+            }
+          }
+          printtable();
+        };
+        // start reading the file. When it is done, calls the onload event defined above.
+        reader.readAsBinaryString(fileInput.files[0]);
+
+    };
+
+var data=fileInput.addEventListener('change', readFile);
+
 </script>
