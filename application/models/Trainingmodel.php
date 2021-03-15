@@ -1,14 +1,15 @@
 <?php
+error_reporting(0);
 class Trainingmodel extends CI_Model{
    public function agentlist()
    {
       $query = $this->db->select('*')->from('users') ->where('role!=','admin')->get();
-      return $query->result();    
+      return $query->result();
    }
 
    public function agentget($id){
       $query = $this->db->select('*')->from('users') ->where('emp_id=',$id)->get();
-      return $query->result(); 
+      return $query->result();
    }
 
    public function materialadd($data){
@@ -203,7 +204,7 @@ class Trainingmodel extends CI_Model{
          }
          else{
             $draw = $this->db->query("SELECT  (SELECT count(*)  FROM `training_assessment` where process='$process' and emp_id='$agent')totalass,(SELECT count(*)  FROM `training_assessment` where `status`='Viewed'  and process='$process' and emp_id='$agent')viewed ,(SELECT count(*) as totalass FROM `training_assessment` where `status`='Completed'  and process='$process' and emp_id='$agent')completed");
-            
+
          }
       }
       if($agent =='All'){
@@ -214,7 +215,7 @@ class Trainingmodel extends CI_Model{
          $dataresult['drawvalue']=$draw->result();
       }
       return $dataresult;
-      
+
 
    }
 
@@ -226,12 +227,12 @@ class Trainingmodel extends CI_Model{
    public function getagentRank($agentid){
       $dataresultRank =  $this->db->query("Select * from(SELECT emp_id, name, score, FIND_IN_SET( score, (
          SELECT GROUP_CONCAT( score
-         ORDER BY score DESC ) 
+         ORDER BY score DESC )
          FROM training_assessment )
          ) AS rank
          FROM training_assessment)val where emp_id='$agentid'");
-         
-        return $dataresultRank->result();  
+
+        return $dataresultRank->result();
    }
  }
 ?>

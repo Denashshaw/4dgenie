@@ -320,6 +320,9 @@ a:hover,.dropdown-options:hover, li.active, a.active {
     <li><a class="<?php  if($actlinks == "leaderAssessment") echo "active";?>" href="<?php echo base_url();?>leaderAssessment"><i class="fa fa-check-circle  fa-lg" aria-hidden="true"></i> Assessment &nbsp;
     </a></li>
 
+    <li><a class="<?php  if($actlinks == "Training") echo "active";?>" href="<?php echo base_url();?>Training"><i class="fa fa-plus-circle  fa-lg" aria-hidden="true"></i> Training &nbsp;
+    </a></li>
+
     <?php
     //if($userdata['role'] != 'agent' && ($userdata['department'] == 'MANAGEMENT' || $userdata['department'] == 'HR' ||  $userdata['role'] == 'admin')){ ?>
         <span class="dropdown-btn dropdown-options">Emp Feedback/Appraisal
