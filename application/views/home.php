@@ -6,11 +6,19 @@ line-height:25px;
 select{
 	font-size:12px;
 }
+input[type=time]::datetime-edit-field.numeric{
+
+    display: inline !important;
+
+}
+
 </style>
 
 <div class="page-wrapper chiller-theme toggled">
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+
 <?php include('header.php');?>
 	<main class="page-content">
 		<div class="container-fluid p-0">
@@ -130,7 +138,7 @@ select{
 										<td>
 
 											<p>Time Spent</p>
-											<input type="time"  id="timespend" name="timespend" value="00:00" max="12:59" onblur="calculatepercentage()" class="form-control"  style="font-size:12px;">
+											<input type="text"  id="timespend" name="timespend" value="00:00" max="12:59" onblur="calculatepercentage()" class="form-control"  style="font-size:12px;">
 										</td>
 										<td  style="width:5%">
 											<p>Count</p>
@@ -359,7 +367,8 @@ select{
 					<div class="col-md-3">
 						<br>
 						<p>Time Spent</p>
-						<input type="time" id="timespendupdate" onblur="calculatepercentage_update()">
+						<!-- <input type="time" id="timespendupdate" onblur="calculatepercentage_update()"> -->
+						<input type="text" id="timespendupdate" onblur="calculatepercentage_update()">
 					</div>
 					<div class="col-md-3"><br>
 						<p>Count</p>
@@ -1024,5 +1033,17 @@ function calculatepercentage_update() {
 		});
 	}
 }
+
+
+</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+        $('#timespend').timepicker({
+            showMeridian: false,
+            showInputs: true,
+						timeFormat:'hh:mm'
+        });
+    });
 </script>
 </html>
