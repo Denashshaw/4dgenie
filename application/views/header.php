@@ -323,6 +323,9 @@ a:hover,.dropdown-options:hover, li.active, a.active {
     <li><a class="<?php  if($actlinks == "Training") echo "active";?>" href="<?php echo base_url();?>Training"><i class="fa fa-plus-circle  fa-lg" aria-hidden="true"></i> Training &nbsp;
     </a></li>
 
+    <li><a class="<?php  if($actlinks == "Timesheet") echo "active";?>" href="<?php echo base_url();?>Timesheet"><i class="fa fa-table fa-lg" aria-hidden="true"></i> Timesheet  &nbsp; <?php if($userdata['role']!='agent'){ ?><span class="badge badge-info timesheet_count">0</span><?php } ?>
+    </a></li>
+
     <?php
     //if($userdata['role'] != 'agent' && ($userdata['department'] == 'MANAGEMENT' || $userdata['department'] == 'HR' ||  $userdata['role'] == 'admin')){ ?>
         <span class="dropdown-btn dropdown-options">Emp Feedback/Appraisal
@@ -520,7 +523,7 @@ $(document).ready(function() {
         localStorage.setItem('isshow', 1);
 
         // Show popup here
-        $('#notificationview').modal('show');
+      //  $('#notificationview').modal('show');
     }
 });
  // $('#notificationview').modal('show');
@@ -745,4 +748,19 @@ for (i = 0; i < dropdown.length; i++) {
   });
 }
 
+gettimesheetcount();
+function gettimesheetcount(){
+  $.ajax({
+    url:"<?php echo base_url(); ?>Timesheet/getcount_notification",
+    method:"post",
+    success:function(data){
+      var dt=JSON.parse(data);
+      if(parseInt(dt[0]['countval']) > 0){
+        $('.timesheet_count').html(dt[0]['countval']);
+      }else{
+        $('.timesheet_count').html(0);
+      }
+    }
+  });
+}
 </script>

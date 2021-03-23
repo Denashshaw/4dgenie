@@ -35,7 +35,7 @@ class NotificationModel extends CI_Model
 
     public function fetchandinsert($table){
       $empid=$_SESSION['emp_id'];
-      $resage = $this->db->query("SELECT TIMEDIFF(now(),`checkin_time`) as timedifferent FROM $table where emp_id='$empid' and  check_inout_flag=1");
+      $resage = $this->db->query("SELECT id,TIMEDIFF(now(),`checkin_time`) as timedifferent FROM $table where emp_id='$empid' and  check_inout_flag=1 order by id desc limit 1");
       return $resage->result();
     }
 }

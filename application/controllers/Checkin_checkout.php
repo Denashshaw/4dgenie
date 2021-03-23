@@ -6,10 +6,10 @@ class Checkin_checkout extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model("Mainmodel");	
-		$this->load->model("Check_inout_model");	
+		$this->load->model("Mainmodel");
+		$this->load->model("Check_inout_model");
 		$userdata=$this->session->all_userdata();
-		if($userdata["hrms_logged_in"] != TRUE){ 
+		if($userdata["hrms_logged_in"] != TRUE){
 			redirect('login/index');
 		}
 	}
@@ -20,7 +20,7 @@ class Checkin_checkout extends CI_Controller {
 
 		date_default_timezone_set('Asia/Kolkata');
 		$time = date('Y-m-d H:i:s');
-				
+
 		$data = array(
 			'user_id'     => $userdata['user_id'],
         	'emp_id'      => $userdata['emp_id'],
@@ -32,7 +32,7 @@ class Checkin_checkout extends CI_Controller {
 			'created_date'=> $time,
 			'check_inout_flag'=>1
 		);
-    	
+
     	$result = $this->Check_inout_model->checkin_data($data);
 	}
 
@@ -70,7 +70,7 @@ class Checkin_checkout extends CI_Controller {
 		$this->db->query("UPDATE checkin_checkout SET checkout_time='".$time."',check_inout_diff='".$check_inout_diff."',check_inout_flag=0 WHERE user_id='".$userdata['user_id']."' and id='".$res[0]->id."' ");
 
 		redirect('home/index');
-	
+
 	}
 
 	public function checkStatus()
@@ -95,7 +95,9 @@ class Checkin_checkout extends CI_Controller {
         $update = $this->Check_inout_model->insertPermission($per_time);
         echo json_encode($update);
     }
-	
+
+
+
 }
 
 ?>

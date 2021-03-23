@@ -32,6 +32,7 @@ class Login extends CI_Controller {
                    	'username'  => $result[0]->username,
                    	'name'      => $result[0]->name,
 				   	'role' 		=> $result[0]->role,
+						'client' => $result[0]->client,
                    	'hrms_logged_in' => TRUE
                );
 					$getusermailid=$this->Mainmodel->getusermail($result[0]->emp_id);
@@ -43,7 +44,12 @@ class Login extends CI_Controller {
 				$this->db->query("UPDATE users SET status='loggedin' WHERE user_id='".$userdata['user_id']."' ");
 
 				$this->session->set_userdata($userdata);
-				redirect('home/index');
+
+				//Check Timesheet Rejected
+				$this->checktimesheet();
+
+
+				//redirect('home/index');
 			}
 		}
 		else
@@ -53,6 +59,16 @@ class Login extends CI_Controller {
 
 	}
 
+	public function checktimesheet()
+	{
+		$this->load->model('Timesheet_model');
+		$data['checktimesheet']=$this->Timesheet_model->checkrejected('timesheet_report',$_SESSION['emp_id']);
+		if(sizeof($data['checktimesheet']) > 0){
+			$this->load->view('RejectedTimesheet',$data);
+		}else{
+			redirect('home/index');
+		}
+	}
 
 	public function signout()
 	{

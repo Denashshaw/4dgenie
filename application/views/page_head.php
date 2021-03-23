@@ -24,6 +24,17 @@
     color: #fff;
     font-size: 15px;
 }
+.fa-pencil-alt{
+  color:#24cb5b;
+  font-size:15px;
+  cursor:pointer;
+  padding:15%;
+}
+.fa-trash{
+  color:#ff5c4b;
+  font-size:18px;
+  cursor:pointer;
+}
 </style>
 
 <div class="row head-content">
@@ -61,7 +72,11 @@ setInterval(function(){
     method : "POST",
     success : function(datares){
       var res=JSON.parse(datares);
-      $('#timer').html('<b id="timerview"><i class="fa fa-clock" aria-hidden="true"></i> '+res[0]['timedifferent']+'</b>');
+      localStorage.setItem('checkid',res[0]['id']);
+      localStorage.setItem('timing',res[0]['timedifferent']);
+      if(parseInt(res[0]['timedifferent'].split(":")[0]) > 24){}else{
+        $('#timer').html('<b id="timerview"><i class="fa fa-clock" aria-hidden="true"></i><span class="runingtime">'+res[0]['timedifferent']+'</span></b>');
+      }
     }
   });
 }, 1000);
