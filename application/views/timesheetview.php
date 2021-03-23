@@ -15,12 +15,23 @@
  include('header.php');
   $userdata=$this->session->all_userdata();
 ?>
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.jqueryui.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowgroup/1.1.2/css/rowGroup.jqueryui.min.css">
 
-  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 
 
-<script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.22/js/dataTables.jqueryui.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/rowgroup/1.1.2/js/dataTables.rowGroup.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.flash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
 
 <main class="page-content">
 
@@ -62,7 +73,7 @@
            <table class="table table-bordered" id="dtset">
              <thead>
                <tr>
-                 <th>Action</th>
+
                  <th>Report Date</th>
                  <?php if($_SESSION['role'] !='agent'){ ?>
                    <th>Agent</th>
@@ -77,7 +88,7 @@
                  <th>Non Productive Time</th>
                  <th>Total Production Count</th>
                  <th>Overall Percentage</th>
-                 <th>Action</th>
+                
                </tr>
              </thead>
              <tbody>
@@ -86,11 +97,11 @@
             $days_before=date('Y-m-d', strtotime('-7 days'));
             foreach($getagent_report as $a){ ?>
               <tr>
-                <?php if($a->report_date >= $days_before && $a->status == 'Rejected' && $_SESSION['emp_id'] == $a->emp_id){ ?>
+                <!-- <?php if($a->report_date >= $days_before && $a->status == 'Rejected' && $_SESSION['emp_id'] == $a->emp_id){ ?>
                     <td><i class="fas fa-pencil-alt" style="color:#24cb5b;font-size:15px;cursor:pointer; padding:15%"  onclick="updatetimesheet()"></i></td>
                 <?php }else{ ?>
                     <td>-</td>
-                <?php } ?>
+                <?php } ?> -->
 
 
                 <td ><?php echo date_format(date_create($a->report_date),"d-m-Y"); ?></td>
@@ -118,11 +129,11 @@
                 <td><?php echo date_format(date_create($a->non_productive_time),"H:i"); ?></td>
                 <td><?php echo $a->total_production; ?></td>
                 <td><h4><?php echo $a->overall_percentage; ?></h4></td>
-                <?php if($a->report_date >= $days_before && $a->status == 'Rejected' && $_SESSION['emp_id'] == $a->emp_id){ ?>
+                <!-- <?php if($a->report_date >= $days_before && $a->status == 'Rejected' && $_SESSION['emp_id'] == $a->emp_id){ ?>
                     <td><i class="fas fa-pencil-alt" style="color:#24cb5b;font-size:15px;cursor:pointer; padding:15%"  onclick="updatetimesheet()"></i></td>
                 <?php }else{ ?>
                     <td>-</td>
-                <?php } ?>
+                <?php } ?> -->
               </tr>
             <?php } ?>
 
@@ -204,7 +215,31 @@
   </div>
 </div>
 <script>
-$('#dtset').DataTable();
+var test="<?php echo $userdata['department'] ?>";
+var role ="<?php echo $userdata['role'] ?>";
+if(test == 'MANAGEMENT' || role == 'supervisor')
+{
+$('#dtset').DataTable({
+  dom: 'Bfrtip',
+  "bSortCellsTop": true,
+  buttons: [
+  {
+     extend:'excel',
+     title: 'Timesheet Report',
+   },
+   {
+     extend:'pdf',
+     title: 'Timesheet Report',
+   },
+   {
+     extend:'print',
+     title: 'Timesheet Report',
+   }
+   ],
+});
+}else{
+  $('#dtset').DataTable();
+}
 $('#fromdate,#todate').datepicker();
 
 $.ajax({

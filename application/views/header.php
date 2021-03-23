@@ -20,6 +20,8 @@ error_reporting(E_ERROR);
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+
+
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,700">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700&display=swap" rel="stylesheet">
   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
@@ -28,11 +30,14 @@ error_reporting(E_ERROR);
   <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap.min.css">
   <link rel="stylesheet" href="<?php echo base_url('css/jquery.datetimepicker.css') ?>" />
   <link rel="stylesheet" href="<?php echo base_url('css/datepicker.css') ?>" />
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
 
   <script src="<?php echo base_url();?>js/jquery.min.js"></script>
   <script src="<?php echo base_url();?>js/bootstrap.min.js"></script>
   <script src="<?php echo base_url('js/jquery.datetimepicker.full.js')?>"></script>
   <script src="<?php echo base_url('js/datepicker.js') ?>"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
   <!-- <script type="text/javascript" src="<?php echo base_url();?>js/js.js"></script> -->
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
 
@@ -67,6 +72,8 @@ error_reporting(E_ERROR);
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script> -->
+
+
 <style type="text/css">
 p{
   font-family: 'Montserrat', sans-serif;

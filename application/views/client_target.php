@@ -1,5 +1,6 @@
 <body>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
     <div class="page-wrapper chiller-theme toggled">
         <?php include('header.php'); ?>
         <main class="page-content">
@@ -138,7 +139,7 @@
 
                                             <div class='col-md-2 p-0'>
                                                 <label for="">Select Agent:</label>
-                                                <select name="multiple_agent" id="multiple_agent" multiple required>
+                                                <select name="multiple_agent" id="multiple_agent" multiple required style="width:205px;">
                                                 </select>
                                             </div>
 
@@ -346,7 +347,9 @@
                         'Target Value has been Updated.',
                         'success'
                     );
+
                     location.reload();
+                    localStorage.setItem('value', 'yes');
                 }
             },
             failed: function(err) {
@@ -484,11 +487,13 @@
                     },
                     success: function(res) {
                         if (res) {
+                          localStorage.setItem("value",'yes');
                             Swal.fire(
                                 'Deleted!',
                                 'Data has been deleted.',
                                 'success'
                             )
+                            location.reload();
                         }
                     },
                     failed: function() {
@@ -699,7 +704,7 @@
     $(document).ready(() => {
         generate_task_table();
         $('#multiple_agent').select2({
-            width: 205,
+            width: "205px",
         });
     });
 
