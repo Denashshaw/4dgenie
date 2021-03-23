@@ -12,8 +12,11 @@
 						<div class="col-3 col-md-8 text-right logout"><a href="<?php echo base_url();?>login/signout">Logout</a></div>
 					</div>
 					<div class="row activity-row">
-						<div class="col-md-12 activity">Add Client</div>
-					</div>
+            <div class="col-md-6 activity">Add Client</div>
+            <div class="col-md-offset-4 offset-md-3 activity">
+              <a class='btn btn-primary' href='<?php echo base_url('Client/client_target'); ?>'>Add Client Target</a>
+            </div>
+          </div>
           <?php echo $this->session->flashdata('msg');?>
 					<div class="row emp-table">
 	          <form action="<?php echo base_url();?>client/add_client" method="post" enctype="multipart/form-data">
