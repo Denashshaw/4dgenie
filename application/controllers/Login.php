@@ -29,11 +29,12 @@ class Login extends CI_Controller {
 					'emp_id'    => $result[0]->emp_id,
 					'user_id'	=> $result[0]->user_id,
 					'department'=> $result[0]->department,
+					'sub_department'=> $result[0]->sub_department,
                    	'username'  => $result[0]->username,
                    	'name'      => $result[0]->name,
 				   	'role' 		=> $result[0]->role,
 						'client' => $result[0]->client,
-                   	'hrms_logged_in' => TRUE
+            'hrms_logged_in' => TRUE
                );
 					$getusermailid=$this->Mainmodel->getusermail($result[0]->emp_id);
 					if(sizeof($getusermailid) > 0){

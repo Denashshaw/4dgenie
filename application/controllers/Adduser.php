@@ -48,6 +48,7 @@ class Adduser extends CI_Controller {
 				$emp_id = rand(pow(10, $digits-1), pow(10, $digits)-1);
 				$empid  = "4DG-".$emp_id;
 
+
 				$data = array(
 					'user_id'   => $empid,
         			'emp_id'    => $details['userid'],
@@ -63,6 +64,9 @@ class Adduser extends CI_Controller {
 					'checkin' => $details['checkintiming'],
 					'checkout' => $details['checkouttiming']
 				);
+				if($details['department'] == 'MANAGEMENT'){
+						$data['sub_department']=$details['subdepartment'];
+				}
 
 		  		$this->db->insert('users',$data);
 
@@ -107,6 +111,9 @@ class Adduser extends CI_Controller {
 					'checkin' => $details['checkintimingupdate'],
 					'checkout' => $details['checkouttimingupdate']
 				);
+				if($details['department'] == 'MANAGEMENT'){
+						$data['sub_department']=$details['subdepartment'];
+				}
 				$this->db->where('user_id',$details['userid']);
 		  		$this->db->update('users',$data);
 

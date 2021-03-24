@@ -84,7 +84,8 @@
 										<?php if($userdata['role'] == 'admin' || ($userdata['role'] == 'supervisor' && $userdata['department'] == 'HR')){ ?>
 									<span style="cursor:pointer"><a onclick="Deactivate(`<?php echo $agentdata->emp_id;?>`)">Deactivate</a></span>
 								<?php } ?>
-									<span class="emp-break-in"><a href="javaScript:void(0)" class="" data-toggle="modal" data-target="#edit_Modal_<?php echo $agentdata->id;?>">Edit</a></span>
+									<span class="emp-break-in"><a href="javaScript:void(0)" class=""
+										onclick="editagent(`<?php echo $agentdata->user_id; ?>`,`<?php echo $agentdata->emp_id; ?>`,`<?php echo $agentdata->name; ?>`,`<?php echo $agentdata->username; ?>`,`<?php echo $agentdata->role; ?>`,`<?php echo $agentdata->department; ?>`,`<?php echo $agentdata->sub_department; ?>`,`<?php echo $agentdata->checkin; ?>`,`<?php echo $agentdata->checkout; ?>`,`<?php echo $agentdata->client; ?>`,`<?php echo $agentdata->doj; ?>`)">Edit</a></span>
 								<!-- <span class="emp-break-out"><a href="<?php echo base_url()?>adduser/deleteuser/<?php echo $agentdata->id;?>" onClick="return doconfirm();" style="color:red;">Delete</a></span>	 -->
 								</td>
 								</tr>
@@ -92,75 +93,7 @@
 
 
 <!-- Modal -->
-<div style="padding-top:1px;" class="modal fade" id="edit_Modal_<?php echo $agentdata->id;?>" role="dialog">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="mons modal-title">Update Agent</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body mons">
-        <form method="post" action="<?php echo base_url();?>adduser/updateuser">
-          <p class="">Employee ID:</p>
-           <input class="col-md-12 col-xs-12 form-control" type="hidden" id="userid" name="userid" placeholder="Emp ID" required="" value="<?php echo $agentdata->user_id;?>" readonly>
-          <input class="col-md-12 col-xs-12 form-control" type="text" id="emp_id" name="emp_id" placeholder="Emp ID" required="" value="<?php echo $agentdata->emp_id;?>" readonly>
-          <p class="">Employee Name:</p>
-          <input class="col-md-12 col-xs-12 form-control" type="text" id="name" name="name" placeholder="Name" required="" value="<?php echo $agentdata->name;?>">
-          <p class="">User Name:</p>
-          <input class="col-md-12 col-xs-12 form-control" type="text" id="username" name="username" placeholder="UserName" required="" value="<?php echo $agentdata->username;?>">
-          <p class="">Role:</p>
-          <select class="form-control" name="role" required="">
-            <option value="">--Select--</option>
-            <option value="agent" <?php if($agentdata->role=="agent") echo 'selected="selected"'; ?>>Agent</option>
-            <option value="supervisor" <?php if($agentdata->role=="supervisor") echo 'selected="selected"'; ?>>Supervisor</option>
-          </select><br>
-          <?php
-            $sql=$this->db->query("SELECT * FROM department");
-            $dep=$sql->result();
-          ?>
 
-          <p class="">Department:</p>
-            <select class="form-control" name="department" id="departmentupdate" required="" onchange="fixtimingupdate(this)">
-              <option value="">--Select--</option>
-              <?php for($i=0;$i<count($dep);$i++) { ?>
-                <option  value="<?php echo $dep[$i]->department;?>" <?php if($dep[$i]->department==$agentdata->department) echo 'selected="selected"'; ?>><?php echo $dep[$i]->department?></option>
-              <?php } ?>
-            </select><br>
-            <div class="row">
-              <div class="col-md-6">
-              <p>In Time</p>
-                <input type="time" class="form-control" id="checkintimingupdate"  name="checkintimingupdate"  value="<?php echo $agentdata->checkin;?>">
-              </div>
-              <div class="col-md-6">
-              <p>Out Time</p>
-              <input type="time" class="form-control" id="checkouttimingupdate"  name="checkouttimingupdate"  value="<?php echo $agentdata->checkout;?>">
-              </div>
-          </div><br>
-          <?php
-            $client=explode(',',$agentdata->client);
-            $clisql=$this->db->query("SELECT * FROM client");
-            $client_data=$clisql->result();
-          ?>
-          <p class="">Client:</p>
-          <select data-placeholder="Choose Client..." class="chosen-select form-control" multiple tabindex="4" name="client[]" required="">
-
-          <?php foreach($client_data as $cli){ ?>
-            <option value="<?php echo trim($cli->client);?>" <?php if(in_array($cli->client, $client) == 1) echo 'selected="selected"'; ?>><?php echo $cli->client?></option>
-          <?php } ?>
-          </select>
-          <br>
-	<p class="">Date of Join:</p>
-	<input class="col-md-12 col-xs-12 form-control" type="date" id="doj" name="doj" required="" value="<?php echo $agentdata->doj;?>">
-	<br>
-            <input type="submit" name="fupdate" class="apply formSubmit" value="Submit" >
-            <input type="button" value="Cancel" class="apply" data-dismiss="modal" >
-        </form>
-        <span class="blinking" id="ajaxmsg" style="color:#337ab7;font-size:15px;position:relative;top:7px;font-weight:800;"></span>
-      </div>
-    </div>
-  </div>
-</div>
 
 								<?php } ?>
 
@@ -176,7 +109,7 @@
 												<?php if($userdata['role'] == 'admin' || ($userdata['role'] == 'supervisor' && $userdata['department'] == 'HR')){ ?>
 												<span style="cursor:pointer"><a  onclick="Activate(`<?php echo $a_deactuv->emp_id;?>`)">Activate</a></span>
 											<?php } ?>
-												<span class="emp-break-in"><a href="javaScript:void(0)" class="" data-toggle="modal" data-target="#edit_Modal_<?php echo $a_deactuv->id;?>">Edit</a></span>
+												<span class="emp-break-in" ><a href="javaScript:void(0)"  class="" data-toggle="modal" data-target="#edit_Modal_<?php echo $a_deactuv->id;?>">Edit</a></span>
 											<!-- <span class="emp-break-out"><a href="<?php echo base_url()?>adduser/deleteuser/<?php echo $a_deactuv->id;?>" onClick="return doconfirm();" style="color:red;">Delete</a></span>	 -->
 											</td>
 
@@ -191,7 +124,91 @@
 			</div>
 		</div>
 	</div>
+	<div style="padding-top:1px;" class="modal fade" id="edit_Modal" role="dialog">
+	  <div class="modal-dialog">
+	    <!-- Modal content-->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h4 class="mons modal-title">Update Agent</h4>
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	      </div>
+	      <div class="modal-body mons">
+	        <form method="post" action="<?php echo base_url();?>adduser/updateuser">
+	          <p class="">Employee ID:</p>
+	           <input class="col-md-12 col-xs-12 form-control" type="hidden" id="userid" name="userid" placeholder="Emp ID" required=""  readonly>
+	          <input class="col-md-12 col-xs-12 form-control" type="text" id="emp_id" name="emp_id" placeholder="Emp ID" required="" value="<?php echo $agentdata->emp_id;?>" readonly>
+	          <p class="">Employee Name:</p>
+	          <input class="col-md-12 col-xs-12 form-control" type="text" id="name" name="name" placeholder="Name" required="" value="<?php echo $agentdata->name;?>">
+	          <p class="">User Name:</p>
+	          <input class="col-md-12 col-xs-12 form-control" type="text" id="username" name="username" placeholder="UserName" required="" value="<?php echo $agentdata->username;?>">
+	          <p class="">Role:</p>
+	          <select class="form-control" name="role" id="role" required="">
+	            <option value="">--Select--</option>
+	            <option value="agent" <?php if($agentdata->role=="agent") echo 'selected="selected"'; ?>>Agent</option>
+	            <option value="supervisor" <?php if($agentdata->role=="supervisor") echo 'selected="selected"'; ?>>Supervisor</option>
+	          </select><br>
+	          <?php
+	            $sql=$this->db->query("SELECT * FROM department");
+	            $dep=$sql->result();
+	          ?>
+
+	          <p class="">Department:</p>
+	            <select class="form-control" name="department" id="departmentupdate" required="" onchange="fixtimingupdate(this.value)">
+	              <option value="">--Select--</option>
+	              <?php for($i=0;$i<count($dep);$i++) { ?>
+	                <option  value="<?php echo $dep[$i]->department;?>" <?php if($dep[$i]->department==$agentdata->department) echo 'selected="selected"'; ?>><?php echo $dep[$i]->department?></option>
+	              <?php } ?>
+	            </select><br>
+
+							<div id="subdt_viewupdate" >
+							<p class="">Sub Department:</p>
+								<select class="form-control" name="subdepartment" id="subdepartmentupdate" >
+									<option value="">--Select--</option>
+									<?php for($i=0;$i<count($dep);$i++){
+										if($dep[$i]->department !='MANAGEMENT' && $dep[$i]->department != 'ADMIN'){
+										?>
+										<option value="<?php echo $dep[$i]->department;?>"><?php echo $dep[$i]->department?></option>
+									<?php }
+								} ?>
+								</select>
+							</div>
+
+	            <div class="row">
+	              <div class="col-md-6">
+	              <p>In Time</p>
+	                <input type="time" class="form-control" id="checkintimingupdate"  name="checkintimingupdate"  value="<?php echo $agentdata->checkin;?>">
+	              </div>
+	              <div class="col-md-6">
+	              <p>Out Time</p>
+	              <input type="time" class="form-control" id="checkouttimingupdate"  name="checkouttimingupdate"  value="<?php echo $agentdata->checkout;?>">
+	              </div>
+	          </div><br>
+	          <?php
+	            $client=explode(',',$agentdata->client);
+	            $clisql=$this->db->query("SELECT * FROM client");
+	            $client_data=$clisql->result();
+	          ?>
+	          <p class="">Client:</p>
+	          <select data-placeholder="Choose Client..." class="chosen-select form-control" multiple tabindex="4" name="client[]" id="updatemultclient" required="">
+
+	          <?php foreach($client_data as $cli){ ?>
+	            <option value="<?php echo trim($cli->client);?>" <?php if(in_array($cli->client, $client) == 1) echo 'selected="selected"'; ?>><?php echo $cli->client?></option>
+	          <?php } ?>
+	          </select>
+	          <br>
+		<p class="">Date of Join:</p>
+		<input class="col-md-12 col-xs-12 form-control" type="date" id="doj" name="doj" required="" value="<?php echo $agentdata->doj;?>">
+		<br>
+	            <input type="submit" name="fupdate" class="apply formSubmit" value="Submit" >
+	            <input type="button" value="Cancel" class="apply" data-dismiss="modal" >
+	        </form>
+	        <span class="blinking" id="ajaxmsg" style="color:#337ab7;font-size:15px;position:relative;top:7px;font-weight:800;"></span>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 </main>
+
 <?php
 
 function getDatacount($obj){
@@ -228,6 +245,29 @@ function getDatacount($obj){
 
 </div>
 <script>
+function editagent(id,emp_id,name,userid,role,department,subdepartment,intime,outtime,client,doj) {
+	$('#edit_Modal').modal('show');
+	$('#edit_Modal #userid').val(id);
+	$('#edit_Modal #emp_id').val(emp_id);
+	$('#edit_Modal #name').val(name);
+	$('#edit_Modal #username').val(userid);
+	$('#edit_Modal #role').val(role);
+	$('#edit_Modal #departmentupdate').val(department);
+	if(department =='MANAGEMENT'){
+		$('#edit_Modal #subdt_viewupdate').show();
+		$('#edit_Modal #subdepartmentupdate').val(subdepartment);
+	}else{
+		$('#edit_Modal #subdt_viewupdate').hide();
+
+	}
+	$('#edit_Modal #checkintimingupdate').val(intime);
+	$('#edit_Modal #checkouttimingupdate').val(outtime);
+
+	$.each(client.split(","), function(i,e){
+	    $("#edit_Modal #updatemultclient option[value='" + e + "']").prop("selected", true);
+	});
+	$('#edit_Modal #doj').val(doj);
+}
 function doconfirm()
 {
   let del=confirm("Are you sure to delete permanently?");
@@ -305,6 +345,19 @@ $('#search').keyup(function(){
               <?php } ?>
             </select>
           <br>
+					<div id="subdt_view">
+					<p class="">Sub Department:</p>
+						<select class="form-control" name="subdepartment" id="subdepartment" >
+							<option value="">--Select--</option>
+							<?php for($i=0;$i<count($dep);$i++){
+								if($dep[$i]->department !='MANAGEMENT' && $dep[$i]->department != 'ADMIN'){
+								?>
+								<option value="<?php echo $dep[$i]->department;?>"><?php echo $dep[$i]->department?></option>
+							<?php }
+						} ?>
+						</select>
+					</div>
+					<br>
           <div class="row">
               <div class="col-md-6">
               <p>In Time</p>
@@ -339,78 +392,14 @@ $('#search').keyup(function(){
     </div>
   </div>
 </div>
-
-<div style="padding-top:1px;" class="modal fade" id="myModal" role="dialog">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="mons modal-title">Add Agent</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body mons">
-        <form method="post" action="<?php echo base_url();?>adduser/adduser">
-          <p class="">Employee ID:</p>
-          <input class="col-md-12 col-xs-12 form-control" type="text" id="userid" name="userid" placeholder="Emp ID" required="">
-          <p class="">Employee Name:</p>
-          <input class="col-md-12 col-xs-12 form-control" type="text" id="name" name="name" placeholder="Name" required="">
-          <p class="">User Name:</p>
-          <input class="col-md-12 col-xs-12 form-control" type="text" id="username" name="username" placeholder="UserName" required="">
-          <p class="">Password:</p>
-          <input class="col-md-12 col-xs-12 form-control" type="password" id="password" name="password" placeholder="Password" required="">
-          <p id="err" style="color:red;"></p>
-          <p class="">Role:</p>
-          <input type="hidden" id="base_url" value="<?php echo base_url(); ?>">
-          <select class="form-control" name="role" required="">
-            <option value="">--Select--</option>
-            <option value="agent">Agent</option>
-            <option value="supervisor">Supervisor</option>
-          </select>
-          <br>
-          <?php
-          $sql=$this->db->query("SELECT * FROM department");
-          $dep=$sql->result();
-          ?>
-          <p class="">Department:</p>
-            <select class="form-control" name="department" required="">
-              <option value="">--Select--</option>
-              <?php for($i=0;$i<count($dep);$i++){ ?>
-                <option value="<?php echo $dep[$i]->department;?>"><?php echo $dep[$i]->department?></option>
-              <?php } ?>
-            </select>
-          <br>
-          <?php
-            $clisql=$this->db->query("SELECT * FROM client");
-            $cli=$clisql->result();
-          ?>
-          <p class="">Client:</p>
-          <select data-placeholder="Choose Client..." class="chosen-select form-control" multiple tabindex="4" name="client[]" required="">
-            <option value=""></option>
-             <?php for($i=0;$i<count($cli);$i++){ ?>
-                <option value="<?php echo $cli[$i]->client;?>"><?php echo $cli[$i]->client?></option>
-              <?php } ?>
-            <!-- <option value="RCM">RCM</option> -->
-          </select>
-          <br>
-
-          <p class="">Date of Join:</p>
-          <input class="col-md-12 col-xs-12 form-control" type="date" id="doj" name="doj" required="">
-	 <br>
-            <input type="submit" name="fadd" class="apply formSubmit" value="Submit" >
-            <input type="button" value="Cancel" class="apply" data-dismiss="modal" >
-        </form>
-        <span class="blinking" id="ajaxmsg" style="color:#337ab7;font-size:15px;position:relative;top:7px;font-weight:800;"></span>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
+$('#subdt_view').hide();
+$('#subdt_viewupdate').hide();
 function openmodal(){
   $('#agentadd').modal('toggle');
 }
 function fixtimingupdate(data){
-  var dpt = data.value;
+  var dpt = data;
   if(dpt == 'DATA'){
     $('#checkintimingupdate').val('09:00');
     $('#checkouttimingupdate').val('18:00');
@@ -425,7 +414,13 @@ function fixtimingupdate(data){
     $('#checkintimingupdate').val('');
     $('#checkouttimingupdate').val('');
   }
+	if(dpt == 'MANAGEMENT'){
+		$('#subdt_viewupdate').show();
+	}else{
+		$('#subdt_viewupdate').hide();
+	}
 }
+
 function fixtiming(){
   var dpt = $('#department').children("option:selected").val();
   if(dpt == 'DATA'){
@@ -442,6 +437,11 @@ function fixtiming(){
     $('#checkintiming').val('');
     $('#checkouttiming').val('');
   }
+	if(dpt == 'MANAGEMENT'){
+		$('#subdt_view').show();
+	}else{
+		$('#subdt_view').hide();
+	}
 }
 
 
