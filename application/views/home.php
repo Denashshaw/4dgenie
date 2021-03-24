@@ -368,7 +368,7 @@ input[type=time]::datetime-edit-field.numeric{
 						<br>
 						<p>Time Spent</p>
 						<!-- <input type="time" id="timespendupdate" onblur="calculatepercentage_update()"> -->
-						<input type="text" id="timespendupdate" onblur="calculatepercentage_update()">
+						<input type="text" id="timespendupdate"  name="timespendupdate" value="00:00" max="12:59" onblur="calculatepercentage_update()">
 					</div>
 					<div class="col-md-3"><br>
 						<p>Count</p>
@@ -889,6 +889,13 @@ function removetimesheet(i){
 
 function updatetimesheet(valget){
 	$('#updatetimesheet').modal('show');
+	$('#timespendupdate').timepicker({
+			showMeridian: false,
+			showInputs: true,
+			minTime: '00',
+			timeFormat:'hh:mm',
+			showMeridian: !1
+	});
 	$('#clientid').html(client[valget]);
 	$('#typeid').html(typeval[valget]);
 	$('#taskid').html(task[valget]);
@@ -1042,8 +1049,11 @@ $(document).ready(function(){
         $('#timespend').timepicker({
             showMeridian: false,
             showInputs: true,
-						timeFormat:'hh:mm'
+						minTime: '00',
+						timeFormat:'hh:mm',
+						showMeridian: !1
         });
+
     });
 </script>
 </html>
