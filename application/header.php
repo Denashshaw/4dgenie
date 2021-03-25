@@ -275,7 +275,7 @@ a:hover,.dropdown-options:hover, li.active, a.active {
         <i class="fa fa-file fa-lg" aria-hidden="true"></i> Documents</a>
       </li>
 
-    
+
       <?php if($userdata['role'] != 'agent'){ ?>
         <li class="<?php if($actlinks == "Onboarding_emp_view") echo "active";?>"><a class="<?php if($actlinks == "Onboarding_emp_view") echo "active";?>" href="<?php echo base_url();?>Candidate_interview/Onboarding_emp_view"><i class="fa fa-arrow-circle-right fa-lg" aria-hidden="true"></i> Onboarding New Emp</a></li>
 
@@ -287,7 +287,7 @@ a:hover,.dropdown-options:hover, li.active, a.active {
 
       <li><a href=""><i class="fa fa-arrow-circle-right fa-lg" aria-hidden="true"></i> Leader Assessment</a></li>
 
-      
+
       <li class="<?php if($actlinks == "Notification") echo "active";?>"><a class="<?php if($actlinks == "Notification") echo "active";?>" href="<?php echo base_url();?>Notification"><i class="fa fa-bullhorn fa-lg" aria-hidden="true"></i> Announcement</a></li>
 
       <?php } ?>
@@ -298,22 +298,22 @@ a:hover,.dropdown-options:hover, li.active, a.active {
 
     <li><a class="<?php  if($actlinks == "Ticket") echo "active";?>" href="<?php echo base_url();?>Ticket"><i class="fa fa-cogs fa-lg" aria-hidden="true"></i> IT Help Desk</a></li>
 
-    <?php 
+    <?php
     //if($userdata['role'] != 'agent' && ($userdata['department'] == 'MANAGEMENT' || $userdata['department'] == 'HR' ||  $userdata['role'] == 'admin')){ ?>
         <span class="dropdown-btn dropdown-options">Emp Feedback/Appraisal
           <i class="fa fa-caret-down fa-lg"></i>
         </span>
         <div class="dropdown-container">
-          <?php 
+          <?php
           if($userdata['department'] == 'HR' || $userdata['department'] == 'MANAGEMENT' || $userdata['role'] == 'admin'){ ?>
             <li class="<?php if($actlinks == "feedbackform") echo "active";?> dropMenu">
             <a class="<?php  if($actlinks == "feedbackform") echo "active";?>" href="<?php echo base_url();?>feedbackform/feedbackhr"><i class="fa fa-arrow-right" aria-hidden="true"></i> HR Feedback </a></li>
             <?php  } ?>
             <li class="<?php if($actlinks == "feedbackform") echo "active";?> dropMenu">
-            <a class="<?php  if($actlinks == "feedbackform") echo "active";?>" href="<?php echo base_url();?>feedbackform/feedbackmanager"><i class="fa fa-arrow-right" aria-hidden="true"></i>One on One Feedback</a></li>     
-          
+            <a class="<?php  if($actlinks == "feedbackform") echo "active";?>" href="<?php echo base_url();?>feedbackform/feedbackmanager"><i class="fa fa-arrow-right" aria-hidden="true"></i>One on One Feedback</a></li>
+
         </div>
-    
+
       <?php //} ?>
 
     <?php if($userdata['role']=='admin' || $userdata['role']=='supervisor'){?>
@@ -346,6 +346,7 @@ a:hover,.dropdown-options:hover, li.active, a.active {
       </div>
       <div class="modal-body mons">
         <form method="post" action="<?php echo base_url();?>adduser/adduser">
+
           <p class="">Employee ID:</p>
           <input class="col-md-12 col-xs-12 form-control" type="text" id="userid" name="userid" placeholder="Emp ID" required="">
           <p class="">Employee Name:</p>

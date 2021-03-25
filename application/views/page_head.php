@@ -25,17 +25,7 @@
     color: #fff;
     font-size: 15px;
 }
-.fa-pencil-alt{
-  color:#24cb5b;
-  font-size:15px;
-  cursor:pointer;
-  padding:15%;
-}
-.fa-trash{
-  color:#ff5c4b;
-  font-size:18px;
-  cursor:pointer;
-}
+
 </style>
 
 <div class="row head-content">

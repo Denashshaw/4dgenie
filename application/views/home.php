@@ -11,7 +11,17 @@ input[type=time]::datetime-edit-field.numeric{
     display: inline !important;
 
 }
-
+.fa-pencil-alt{
+  color:#24cb5b;
+  font-size:15px;
+  cursor:pointer;
+  padding:15%;
+}
+.fa-trash{
+  color:#ff5c4b;
+  font-size:18px;
+  cursor:pointer;
+}
 </style>
 
 <div class="page-wrapper chiller-theme toggled">

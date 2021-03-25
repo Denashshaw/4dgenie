@@ -1,6 +1,6 @@
 <body>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
+<input type="hidden" id="base_url" value="<?php echo base_url(); ?>">
     <div class="page-wrapper chiller-theme toggled">
         <?php include('header.php'); ?>
         <main class="page-content">
@@ -144,7 +144,7 @@
                                             </div>
 
                                             <div class="col-md-2">
-                                                <label for="">Target Value:</label>
+                                                <label for="">Target/Hour:</label>
                                                 <input type="text" class='form-control m-0' id="target_val" name="target_val" required autocomplete="off">
                                             </div>
 
@@ -327,6 +327,7 @@
 
 </body>
 <script>
+
     $('#client_field').change(() => {
         var agent_id = $('#agent_emp_id').val();
         edit_target(agent_id, param = 'yes');
