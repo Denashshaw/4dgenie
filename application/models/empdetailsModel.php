@@ -444,7 +444,8 @@
 
     public function get_managers_list()
     {
-      $managers_list = $this->db->select('emp_id, name')->from('users')->where('department =', 'MANAGEMENT')->get();
+     // $managers_list = $this->db->select('emp_id, name')->from('users')->where('department =', 'MANAGEMENT')->get();
+      $managers_list = $this->db->query("SELECT emp_id,name FROM users WHERE department='MANAGEMENT' OR role='supervisor' AND department='IT' ");
       return $managers_list->result_array();
     }
 
@@ -499,8 +500,8 @@
     {
       if ($_SESSION['role'] == 'admin') {
         return $this->db->select('*')->from('emp_leave_details')->get()->result_array();
-      } elseif($_SESSION['department'] == 'MANAGEMENT'){
-        return $this->db->select('*')->from('emp_leave_details')->where('manager_id',$_SESSION['emp_id'])->get()->result_array();
+      } elseif($_SESSION['role'] == 'supervisor'){
+          return $this->db->select('*')->from('emp_leave_details')->where('manager_id',$_SESSION['emp_id'])->or_where('emp_id',$_SESSION['emp_id'])->get()->result_array();
       }else{
         return $this->db->select('*')->from('emp_leave_details')->where('emp_id', $_SESSION['emp_id'])->get()->result_array();
       }
