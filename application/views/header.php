@@ -355,7 +355,7 @@ a:hover,.dropdown-options:hover, li.active, a.active {
 
 
 
-    <?php if($userdata['role']=='admin' || $userdata['role']=='supervisor'){?>
+    <?php if($userdata['role']=='admin' || $userdata['role']=='supervisor'  || $userdata['emp_id'] == 'M348'){?>
       <span class="viewhover dropdown-btn dropdown-options" onclick="viewreport()">Reports
         <i class="fa fa-caret-right fa-lg" style="float: right;"></i>
       </span>
@@ -691,8 +691,7 @@ for (i = 0; i < dropdown.length; i++) {
   });
 }
 
-gettimesheetcount();
-function gettimesheetcount(){
+$(document).ready(function(){
   $.ajax({
     url:"<?php echo base_url(); ?>Timesheet/getcount_notification",
     method:"post",
@@ -705,5 +704,5 @@ function gettimesheetcount(){
       }
     }
   });
-}
+})
 </script>
