@@ -221,7 +221,7 @@
      $client_val = [];
      $i = 0;
      foreach ($client_arr as $client) {
-       $res = $this->db->select('id, client')->from('client')->where('keyword', $client)->get()->row();
+       $res = $this->db->select('id, client')->from('client')->where('client', $client)->get()->row();
 
        if ($res) {
          $client_val[$i++] = $res;
