@@ -1,6 +1,5 @@
 <body>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<input type="hidden" id="base_url" value="<?php echo base_url(); ?>">
     <div class="page-wrapper chiller-theme toggled">
         <?php include('header.php'); ?>
         <main class="page-content">
@@ -22,9 +21,16 @@
                                     <li class="nav-item">
                                         <a class="nav-link tablink" data-toggle="tab" data-tab-index="1" onclick="openPage('sub_task_section', this, 'white')" id="sub_task_tab">Sub-Task</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link tablink" data-toggle="tab" data-tab-index="1" onclick="openPage('target_section', this, 'white')" id="target_section_tab">Target Setup</a>
-                                    </li>
+                                    <?php if (($_SESSION['department'] == 'DATA' || $_SESSION['department'] == 'HR') || $_SESSION['department'] == 'MANAGEMENT' && ($_SESSION['sub_department'] == 'DATA')) { ?>
+                                        <li class="nav-item">
+                                            <a class="nav-link tablink" data-toggle="tab" data-tab-index="1" onclick="openPage('target_section', this, 'white')" id="target_section_tab">Target Setup - Agent Wise</a>
+                                        </li>
+                                    <?php } ?>
+                                    <?php if (($_SESSION['department'] == 'VOICE' || $_SESSION['department'] == 'QA') || $_SESSION['department'] == 'MANAGEMENT' && ($_SESSION['sub_department'] == 'VOICE' || $_SESSION['sub_department'] == 'QA')) { ?>
+                                        <li class="nav-item">
+                                            <a class="nav-link tablink" data-toggle="tab" data-tab-index="1" onclick="openPage('target_client_section', this, 'white')" id="target_client_tab">Target Setup - Client Wise</a>
+                                        </li>
+                                    <?php } ?>
                                 </ul>
 
                                 <div class="tabcontent" id="task" style="text-decoration:none;">
@@ -43,7 +49,7 @@
                                                 <input type="text" class='form-control' id="task_val" name="task_val" required autocomplete="off">
                                             </div>
 
-                                            <div class='col-md-2' style="margin-top:40px;">
+                                            <div class='col-md-2' style="margin-top: 38px;">
                                                 <button class='btn btn-success'><i class="fa fa-check" aria-hidden="true"></i> Submit</button>
                                             </div>
                                         </div>
@@ -115,31 +121,22 @@
                                             <div class="col-md-2">
                                                 <label for="">Select Client:</label>
                                                 <select name="client_drop" id="client_drop" class='form-control'>
-                                                    <!-- <option value="sjhealth">SJ Health</option>
-                                                <option value="sandstone">Sandstone</option>
-                                                <option value="primal_billing">Primal Billing</option> -->
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="">Select Task:</label>
                                                 <select name="target_task_tab" id="target_task_tab" class='form-control'>
-                                                    <!-- <option value="voice">Voice</option>
-                                                <option value="non_voice">Non-Voice</option>
-                                                <option value="training">Training</option> -->
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="">Select Sub-Task:</label>
                                                 <select name="target_subtask" id="target_subtask" class='form-control'>
-                                                    <!-- <option value="call_hard">Call-Hard</option>
-                                                <option value="call_moderate">Call-Moderate</option>
-                                                <option value="call_easy">Call-Easy</option> -->
                                                 </select>
                                             </div>
 
                                             <div class='col-md-2 p-0'>
                                                 <label for="">Select Agent:</label>
-                                                <select name="multiple_agent" id="multiple_agent" multiple required style="width:205px;">
+                                                <select name="multiple_agent" id="multiple_agent" multiple required>
                                                 </select>
                                             </div>
 
@@ -154,9 +151,6 @@
                                         </div>
                                     </form>
 
-                                    <!-- <div class="row emp-table">
-                                        <div class="col-md-12 table-responsive">
-                                            <div class="row"> -->
                                     <table class='display' id="target_setup_table" style="width:100%">
                                         <thead>
                                             <tr>
@@ -185,31 +179,80 @@
                                                     <!-- <td><?php echo $value->target_value; ?></td> -->
                                                     <td>
                                                         <button class='btn btn-primary' onClick='edit_target("<?php echo $value->agent_id; ?>")'><i class=' fa fa-info-circle'></i> View</button>
-                                                        <button class='btn btn-danger' onClick="delete_target(<?php echo $value->id; ?>)"> <i class='fa fa-trash'></i> Delete</button>
+                                                        <!-- <button class='btn btn-danger' onClick="delete_target(<?php echo $value->id; ?>)"> <i class='fa fa-trash'></i> Delete</button> -->
                                                     </td>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
                                     </table>
                                 </div>
-                                <!-- </div>
-                                    </div>
-                                </div> -->
 
-                                <!-- <div class="row emp-table">
-                            <table>
-                                <thead>
-                                    <tr style='text-align:center;'>
-                                        <th>Task</th>
-                                        <th>Sub-Task</th>
-                                        <th>Target Per Hour</th>
-                                        <th><button class="btn btn-success">Add Task</button></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="client_target">
-                                </tbody>
-                            </table>
-                        </div> -->
+                                <div class="tabcontent" id="target_client_section" style="display: none;">
+                                    <form id="target_client_form" method='POST'>
+                                        <div class="row mt-5">
+                                            <div class="col-md-2">
+                                                <label for="">Select Client:</label>
+                                                <select name="client_drop" id="client_drop_c" class='form-control'>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="">Select Task:</label>
+                                                <select name="target_task_tab" id="target_task_tab_c" class='form-control'>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="">Select Sub-Task:</label>
+                                                <select name="target_subtask" id="target_subtask_c" class='form-control'>
+                                                </select>
+                                            </div>
+
+                                            <!-- <div class='col-md-2 p-0'>
+                                                <label for="">Select Agent:</label>
+                                                <select name="multiple_agent" id="multiple_agent_c" multiple required>
+                                                </select>
+                                            </div> -->
+
+                                            <div class="col-md-2">
+                                                <label for="">Target/Hour:</label>
+                                                <input type="text" class='form-control m-0' id="target_val_c" name="target_val" required autocomplete="off">
+                                            </div>
+
+                                            <div class="col-md-1" style="margin-top: 28px;">
+                                                <button class='btn btn-success'> Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <!-- table need to come -->
+                                    <table class='display' id="target_setup_client_table" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <!-- <th>Task</th>
+                                                <th>Sub-Task</th> -->
+                                                <th>Client</th>
+                                                <!-- <th>Agent Id</th>
+                                                <th>Agent Name</th> -->
+                                                <th>Created By</th>
+                                                <th>Updated By</th>
+                                                <th>Target</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            //print_r($client_target_data);
+                                            foreach ($client_target_data as $key => $value) { ?>
+                                                <tr>
+                                                    <td><?php echo $value->client; ?></td>
+                                                    <td><?php echo $value->created_by; ?></td>
+                                                    <td><?php echo ($value->updated_by == '' ? '-' : $value->updated_by); ?></td>
+                                                    <td><?php echo $value->target_value; ?></td>
+                                                    <td><button class='btn btn-primary' onClick='edit_target_client("<?php echo $value->id; ?>")'><i class=' fa fa-info-circle'></i> View</button></td>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
 
                             </div>
                         </div>
@@ -325,9 +368,50 @@
         </div>
     </div>
 
+    <!-- Big modal client target value -->
+    <div class="modal fade" id="task_main_client_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel3"><i class='fa fa-pencil-alt'></i> Edit Client Target Value</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="target_modal_client_form">
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                <!-- <div class='pb-3'>
+                                    <select id="client_field" class='form-control col-md-2 offset-md-10'>
+                                    </select>
+                                    <input type="hidden" id="agent_emp_id">
+                                </div> -->
+                                <table class='table table-striped' border="1">
+                                    <thead>
+                                        <tr>
+                                            <th>S.No</th>
+                                            <th>Client</th>
+                                            <th>Task</th>
+                                            <th>Sub-Task</th>
+                                            <th>Target</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="modal_target_client_tbl"></tbody>
+                                </table>
+                                <div class='row justify-content-md-center'>
+                                    <button class='btn btn-success justify-content-center' type="submit"><i class='fa fa-check'></i> Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 <script>
-
     $('#client_field').change(() => {
         var agent_id = $('#agent_emp_id').val();
         edit_target(agent_id, param = 'yes');
@@ -348,7 +432,32 @@
                         'Target Value has been Updated.',
                         'success'
                     );
+                    location.reload();
+                    localStorage.setItem('value', 'yes');
+                }
+            },
+            failed: function(err) {
+                console.log(err)
+            }
+        });
+    });
 
+
+    $('#target_modal_client_form').submit((e) => {
+        var base_url = $('#base_url').val();
+        var data = $("#target_modal_client_form").serialize();
+        e.preventDefault();
+        $.ajax({
+            url: base_url + 'Client/target_form_client_data',
+            method: 'POST',
+            data: data,
+            success: function(res) {
+                if (res) {
+                    Swal.fire(
+                        'Updated!',
+                        'Target Value has been Updated.',
+                        'success'
+                    );
                     location.reload();
                     localStorage.setItem('value', 'yes');
                 }
@@ -399,9 +508,48 @@
         });
     }
 
+    function edit_target_client(client_id, param = '') {
+        var base_url = $('#base_url').val();
+        $.ajax({
+            url: base_url + 'Client/get_view_client_target_data',
+            method: 'POST',
+            data: {
+                client_id: client_id
+            },
+            success: function(res) {
+                var tbody = [];
+                var data = JSON.parse(res);
+                var i = 1;
+                if (data.length > 0) {
+                    data.forEach(val => {
+                        tbody += `<tr>
+                        <td>${i}</td>
+                        <td>${val.client}</td>
+                        <td>${val.task}</td>
+                        <td>${val.sub_task}</td>
+                        <td>
+                        <input type="text" name="${val.client_id}_${val.task_id}_${val.sub_task_id}" value="${val.target_value}"></td>
+                    </tr>`;
+                        i++;
+                    });
+                } else {
+                    tbody += `<tr><td colspan='5'><h5 style='text-align:center;'>No Task or Subtask assigned for ${$('#client_field option:selected').text()}!</h5></td></tr>`;
+                }
+                $('#modal_target_client_tbl').html(tbody);
+                if (param == '') {
+                    $('#task_main_client_modal').modal('toggle');
+                }
+            },
+            failed: function(err) {
+                console.log(err);
+            }
+        });
+    }
+
 
     $(document).ready(function() {
         $('#target_setup_table').DataTable();
+        $('#target_setup_client_table').DataTable();
         var ans = localStorage.getItem('value');
         if (ans) {
             $('#target_section_tab').click();
@@ -488,13 +636,13 @@
                     },
                     success: function(res) {
                         if (res) {
-                          localStorage.setItem("value",'yes');
+                            localStorage.setItem('value', 'yes');
                             Swal.fire(
                                 'Deleted!',
                                 'Data has been deleted.',
                                 'success'
-                            )
-                            location.reload();
+                            );
+                            // location.reload();
                         }
                     },
                     failed: function() {
@@ -514,7 +662,7 @@
         $.ajax({
             url: base_url + 'Client/generate_task_table',
             method: 'GET',
-            success: function(res) {
+            success: function(res) {              
                 var data = JSON.parse(res);
                 var tbody = [];
                 data.forEach(val => {
@@ -705,7 +853,7 @@
     $(document).ready(() => {
         generate_task_table();
         $('#multiple_agent').select2({
-            width: "205px",
+            width: 205,
         });
     });
 
@@ -765,7 +913,9 @@
                 $('#subtask_task').html(option);
                 if (param) {
                     $('#target_task_tab').html(option);
+                    $('#target_task_tab_c').html(option);
                     get_sub_task_val();
+                    get_sub_task_val_c();
                 }
             },
             failed: function(err) {
@@ -827,6 +977,29 @@
     });
     // Third tab task click end
 
+    // Forth tab task click start
+    $('#target_client_tab').click(() => {
+        var base_url = $('#base_url').val();
+        $.ajax({
+            url: base_url + 'Client/get_client_data',
+            method: 'GET',
+            success: function(res) {
+                var data = JSON.parse(res);
+                var option = [];
+                data.forEach(val => {
+                    option += `<option value='${val.id}'>${val.client}</option>`;
+                });
+                $('#client_drop_c').html(option);
+                $('#client_field_c').html(option);
+                get_sub_task('target_page');
+            },
+            failed: function(err) {
+                console.log(err);
+            }
+        });
+    });
+    // Forth tab task click end
+
     function get_agents_for_user() {
         var base_url = $('#base_url').val();
         $.ajax({
@@ -849,6 +1022,33 @@
     $('#target_task_tab').change(() => {
         get_sub_task_val();
     });
+    $('#target_task_tab_c').change(() => {
+        get_sub_task_val_c();
+    });
+
+    function get_sub_task_val_c() {
+        var base_url = $('#base_url').val();
+        var target_task_tab = $('#target_task_tab_c').val();
+        $.ajax({
+            url: base_url + 'Client/get_sub_task_val',
+            method: 'POST',
+            data: {
+                target_task_tab: target_task_tab
+            },
+            success: function(res) {
+                var data = JSON.parse(res);
+                var option = [];
+                data.forEach(val => {
+                    option += `<option value='${val.id}'>${val.sub_task}</option>`;
+                });
+                // $('#target_subtask').html(option);
+                $('#target_subtask_c').html(option);
+            },
+            failed: function(err) {
+                console.log(err);
+            }
+        });
+    }
 
     function get_sub_task_val() {
         var base_url = $('#base_url').val();
@@ -895,6 +1095,43 @@
                 if (res) {
                     $('#target_val').val('');
                     $('#multiple_agent').val('').trigger('change');
+                    // $('#target_section_tab').click();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Form submitted successfully!',
+                        timer: 1000
+                    });
+                    localStorage.setItem('value', 'yes');
+                    location.reload();
+                }
+            },
+            failed: function(err) {
+                console.log(err);
+            }
+        });
+    });
+
+
+    $('#target_client_form').submit((e) => {
+        e.preventDefault();
+        var client_drop = $('#client_drop_c').val();
+        var target_task_tab = $('#target_task_tab_c').val();
+        var target_subtask = $('#target_subtask_c').val();
+        var target_val = $('#target_val_c').val();
+        var base_url = $('#base_url').val();
+        $.ajax({
+            url: base_url + 'Client/insert_client_target_details',
+            method: 'POST',
+            data: {
+                client_drop: client_drop,
+                target_task_tab: target_task_tab,
+                target_subtask: target_subtask,
+                target_val: target_val
+            },
+            success: function(res) {
+                if (res) {
+                    $('#target_val').val('');
+                    // $('#multiple_agent').val('').trigger('change');
                     // $('#target_section_tab').click();
                     Swal.fire({
                         icon: 'success',
