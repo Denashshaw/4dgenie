@@ -46,15 +46,22 @@ class Breakin_breakout extends CI_Controller {
 
 		$to_time   = strtotime($res[0]->breakin_time);
 		$from_time = strtotime($time);
-		$tot_mins  = round(abs($to_time - $from_time) / 60,2). " minute";
-		$final     = $tot_mins*60;
-
-
-		$hours     = floor($final / 3600);
-		$minutes   = floor(($final / 60) % 60);
-		$seconds   = $final % 60;
-
-		$check_inout_diff ="$minutes mins:$seconds secs";
+		// $tot_mins  = round(abs($to_time - $from_time) / 60,2). " minute";
+		// $final     = $tot_mins*60;
+		//
+		//
+		// $hours     = floor($final / 3600);
+		// $minutes   = floor(($final / 60) % 60);
+		// $seconds   = $final % 60;
+		//
+		// $check_inout_diff ="$minutes mins:$seconds secs";
+		$check_inout_diff_total = gmdate("H:i:s",($from_time-$to_time));
+		$exp_timting=explode(":",$check_inout_diff_total);
+		if($exp_timting[0] == '00'){
+			$check_inout_diff = (int)$exp_timting[1]." mins:".(int)$exp_timting[2]." secs";
+		}else{
+			$check_inout_diff = (int)$exp_timting[0]." hour:".(int)$exp_timting[1]." mins:".(int)$exp_timting[2]." secs";
+		}
 
 		$this->db->query("UPDATE breakin_breakout SET breakout_time='".$time."',break_inout_diff='".$check_inout_diff."',break_inout_flag=0 WHERE user_id='".$userdata['user_id']."' and id='".$res[0]->id."' ");
 
