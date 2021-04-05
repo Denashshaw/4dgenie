@@ -14,12 +14,10 @@
 ?>
 
 <main class="page-content">
-  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
  <link rel="stylesheet" href="<?php echo base_url('multiplesectplugin/css/jquery.transfer.css?v=0.0.3') ?>" />
  <link rel="stylesheet" href="<?php echo base_url('multiplesectplugin/icon_font/css/icon_font.css') ?>" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="<?php echo base_url('multiplesectplugin/js/jquery.transfer.js?v=0.0.6');?>"></script>
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 
   <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
