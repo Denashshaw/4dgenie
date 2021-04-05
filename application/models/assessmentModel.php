@@ -95,7 +95,7 @@ class assessmentModel extends CI_Model
     $datarow=array("EmpID","Name");
     foreach ($getquestion as $a) {
       $datarow[$i+2]=$a->question;
-      array_push($q,array($a->id,$a->correct,$a->a,$a->b,$a->c,$a->b));
+      array_push($q,array($a->id,$a->correct,$a->a,$a->b,$a->c,$a->d));
       $i++;
     }
     array_push($dataset,$datarow);
