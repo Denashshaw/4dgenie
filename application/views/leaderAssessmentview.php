@@ -8,35 +8,46 @@
             margin: 0 auto;
         }
 </style>
+<head>
+
+</head>
+
 <?php
  include('header.php');
   $userdata=$this->session->all_userdata();
 ?>
 
 <main class="page-content">
- <link rel="stylesheet" href="<?php echo base_url('multiplesectplugin/css/jquery.transfer.css?v=0.0.3') ?>" />
- <link rel="stylesheet" href="<?php echo base_url('multiplesectplugin/icon_font/css/icon_font.css') ?>" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="<?php echo base_url('multiplesectplugin/js/jquery.transfer.js?v=0.0.6');?>"></script>
+
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<?php echo base_url('multiplesectplugin/css/jquery.transfer.css?v=0.0.3') ?>" />
+  <link rel="stylesheet" href="<?php echo base_url('multiplesectplugin/icon_font/css/icon_font.css') ?>" />
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+   <script src="<?php echo base_url('multiplesectplugin/js/jquery.transfer.js?v=0.0.6');?>"></script>
+   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 
-  <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.jqueryui.min.css">
-  	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowgroup/1.1.2/css/rowGroup.jqueryui.min.css">
+   <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+   	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.jqueryui.min.css">
+   	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowgroup/1.1.2/css/rowGroup.jqueryui.min.css">
 
+   <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+ 	<script src="https://cdn.datatables.net/1.10.22/js/dataTables.jqueryui.min.js"></script>
+ 	<script type="text/javascript" src="https://cdn.datatables.net/rowgroup/1.1.2/js/dataTables.rowGroup.min.js"></script>
+   <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+   <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.flash.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+   <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+ <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+   <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
 
-  <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.22/js/dataTables.jqueryui.min.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/rowgroup/1.1.2/js/dataTables.rowGroup.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.flash.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-  <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
   <div class="container-fluid p-0">
     <?php include('page_head.php');?>
+
     <div class="row activity-row">
 			<div class="col-md-12 activity">Assessment</div>
 		</div>
@@ -64,16 +75,9 @@
           </div>
         </div>
         <br>
-        <div class="row">
-          <div class="col-md-6">
-            <p>Add Questions</p>
-            <i class="fa fa-plus" style="font-size:60px;margin-top:10%;margin-left:45%;color:green;cursor:pointer;" onclick="addquestion()"></i>
-          </div>
-          <div class="col-md-6">
-            <p> Upload Questions</p>
-            <input id="csv" type="file" class="form-control" style="margin-top:15%;">
-          </div>
-        </div>
+        <p>Add Questions</p>
+        <!-- <button class="btn btn-success" onclick="addquestion()">Add Question</button> -->
+        <i class="fa fa-plus" style="font-size:60px;margin-top:10%;margin-left:45%;color:green;cursor:pointer;" onclick="addquestion()"></i>
       </div><br>
       <div class="col-md-12">
         <table class="table table-bordered">
@@ -125,6 +129,7 @@
                   <p style="background:#c93f58;padding:2%;border-radius:50%;width:20%;text-align:center;color:white"  onclick="viewagent(`<?php echo $a->title; ?>`,`<?php echo $a->emp_id; ?>`)">
                     <?php echo $a->noof_emp_id; ?>
                   </p>
+                  <i class="fa fa-plus" style="float:right;font-size:15px;color:#579ef7;cursor:pointer" title="Add Agents" ></i>
                 </td>
               <td> <?php echo date_format(date_create($a->created_date),"F d-Y"); ?></td>
             </tr>
@@ -138,52 +143,7 @@
   </div>
 
 
-  <div class="modal fade addquestion" id="addquestion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="exampleModalLongTitle">Add Questions</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="addingquestion">
-        <div>
-          <p>Question</p>
-          <textarea id="question" name="question" class="form-control" rows="5"></textarea>
-        </div>
-        <br>
-        <table class="table table-bordered">
-          <tr>
-              <td>A <input type="text" name="a" id="a"></td>
-              <td>B <input type="text" name="b" id="b"></td>
-          </tr>
-          <tr>
-               <td>C <input type="text" name="c" id="c"></td>
-              <td>D <input type="text" name="d" id="d"></td>
-          </tr>
-        </table>
 
-      <div>
-        <p>Correct Answer</p>
-        <select id="correctans" name="correctans" class="form-control">
-          <option value="a">A</option>
-          <option value="b">B</option>
-          <option value="c">C</option>
-          <option value="d">D</option>
-        </select>
-      </div>
-    </form>
-    </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" onclick="addandclose(1)">Save & Add New</button>
-        <button type="button" class="btn btn-primary" onclick="addandclose(2)">Save & Close</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
 </main>
 
 <?php include('sweetalert.php'); ?>
@@ -243,7 +203,8 @@ var selectedagent;
           if(JSON.parse(datares).length > 0){
              swal("Error", "Title Already Exists", "error");
           }else{
-              $('.addquestion').modal('show');
+
+              $('.addquestionModal').modal('show');
           }
         }
       });
@@ -278,7 +239,7 @@ var selectedagent;
     if(res == 1){
 
     }else{
-      $('.addquestion').modal('hide');
+      $('.addquestionModal').modal('hide');
     }
   }
 
@@ -481,47 +442,50 @@ $('#searchagent').keyup(function(){
     $('.notfound').show();
   }
 });
-
-//csv upload
-var fileInput = document.getElementById("csv"),
-
-    readFile = function () {
-    	var dtaset=new Array();
-        var reader = new FileReader();
-        reader.onload = function () {
-          var lines = reader.result.split('\n');
-          for(var i = 0; i < lines.length; i++){
-            console.log(lines[i]);
-            var getline = lines[i].split("\t");
-            for(var j=0;j<getline.length; j++){
-              if(j == 0){
-                questions.push(getline[j]);
-              }
-              if(j == 1){
-                a.push(getline[j]);
-              }
-              if(j == 2){
-                b.push(getline[j]);
-              }
-              if(j == 3){
-                c.push(getline[j]);
-              }
-              if(j == 4){
-                d.push(getline[j]);
-              }
-              if(j == 5){
-                correc.push(getline[j]);
-              }
-
-            }
-          }
-          printtable();
-        };
-        // start reading the file. When it is done, calls the onload event defined above.
-        reader.readAsBinaryString(fileInput.files[0]);
-
-    };
-
-var data=fileInput.addEventListener('change', readFile);
-
 </script>
+<div class="modal fade addquestionModal" id="addquestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLongTitle">Add Questions</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="addingquestion">
+        <div>
+          <p>Question</p>
+          <textarea id="question" name="question" class="form-control" rows="5"></textarea>
+        </div>
+        <br>
+        <table class="table table-bordered">
+          <tr>
+              <td>A <input type="text" name="a" id="a"></td>
+              <td>B <input type="text" name="b" id="b"></td>
+          </tr>
+          <tr>
+               <td>C <input type="text" name="c" id="c"></td>
+              <td>D <input type="text" name="d" id="d"></td>
+          </tr>
+        </table>
+
+      <div>
+        <p>Correct Answer</p>
+        <select id="correctans" name="correctans" class="form-control">
+          <option value="a">A</option>
+          <option value="b">B</option>
+          <option value="c">C</option>
+          <option value="d">D</option>
+        </select>
+      </div>
+    </form>
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" onclick="addandclose(1)">Save & Add New</button>
+        <button type="button" class="btn btn-primary" onclick="addandclose(2)">Save & Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
