@@ -69,4 +69,10 @@ class ReportingPerson extends CI_Controller {
       $insertdatast = $this->reportingModal->bulkadd($dataset);
       redirect('ReportingPerson');
     }
+
+		public function deleted()
+		{
+			$deletedatast = $this->reportingModal->deletemapping($_POST['manager_id']);
+      echo json_encode($deletedatast);
+		}
 }

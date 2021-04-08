@@ -8,7 +8,7 @@ class reportingModal extends CI_Model
   }
 
   function managerdata(){
-    $managerlist = $this->db->query("SELECT * FROM users WHERE role='supervisor'");
+    $managerlist = $this->db->query("SELECT * FROM users WHERE role='supervisor' and emp_id not in(SELECT DISTINCT manager_id FROM `emp_separation_managers`)");
     return $managerlist->result();
   }
 
@@ -24,5 +24,9 @@ class reportingModal extends CI_Model
   function getreportingdetails(){
     $agentlist = $this->db->query("SELECT GROUP_CONCAT(`emp_id`,'/',agent_name SEPARATOR ',') as agent,manager_id,reporting_manager FROM `emp_separation_managers` GROUP by `manager_id`");
     return $agentlist->result();
+  }
+
+  function deletemapping($man){
+    return $this->db->delete('emp_separation_managers',array('manager_id' => $man));
   }
 }

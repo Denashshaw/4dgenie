@@ -65,7 +65,8 @@
 
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css"> -->
 
 <main class="page-content">
 	<div class="container-fluid p-0">
@@ -78,7 +79,7 @@
                 <div class="row">
                     <div class="col-md-12">
                     <br>
-                    <?php  if($userdata['department'] =='MANAGEMENT' || $userdata['role'] =='admin'){ ?>
+                    <?php  if($userdata['role'] =='supervisor' || $userdata['role'] =='admin'){ ?>
                         <button  onclick="viewannouncement()" style="margin-left:90%" class="check-out">Add</button>
                     <?php } ?>
                         <div class="card card-body" style="display:none" id="viewannouncement">
@@ -121,6 +122,7 @@
                     </thead>
                     <tbody>
                         <?php foreach ($reportingdetails as $dataset) {
+                          if(($userdata['emp_id'] == $dataset->manager_id && $userdata['role'] == 'supervisor') || $userdata['department'] == 'MANAGEMENT' || $userdata['department'] == 'ADMIN'){
                             $agentlist=explode(",",$dataset->agent);
                           ?>
                             <tr>
@@ -138,12 +140,17 @@
                                   </p><?php
                                   }
                                  ?></td>
-                                <td style="font-size:20px;color:#228416;cursor:pointer" onclick="edituserdetails(`<?php echo $dataset->manager_id; ?>`,`<?php echo $dataset->reporting_manager; ?>`,`<?php echo $dataset->agent?>`);">
-                                  <i class="fa fa-pencil" aria-hidden="true" ></i>
+                                <td  >
+                                  <i style="font-size:20px;color:#228416;cursor:pointer" class="fa fa-pencil" aria-hidden="true" onclick="edituserdetails(`<?php echo $dataset->manager_id; ?>`,`<?php echo $dataset->reporting_manager; ?>`,`<?php echo $dataset->agent?>`);"></i>
+                                  <?php if($userdata['department'] == 'MANAGEMENT' || $userdata['department'] == 'ADMIN'){ ?>
+                                    <i style="font-size:20px;color:#ff5c4b;cursor:pointer" class="fa fa-trash" aria-hidden="true" onclick="deleteuserdetails(`<?php echo $dataset->manager_id; ?>`,`<?php echo $dataset->reporting_manager; ?>`);"></i>
+                                  <?php } ?>
                                 </td>
 
                             </tr>
-                        <?php } ?>
+                        <?php
+                          }
+                        } ?>
 
                     </tbody>
                 </table>
@@ -186,7 +193,7 @@
     </div>
   </div>
 </div>
-
+<?php include('sweetalert.php'); ?>
 <?php if($userdata['department'] != 'MANAGEMENT'){ ?>
   <script>
     $('.menu1 input').prop("readonly", true);
@@ -304,5 +311,32 @@ function viewannouncement(){
 
 }
 
+function deleteuserdetails(manager_id,manager_name) {
+  swal({
+    title: "Are you sure?",
+    text: "Do you want to delete "+manager_id+"/"+manager_name+" agent's mapping details!!!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+      $.ajax({
+        type : "POST",
+        url    : "<?php echo base_url(); ?>ReportingPerson/deleted",
+        data   : {"manager_id":manager_id},
+        success: function(datares){
 
+        }
+      });
+
+      swal("Deleted Successfully!", {
+        icon: "success",
+      });
+      location.reload();
+    } else {
+      swal("Your mapping details are safe!");
+    }
+  });
+}
 </script>
