@@ -5,6 +5,11 @@ class assessmentModel extends CI_Model
   	$data = $this->db->query("SELECT CONCAT(emp_id,'/',name) as name ,emp_id  FROM users WHERE role!='admin'");
   	return $data->result();
   }
+  public function newassign_getagentname($data){
+    $res=str_replace(",","','",$data);
+  	$data = $this->db->query("SELECT CONCAT(emp_id,'/',name) as name ,emp_id  FROM users WHERE role!='admin' and emp_id not in ('".$res."')");
+  	return $data->result();
+  }
   public function addquestionModel($table,$data){
 
     $insertresult = $this->db->insert_batch($table,$data);
@@ -24,6 +29,7 @@ class assessmentModel extends CI_Model
   $data = $this->db->query($query);
     return $data->result();
   }
+
 
   public function getquestion($table,$question){
     $query = "SELECT * FROM $table where id in($question)";
@@ -148,5 +154,13 @@ class assessmentModel extends CI_Model
       //array_push($dataset,$questionval);
     }
     return $dataset;
+  }
+
+  public function updatenewagent($data)
+  {
+    $title=$data['title'];
+    $dt=','.$data['agents'];
+    $res = $this->db->query("UPDATE assessment_question set emp_id=concat(emp_id,'$dt') where title='$title'");
+    return $res;
   }
 }

@@ -140,6 +140,17 @@ class leaderAssessment extends CI_Controller {
 	}
 
 
+	public function getagentlist_newadd()
+	{
+		$dataset = $this->assessmentModel->newassign_getagentname($_POST['emp_name']);
+		echo json_encode($dataset);
+	}
+	public function assign_agentsnew()
+	{
+		$res = $this->assessmentModel->updatenewagent($_POST);
+		echo json_encode($res);
+	}
+
 
 }
 

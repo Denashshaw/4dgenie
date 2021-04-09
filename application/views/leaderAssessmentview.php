@@ -68,8 +68,6 @@
             <input type="text" id="title" name="title" class="form-control">
           </div>
           <div class="col-md-6" style="text-align:right">
-            <!-- <p>Created Date</p>
-            <?php echo date('F d Y'); ?> -->
             <p> Test Timing</p>
             <input type="number" min="1" max="120" id="timing" name="timing" >
           </div>
@@ -117,7 +115,9 @@
             </tr>
           </thead>
           <tbody>
-            <?php foreach ($getdata as $a) { ?>
+            <?php
+            $i=0;
+             foreach ($getdata as $a) { ?>
               <tr>
                 <td> <?php echo $a->title; ?></td>
                 <td>
@@ -129,11 +129,13 @@
                   <p style="background:#c93f58;padding:2%;border-radius:50%;width:20%;text-align:center;color:white"  onclick="viewagent(`<?php echo $a->title; ?>`,`<?php echo $a->emp_id; ?>`)">
                     <?php echo $a->noof_emp_id; ?>
                   </p>
-                  <i class="fa fa-plus" style="float:right;font-size:15px;color:#579ef7;cursor:pointer" title="Add Agents" ></i>
+                  <i class="fa fa-plus" style="float:right;font-size:15px;color:#579ef7;cursor:pointer" title="Add Agents" onclick="assignsametest(`<?php echo $i; ?>`,`<?php echo $a->title; ?>`,`<?php echo $a->emp_id; ?>`)"></i>
                 </td>
               <td> <?php echo date_format(date_create($a->created_date),"F d-Y"); ?></td>
             </tr>
+
               <?php
+              $i++;
             }
             ?>
           </tbody>
@@ -489,3 +491,80 @@ $('#searchagent').keyup(function(){
     </div>
   </div>
 </div>
+
+
+<script type="text/javascript">
+  function assignsametest(i,title,emp) {
+    emplist=emp.split(",");
+    var emplist_ar=[];
+    emplist.forEach((empdetails) => {
+      var emp_list=empdetails.split("/");
+      emplist_ar.push(emp_list[0]);
+    });
+    console.log(emplist_ar);
+    var selectedagent_v;
+      $.ajax({
+        'async': false,
+        url : "<?php echo base_url(); ?>leaderAssessment/getagentlist_newadd",
+        method : "POST",
+        data:{"emp_name":emplist_ar.toString()},
+        success : function(datares){
+          res = datares;
+          $('#addnewagents').modal('show');
+
+          var re = JSON.parse(res);
+          var out='';
+          for (var i = 0; i < re.length; i++) {
+            out +='<option>'+re[i]['name']+'</option>';
+
+          }
+
+           $(".addnewagents #transfer2").html(out);
+           $(".addnewagents #transfer2").select2();
+          $('.addnewagents #assessmentid').html('<b>'+title+'</b>');
+        }
+      });
+  }
+</script>
+<div class="modal fade addnewagents" id="addnewagents" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLongTitle">Add Agent's</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="addnewingquestion">
+          <p>Assessment ID : <span id="assessmentid"></span></p><br>
+          <!-- <div id="transfer2" class="transfer-demo" style="font-size:12px"></div> -->
+          <p>Select New Agent</p>
+          <select  id="transfer2" name="" class="form-control" multiple style="width:300px;min-height:350px;">
+
+          </select>
+
+    </form>
+    </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-success" onclick="addandclose(1)">Save & Add New</button>-->
+        <button type="button" class="btn btn-primary" onclick="assignsamequestion()">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"  data-target="#addnewagents">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  function assignsamequestion() {
+    var agents=$('#transfer2').val();
+    $.ajax({
+      'async': false,
+      url : "<?php echo base_url(); ?>leaderAssessment/assign_agentsnew",
+      method : "POST",
+      data:{"title":$('#assessmentid').text(),"agents":agents.toString()},
+      success : function(datares){
+        location.reload();
+      }
+    });
+  }
+</script>
