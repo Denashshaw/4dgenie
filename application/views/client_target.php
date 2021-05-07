@@ -552,7 +552,7 @@
         $('#target_setup_client_table').DataTable();
         var ans = localStorage.getItem('value');
         if (ans) {
-            $('#target_section_tab').click();
+            $('#target_client_tab').click();
             localStorage.removeItem('value');
         }
     });
@@ -662,7 +662,7 @@
         $.ajax({
             url: base_url + 'Client/generate_task_table',
             method: 'GET',
-            success: function(res) {              
+            success: function(res) {
                 var data = JSON.parse(res);
                 var tbody = [];
                 data.forEach(val => {
@@ -1132,7 +1132,8 @@
                 if (res) {
                     $('#target_val').val('');
                     // $('#multiple_agent').val('').trigger('change');
-                    // $('#target_section_tab').click();
+                    // $('#target_section_tab').click();                    
+                    $('#target_client_tab').click();
                     Swal.fire({
                         icon: 'success',
                         title: 'Form submitted successfully!',

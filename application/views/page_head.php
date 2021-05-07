@@ -34,7 +34,7 @@
     <p id="timer" style="padding-top:5%;padding-left:10%;"></p>
   </div>
 	<div class="col-1 col-md-3  text-right logout">
-
+<input type="hidden" id="base_url" value="<?php echo base_url(); ?>">
     <span class="fa-stack fa-2x has-badge" data-count="0" onclick="viewnotification()">
         <i class="fa fa-circle fa-stack-2x"></i>
         <i class="fa fa-bell fa-stack-1x fa-inverse"></i>
@@ -55,23 +55,7 @@
     </div>
 </div>
 <script>
-$(document).ready(function(){
-setInterval(function(){
-  var base_url = "<?php echo base_url(); ?>";
-  $.ajax({
-    url : base_url+"Notification/viewcheckinduriation",
-    method : "POST",
-    success : function(datares){
-      var res=JSON.parse(datares);
-      localStorage.setItem('checkid',res[0]['id']);
-      localStorage.setItem('timing',res[0]['timedifferent']);
-      if(parseInt(res[0]['timedifferent'].split(":")[0]) > 24){}else{
-        $('#timer').html('<b id="timerview"><i class="fa fa-clock" aria-hidden="true"></i><span class="runingtime">'+res[0]['timedifferent']+'</span></b>');
-      }
-    }
-  });
-}, 1000);
-});
+
 
 function viewnotification(){
     $('.viewnotification_part').toggle();

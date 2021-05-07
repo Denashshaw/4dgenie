@@ -99,6 +99,27 @@ class Client extends CI_Controller
 		exit;
 	}
 
+	// Checking emp exists while adding - agent modal
+	public function checkEmpIdExists()
+	{
+		$data = $this->Client_model->checkEmpIdExists();
+		echo json_encode($data);
+	}
+
+	// Get reporting person while adding agent - agent modal
+	public function getReportingPerson()
+	{
+		$data = $this->Client_model->getReportingPerson();
+		echo json_encode($data);
+	}
+
+	// Get all clients for agent while adding agent - agent modal
+	public function getAllClients()
+	{
+		$data = $this->Client_model->getAllClients();
+		echo json_encode($data);
+	}
+
 	// denash shaw code start
 	public function client_target()
 	{

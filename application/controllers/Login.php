@@ -47,10 +47,10 @@ class Login extends CI_Controller {
 				$this->session->set_userdata($userdata);
 
 				//Check Timesheet Rejected
-				$this->checktimesheet();
+			//	$this->checktimesheet();
 
 
-				//redirect('home/index');
+				redirect('home/index');
 			}
 		}
 		else
@@ -69,6 +69,7 @@ class Login extends CI_Controller {
 		}else{
 			redirect('home/index');
 		}
+
 	}
 
 	public function signout()

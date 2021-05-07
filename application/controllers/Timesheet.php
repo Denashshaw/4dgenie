@@ -19,7 +19,12 @@ class Timesheet extends CI_Controller {
 			 $data['getagent_report']=$this->Timesheet_model->getlist($_POST);
 			// $this->load->view('timesheetview',$data);
 		}else{
-			$data['getagent_report']='';
+			$dataset= array(
+				'fromdate' => date('m/01/Y'),
+				'todate' => date('m/d/Y'),
+				'agent' => 'All',
+			);
+			$data['getagent_report']=$this->Timesheet_model->getlist($dataset);;
 			//$data['firststtimesubmit']='yes';
 		}
 
@@ -75,18 +80,28 @@ class Timesheet extends CI_Controller {
 
   public function timesheet_submit(){
     $userdata=$this->session->all_userdata();
-    $emp_id=$userdata['emp_id'];
-    $name=$userdata['name'];
-    $department=$userdata['department'];
+		if($_POST['agent']){
+			$emp_id=explode("/",$_POST['agent'])[0];
+			$name=explode("/",$_POST['agent'])[1];
+			$date=date_format(date_create($_POST['reporting_date']),"Y-m-d");
+			$category ='Irregular';
+			$getuserDPT=$this->db->query("SELECT department FROM users WHERE emp_id='".$emp_id."'")->result();
+			$department=$getuserDPT[0]->department;
+		}else{
+			$emp_id=$userdata['emp_id'];
+	    $name=$userdata['name'];
+	    $department=$userdata['department'];
 
-    $dataget=$this->db->query("SELECT * FROM checkin_checkout WHERE emp_id='".$emp_id."' ORDER BY id desc")->result();
-    $checkindate=$dataget[0]->checkin_time;
-    $date=date_format(date_create($checkindate),"Y-m-d");
-    if($dataget[0]->reason!=''){
-      $category ='Irregular';
-    }else{
-      $category ='Regular';
-    }
+			$dataget=$this->db->query("SELECT * FROM checkin_checkout WHERE emp_id='".$emp_id."' ORDER BY id desc")->result();
+	    $checkindate=$dataget[0]->checkin_time;
+			$date=date_format(date_create($checkindate),"Y-m-d");
+
+			if($dataget[0]->reason!=''){
+	      $category ='Irregular';
+	    }else{
+	      $category ='Regular';
+	    }
+		}
     $dataset=array();
 		$reporting_person=explode("/",$_POST['reporting_person']);
     for($i=0;$i<sizeof($_POST['client']);$i++){
@@ -102,6 +117,7 @@ class Timesheet extends CI_Controller {
       $dataset[$i]['time_spent']=$_POST['timespent'][$i];
       $dataset[$i]['count_production']=$_POST['countdown'][$i];
 			$dataset[$i]['target']=$_POST['target'][$i];
+			$dataset[$i]['tobe_achived']=$_POST['tobe_achived'][$i];
 			$dataset[$i]['percentage']=$_POST['percentage'][$i];
       $dataset[$i]['comments']=$_POST['comments'][$i];
 			$dataset[$i]['reviewer_id']=$reporting_person[0];
@@ -122,7 +138,9 @@ class Timesheet extends CI_Controller {
 			"productive_time"=>$_POST['productive_time'],
 			"non_productive_time"=>$_POST['non_rpoductive_time'],
 			"total_production"=>$_POST['totalproduction_count'],
+			"total_target"=>$_POST['target_count'],
 			"overall_percentage"=>$_POST['overall_percentage'],
+			"percentagebelow90"=>$_POST['otherdetailsenter'],
 		);
 
 		$this->Timesheet_model->datastore_report('timesheet_report',$timesheet_report_data);
@@ -152,6 +170,7 @@ class Timesheet extends CI_Controller {
 
 	public function updaterejected()
 	{
+
 		$resGet =$this->Timesheet_model->update_rej_data($_POST);
 		return redirect('Login/checktimesheet');
 	}
@@ -177,10 +196,63 @@ class Timesheet extends CI_Controller {
 			"productive_time"=>$_POST['productiontime'],
 			"non_productive_time"=>$_POST['non_productivetime'],
 			"total_production"=>$_POST['totalcount'],
+			"total_target"=>$_POST['total_target'],
 			"overall_percentage"=>$_POST['overallpercentage'],
+			"percentagebelow90"=>$_POST['percentagebelow90']
 		);
 		$resGet =$this->Timesheet_model->updateentire_report($timesheet_report);
 		echo json_encode(["status"=>"Success"]);
 	}
 
+	public function getrejectedlist()
+	{
+		$checktimesheet=$this->Timesheet_model->checkrejected('timesheet_report',$_SESSION['emp_id']);
+		echo json_encode($checktimesheet);
+	}
+
+	public function getcheckinout()
+	{
+		$checktimesheet=$this->Timesheet_model->get_agentinout('checkin_checkout',$_POST['emp_id'],$_POST['repDate']);
+		echo json_encode($checktimesheet);
+	}
+
+	public function deleterows(){
+		$agent_name=$this->Timesheet_model->deleterejectedts($_POST['id']);
+		echo json_encode($agent_name);
+	}
+
+
+	//Report
+	public function TimesheetReport()
+	{
+		if(isset($_POST['submit'])){
+			if($_POST['category'] == 'Summary'){
+			 	$data['getagent_report']=$this->Timesheet_model->getlist($_POST);
+			}else{
+				$data['getagent_data']=$this->Timesheet_model->getrawdata($_POST);
+			}
+			// $this->load->view('timesheetview',$data);
+		}else{
+			$dataset= array(
+				'fromdate' => date('m/01/Y'),
+				'todate' => date('m/d/Y'),
+				'agent' => 'All',
+			);
+			$data['getagent_report']=$this->Timesheet_model->getlist($dataset);;
+			//$data['firststtimesubmit']='yes';
+		}
+
+		$this->load->view('report/TS_Report',$data);
+	}
+
+	//Missing TS
+	public function missingts()
+	{
+		$this->load->view('missingts');
+	}
+	public function checktsrejectiondata()
+	{
+		$res=$this->Timesheet_model->TSexists($_POST);
+		echo json_encode($res);
+	}
 }

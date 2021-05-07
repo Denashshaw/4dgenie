@@ -30,14 +30,14 @@ error_reporting(E_ERROR);
   <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap.min.css">
   <link rel="stylesheet" href="<?php echo base_url('css/jquery.datetimepicker.css') ?>" />
   <link rel="stylesheet" href="<?php echo base_url('css/datepicker.css') ?>" />
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
 
 
   <script src="<?php echo base_url();?>js/jquery.min.js"></script>
   <script src="<?php echo base_url();?>js/bootstrap.min.js"></script>
   <script src="<?php echo base_url('js/jquery.datetimepicker.full.js')?>"></script>
   <script src="<?php echo base_url('js/datepicker.js') ?>"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
   <!-- <script type="text/javascript" src="<?php echo base_url();?>js/js.js"></script> -->
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
 
@@ -45,7 +45,8 @@ error_reporting(E_ERROR);
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
 
  -->
-
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/>
   <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.jqueryui.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowgroup/1.1.2/css/rowGroup.jqueryui.min.css">
@@ -62,18 +63,11 @@ error_reporting(E_ERROR);
  <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
  <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
  <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.colVis.min.js"></script>
-  	<!-- <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-  	<script src="https://cdn.datatables.net/1.10.22/js/dataTables.jqueryui.min.js"></script>
-  	<script type="text/javascript" src="https://cdn.datatables.net/rowgroup/1.1.2/js/dataTables.rowGroup.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.flash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script> -->
 
-
+ <?php if($this->uri->segment(1) != 'leaderAssessment'){?>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/>
+   <?php } ?>
 <style type="text/css">
 p{
   font-family: 'Montserrat', sans-serif;
@@ -119,15 +113,6 @@ input{
   width: 25%;
 }
 
-/*.apply:hover,.apply:focus {
-  background: #337ab7;
-  color:#fff;
-  padding:10px 22px 10px 22px;
-  margin:0px 0px 0px !important;
-  text-decoration:none;
-}
-*/
-/* Fixed sidenav, full height */
 .sidenav {
   height: 100%;
   width: 250px;
@@ -234,7 +219,7 @@ a:hover,.dropdown-options:hover, li.active, a.active {
   </div>
   <div class="agent-type">
     <?php
-    if($userdata['role'] == 'agent' || ($userdata['role']=='supervisor' && $userdata['department'] != 'MANAGEMENT')){
+    if($userdata['role'] == 'agent' || ($userdata['role']=='supervisor' && $userdata['department'] != 'MANAGEMENT') || $userdata['department'] != 'IT'){
       echo ucfirst($userdata['role']);
     }else{
         echo ucfirst($userdata['department']);
@@ -265,7 +250,7 @@ a:hover,.dropdown-options:hover, li.active, a.active {
           <a class="<?php  if($actlinks == "add_client") echo "active";?>" href="<?php echo base_url();?>add_client"><i class="fa fa-arrow-right" aria-hidden="true"></i> Client</a></li>
         <?php } ?>
 <!--          Muthu Asking this adding permission -->
-      <?php if($userdata['role']=='admin' || $userdata['role']=='supervisor' || $userdata['emp_id'] == 'M503'){ ?>
+      <?php if($userdata['role']=='admin' || $userdata['role']=='supervisor' || $userdata['emp_id'] == 'M503' || $userdata['emp_id'] == 'M416'){ ?>
           <li class="<?php if($actlinks  == "agentlist") echo "active";?> dropMenu">
             <a class="<?php if($actlinks == "agentlist") echo "active";?>" href="<?php echo base_url();?>agentlist"><i class="fa fa-arrow-right" aria-hidden="true"></i>
             Agent List</a>
@@ -277,7 +262,7 @@ a:hover,.dropdown-options:hover, li.active, a.active {
           </li>
 
         <?php }
-        if($userdata['department'] == 'MANAGEMENT' || $userdata['role'] == 'admin'){ ?>
+        if($userdata['role'] == 'supervisor' || $userdata['role'] == 'admin'){ ?>
           <li class="<?php if($actlinks  == "reportingPerson") echo "active";?> dropMenu">
             <a class="<?php if($actlinks == "reportingPerson") echo "active";?>" href="<?php echo base_url();?>reportingPerson"><i class="fa fa-arrow-right" aria-hidden="true"></i>
             Team Mapping</a>
@@ -383,6 +368,27 @@ a:hover,.dropdown-options:hover, li.active, a.active {
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="notificationview_Timeline" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Rejected Time Sheet</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Your Timesheet Rejected!!! Do you want to Re-submit the form?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="check-out" data-dismiss="modal" >Remaind Me Later</button>
+        <button type="button" class="check-in" onclick="location.replace('<?php echo base_url();?>Login/checktimesheet');">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal -->
 <div style="padding-top:1px;" class="modal fade" id="changePassword" role="dialog">
   <div class="modal-dialog">
@@ -448,6 +454,7 @@ a:hover,.dropdown-options:hover, li.active, a.active {
 
         <input type="submit" name="reset_password" class="apply formSubmit" value="Submit" id="reset_apply">
           <input type="button" value="Cancel" class="apply" data-dismiss="modal" >
+          <input type="hidden" value="<?php echo base_url(); ?>" id="base_url">
         </form>
         <span class="blinking" id="ajaxmsg" style="color:#337ab7;font-size:15px;position:relative;top:7px;font-weight:800;"></span>
       </div>
@@ -466,7 +473,21 @@ $(document).ready(function() {
         localStorage.setItem('isshow', 1);
 
         // Show popup here
-      //  $('#notificationview').modal('show');
+
+      $.ajax({
+        url : "<?php echo base_url(); ?>Timesheet/getrejectedlist",
+        method : "POST",
+        success : function(datares){
+          var get =JSON.parse(datares);
+          console.log(get.length);
+          if(get.length > 0){
+          //  alert(get);
+            $('#notificationview_Timeline').modal('show');
+          }else{
+            //$('#notificationview').modal('show');
+          }
+        }
+      });
     }
 });
  // $('#notificationview').modal('show');

@@ -48,6 +48,12 @@
           </li>
           <?php } ?>
 
+          <?php if($userdata['department'] == 'ADMIN' || $userdata['role'] == 'supervisor' ){ ?>
+          <li class="list-group-item <?php if($actlinks == "TimesheetReport") echo "active";?> dropMenu_rep">
+            <a class="<?php  if($actlinks == "TimesheetReport") echo "active";?>" href="<?php echo base_url();?>Timesheet/TimesheetReport">Timesheet Report</a>
+          </li>
+          <?php } ?>
+
            <!-- <li class="list-group-item">Attendance Report</li> -->
          </ul>
       </div>

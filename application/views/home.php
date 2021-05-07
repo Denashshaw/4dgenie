@@ -22,6 +22,7 @@ input[type=time]::datetime-edit-field.numeric{
   font-size:18px;
   cursor:pointer;
 }
+
 </style>
 
 <div class="page-wrapper chiller-theme toggled">
@@ -76,13 +77,31 @@ input[type=time]::datetime-edit-field.numeric{
 						</div>
 					</div>
 
+					<div class="row emp-table" id="viewrejectedsheet"  style="display:none;">
+						<div class="col-md-12 table-responsive">
+							<div class="activity" style="text-align:center;border-bottom: 2px  solid #5caddc;">TIMESHEET</div><br>
+							<div class="row">
+								<div class="col-md-3"></div>
+								<div class="col-md-6">
+									<div class="card card-body shadow " align="center">
+										<p>Your Timesheet Rejected!!! Do you want to Re-submit the form now?</p>
+										<div  align="center">
+												<button type="button" class="check-in" onclick="location.replace('<?php echo base_url();?>Login/checktimesheet');" style="width:30%;">Go to Rejected Timesheet</button>
+										</div>
 
+									</div>
+								</div>
+							</div>
+							<br>
+						</div>
+					</div>
+					<br>
 
 					<div class="row emp-table viewtimesheet" style="display:none;">
 						<div class="col-md-12 table-responsive">
 							<div class="activity" style="text-align:center;border-bottom: 2px  solid #5caddc;">TIMESHEET</div><br>
 							<div class="row">
-								<div class="col-md-3">
+								<div class="col-md-3" style="display:none">
 									<p>Reporting Person</p>
 									<select id="reportingperson" class="form-control" style="font-size:14px;">
 										<option value=""></option>
@@ -90,27 +109,28 @@ input[type=time]::datetime-edit-field.numeric{
 								</div>
 							</div><br>
 							<div class="row ">
-								<div class="card card-body">
+								<div class="card card-body shadow" style="background:Aquamarine">
 									<p> Total Time Spent</p>
-									<p id="totalassignedhours" style="font-weight:bold">00:00</p>
+									<p id="totalassignedhours" style="font-weight:bold;font-size:25px;">00:00</p>
 								</div>
-								<div class="card card-body">
+								<div class="card card-body shadow" style="background:DarkSalmon">
 									<p> Productive Time</p>
 									<p id="productivetime" style="font-weight:bold">00:00</p>
 								</div>
-								<div class="card card-body">
+								<div class="card card-body shadow"  style="background:SteelBlue">
 									<p> Non-Productive Time</p>
 									<p id="non_productivetime" style="font-weight:bold">00:00</p>
 								</div>
-								<!-- <div class="card card-body">
-									<p> Break Time</p>
+								<div class="card card-body" style="display:none">
+									<p> Total target</p>
+									<p id="totaltarget" style="font-weight:bold">0</p>
 									<p id="breaktime" style="font-weight:bold">00:00</p>
-								</div> -->
-								<div class="card card-body">
+								</div>
+								<div class="card card-body"  style="background:Wheat">
 									<p> Total Production Count</p>
 									<p id="totalcount" style="font-weight:bold">0</p>
 								</div>
-								<div class="card card-body">
+								<div class="card card-body"  style="background:#f5b3b3">
 									<p> Overall Percentage</p>
 									<p id="overallpercentage" style="font-weight:bold">0%</p>
 								</div>
@@ -141,12 +161,11 @@ input[type=time]::datetime-edit-field.numeric{
 										</td>
 										<td>
 											<p>Sub-Task</p>
-											<select id="subtask" name="subtask" class="form-control"  style="font-size:12px;" >
+											<select id="subtask" name="subtask" class="form-control" onchange="checktargetsetup()"  style="font-size:12px;" >
 												<option value="">Select Sub Task</option>
 											</select>
 										</td>
-										<td>
-
+										<td style="width:10%">
 											<p>Time Spent</p>
 											<input type="text"  id="timespend" name="timespend" value="00:00" max="12:59" onblur="calculatepercentage()" class="form-control"  style="font-size:12px;">
 										</td>
@@ -154,7 +173,7 @@ input[type=time]::datetime-edit-field.numeric{
 											<p>Count</p>
 											<input type="text" id="count_prod" name="count_prod" class="form-control" onblur="calculatepercentage()" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" style="font-size:12px;">
 										</td>
-										<td style="width:5%">
+										<td style="width:5%;display:none">
 											<p>Target/hr</p>
 											<input type="text" readonly id="target" name="target" class="form-control" style="font-size:12px;">
 										</td>
@@ -176,9 +195,15 @@ input[type=time]::datetime-edit-field.numeric{
 								<tbody id="display_data">
 								</tbody>
 							</table>
-							<div style="text-align:center">
 
-								<input type="button" value="Submit" id="timerview" onclick="logooutsubmit()" class="timesheetsubmit" style="display:none;">
+							<div class="row">
+								<div class="col-md-3" id="get_below90details"  style="display:none;">
+								  <p>Details</p>
+								  <textarea name="get_below90details_tx" id="get_below90details_tx" rows="3" cols="30"></textarea>
+								</div>
+								<div class="col-md-9" style="text-align:center">
+									<input type="button" value="Submit" id="timerview" onclick="logooutsubmit()" class="timesheetsubmit" style="display:none;margin-top:10%">
+								</div>
 							</div>
 						</div>
 					</div>
@@ -231,17 +256,25 @@ input[type=time]::datetime-edit-field.numeric{
 									</span></td>
 									<td><span class="" style="color:#5778dc;">
 									<?php
+									$tst=strtotime('00:00:00');
+									$totaltime = 0;
 										for($i=0;$i<count($breakin);$i++){
-										    echo $breakin[$i]->break_inout_diff.'<br>';
-											$seconds = explode(":", $breakin[$i]->break_inout_diff);
-										    $total_bktime += $breakin[$i]->break_inout_diff;
-										    $total_bksecs += $seconds[1];
+
+										  echo $breakin[$i]->break_inout_diff.'<br>';
+											$seconds = explode(":", str_replace(array(' hour',' mins',' secs'),'',$breakin[$i]->break_inout_diff));
+											$addtime = (string)date("H:i:s",strtotime(str_replace(array(' hour',' mins',' secs'),'',$breakin[$i]->break_inout_diff)));
+											$timeinsec = strtotime($addtime) - $tst;
+											$totaltime = $totaltime + $timeinsec;
+
 										}
-										$minutes = floor($total_bksecs/60);
-									    $secondsleft = $total_bksecs%60;
+										$h = sprintf("%02d",intval($totaltime / 3600));
+										$totaltime = $totaltime - ($h * 3600);
+										$m = sprintf("%02d",intval($totaltime / 60));
+										$s = sprintf("%02d",$totaltime - ($m * 60));
 									?>
 									</span>
-									<span class="emp-break-out">Total Break: <?php echo $total_bktime+$minutes;?> Mins <?php echo $secondsleft;?> Secs</span>
+									<!-- <span class="emp-break-out">Total Break: <?php echo $total_bktime+$minutes;?> Mins <?php echo $secondsleft;?> Secs</span> -->
+									<span class="emp-break-out">Total Break: <?php echo $h." Hour:".$m." Mins:".$s." Secs"; ?></span>
 									</td>
 									<td><span class="emp-break-out"><?php echo $checkin[0]->checkout_time;?></span></td>
 									<td><span class="permission_val" style="color: #938554;">0 mins</span></td>
@@ -378,14 +411,14 @@ input[type=time]::datetime-edit-field.numeric{
 						<br>
 						<p>Time Spent</p>
 						<!-- <input type="time" id="timespendupdate" onblur="calculatepercentage_update()"> -->
-						<input type="text" id="timespendupdate"  name="timespendupdate" value="00:00" max="12:59" onblur="calculatepercentage_update()">
+						<input type="text" id="timespendupdate" style="width:80%" name="timespendupdate" value="00:00" max="12:59" onblur="calculatepercentage_update()">
 					</div>
 					<div class="col-md-3"><br>
 						<p>Count</p>
 						<input type="text" style="width:50%"  onblur="calculatepercentage_update()" id="countupdate"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
 					</div>
-					<div class="col-md-3"><br>
-						<p>Target</p>
+					<div class="col-md-3" style="display:none;"><br>
+						<p>Target/hr</p>
 						<input type="text"  style="width:50%" id="targetupdate" readonly >
 					</div>
 					<div class="col-md-3"><br>
@@ -412,16 +445,74 @@ input[type=time]::datetime-edit-field.numeric{
 </div>
 <?php include('sweetalert.php'); ?>
 <script type="text/javascript">
+$(document).ready(function(){
+		$('#get_below90details').hide();
+	$.ajax({
+		url: '<?php echo base_url(); ?>Timesheet/getclientlist',
+		method:'POST',
+		success: function(res){
+			var resdata=JSON.parse(res);
+			var outclient='';
+			outclient='<option value="">Select Client</option>';
+			for(var i=0;i<resdata.length;i++){
+				if(i == 0){
+					var setselected = 'selected';
+				}
+				outclient += '<option value="'+resdata[i]['id']+'/'+resdata[i]['client']+'" '+setselected+'>'+resdata[i]['client']+'</option>';
+			}
+			$('#client').html(outclient);
+		}
+	})
 
+	$.ajax({
+		url: '<?php echo base_url(); ?>Timesheet/getreporting',
+		method:'POST',
+		success: function(res){
+			var resdata=JSON.parse(res);
+			//console.log(resdata);
+			var role='<?php echo $_SESSION["department"]; ?>';
+			if(resdata.length == 0){
+				if(role == 'MANAGEMENT' || role == 'ADMIN'){}else{
+					swal("Warning", "Please contact your manager!!! Your reporting person not assigned", "warning");
+					$('.viewtimesheet').css("display", "none");
+				}
+			}
+			 var outrepPerson='';
+			 for(var i=0;i<resdata.length;i++){
+				 if(i==0){
+					 var setselect='selected';
+				 }
+				outrepPerson += '<option value="'+resdata[i]['manager_id']+'/'+resdata[i]['reporting_manager']+'" '+setselect+'>'+resdata[i]['manager_id']+'/'+resdata[i]['reporting_manager']+'</option>';
+			 }
+			$('#reportingperson').html(outrepPerson);
+		}
+	})
+})
+var flag_set=true;
 function redirectUser(){
-	//var per_time = $('.permission').val();
-    // location.replace('<?php echo base_url();?>Checkin_checkout/CheckOut/'+parseInt(per_time));
+	var dept='<?php echo $_SESSION["department"]; ?>';
+	var empidg='<?php echo $_SESSION["emp_id"]; ?>';
+	var role='<?php echo $_SESSION["role"]; ?>';
+	if(dept == 'MANAGEMENT' || dept == 'ADMIN' || dept=='IT' || dept == 'SOFTWARE' || dept == 'BUSINESS DEVELOPMENT' || empidg == 'M542' || role == 'supervisor'){
+		var per_time = $('.permission').val();
+    location.replace('<?php echo base_url();?>Checkin_checkout/CheckOut/'+parseInt(per_time));
+	}else{
+		//check Rejection
+
+		$.ajax({
+			url : "<?php echo base_url(); ?>Timesheet/getrejectedlist",
+			method : "POST",
+			success : function(datares){
+				var getRgej =JSON.parse(datares);
+				if(getRgej.length > 0){
+					$('#viewrejectedsheet').show();
+				}else{
 		if(localStorage.getItem('timing')){
 	  	var currentrunningtime = localStorage.getItem('timing').split(":");
 			var hours =parseInt(currentrunningtime[0]);
 
-			if(hours > 11){
-
+		//	if(hours > 11 && hours < 24){
+				if(hours > 11){
 				$.ajax({
 					method : 'post',
 					url    : '<?php echo base_url()?>Timesheet/checklateupdate',
@@ -442,41 +533,28 @@ function redirectUser(){
 				$('.viewtimesheet').show();
 			}
 		}
-		$.ajax({
-			url: '<?php echo base_url(); ?>Timesheet/getclientlist',
-			method:'POST',
-			success: function(res){
-				var resdata=JSON.parse(res);
-				var outclient='';
-				outclient='<option value="">Select Client</option>';
-				for(var i=0;i<resdata.length;i++){
-					outclient += '<option value="'+resdata[i]['id']+'/'+resdata[i]['client']+'">'+resdata[i]['client']+'</option>';
-				}
-				$('#client').html(outclient);
-			}
-		})
 
-		$.ajax({
-			url: '<?php echo base_url(); ?>Timesheet/getreporting',
-			method:'POST',
-			success: function(res){
-				var resdata=JSON.parse(res);
-				//console.log(resdata);
 
-				if(resdata.length == 0){
-					swal("Warning", "Please contact your manager!!! Your reporting person not assigned", "warning");
-					$('.viewtimesheet').css("display", "none");
-				}
-				 var outrepPerson='';
-				 for(var i=0;i<resdata.length;i++){
-					 if(i==0){
-						 var setselect='selected';
-					 }
-				 	outrepPerson += '<option value="'+resdata[i]['manager_id']+'/'+resdata[i]['reporting_manager']+'" '+setselect+'>'+resdata[i]['manager_id']+'/'+resdata[i]['reporting_manager']+'</option>';
-				 }
-				$('#reportingperson').html(outrepPerson);
-			}
-		})
+		if(flag_set){
+			client.push($('#client ').val());
+			typeval.push('Non-Productive');
+			task.push('Personal');
+			subtask.push('Break');
+			timespent.push('01:00');
+			countdown.push('-');
+			comments.push('');
+			target.push('-');
+			per.push('');
+			set_tobe_achieved.push('-');
+			displaytimesheetdata();
+			flag_set = false;
+		}
+
+		}
+	}
+});
+	}
+
 
 }
 
@@ -667,7 +745,9 @@ function tasklistget(types){
 	}else{
 		var out_type='';
 		out_type +='<option value="">Select Task</option>';
+		var dpt = "<?php echo $_SESSION['department']; ?>";
 		if(types.value == 'Productive'){
+
 			$.ajax({
 				url: '<?php echo base_url(); ?>Timesheet/gettasklist',
 				method:'POST',
@@ -675,16 +755,33 @@ function tasklistget(types){
 				success: function(res){
 					var resdata=JSON.parse(res);
 
+
 					for(var i=0;i<resdata.length;i++){
-						out_type += '<option value="'+resdata[i]['id']+'/'+resdata[i]['task']+'">'+resdata[i]['task']+'</option>';
+						if(dpt == 'DATA'){
+							$('#task').attr('readonly', true);
+							out_type += '<option value="'+resdata[i]['id']+'/'+resdata[i]['task']+'" selected readonly>'+resdata[i]['task']+'</option>';
+
+						}else{
+							out_type += '<option value="'+resdata[i]['id']+'/'+resdata[i]['task']+'">'+resdata[i]['task']+'</option>';
+						}
 					}
 					$('#task').html(out_type);
+					if(dpt == 'DATA'){
+						sub_tasklistget($('#task').val());
+					}
 				}
 			});
+			$('#count_prod').show();
 		}
 		if(types.value == 'Non-Productive'){
+			if(dpt == 'DATA'){
+        $('#task').attr('readonly', false);
+      }
 			out_type +='<option value="Non-Productive">Non-Productive</option><option value="Personal">Personal</option>';
+			$('#target').val(0);
 			$('#task').html(out_type);
+			$('#count_prod').hide();
+
 		}
 
 	}
@@ -697,7 +794,7 @@ function sub_tasklistget(subtype){
 		$.ajax({
 			url: '<?php echo base_url(); ?>Timesheet/getsubtasklist',
 			method:'POST',
-			data:{"task":subtype.value},
+			data:{"task":$('#task').val()},
 			success: function(res){
 				var resdata=JSON.parse(res);
 				for(var i=0;i<resdata.length;i++){
@@ -710,10 +807,15 @@ function sub_tasklistget(subtype){
 		if(subtype.value == 'Non-Productive'){
 			out_subtype +='<option value="Team Meeting">Team Meeting</option><option value="Client Down Time">Client Down Time</option>';
 			out_subtype +='<option value="One To One Meeting">One To One Meeting</option><option value="Training">Training</option>';
+			out_subtype +='<option value="Events">Events</option>';
 		}
 		if(subtype.value == 'Personal'){
 			out_subtype +='<option value="Break" >Break</option><option value="System Down">System Down</option>';
-			out_subtype +='<option value="Cab Late">Cab Late</option><option value="Permission">Permission</option>';
+			var dt="<?php echo $_SESSION['department']; ?>";
+			if(dt != 'DATA'){
+				out_subtype +='<option value="Cab Late">Cab Late</option>';
+			}
+			out_subtype +='<option value="Permission">Permission</option>';
 		}
 		$('#subtask').html(out_subtype);
 	}
@@ -748,43 +850,74 @@ var countdown = [];
 var comments = [];
 var target=[];
 var per=[];
+var set_tobe_achieved=[];
+
+
 function timesheetadd(){
+	calculatepercentage();
 	if($('#subtask').val() == 'Break'){
 		var timing = $('#timespend').val().split(':');
-		if(parseInt(timing[0]) == 0 || parseInt(timing[0]) == 1){
+		var time1=timing[0];
+		var time2=timing[1];
+		if((parseInt(time1) == 0 && parseInt(time2) < 60) || (parseInt(time1) == 1 && parseInt(time2) == 0)){
 
 		}else{
 			//alert("Break hour not more than 1 hour");
-			swal("Warning", "Break hour not more than 1 hour", "warning");
+			swal("Error", "Break hour not more than 1 hour", "error");
 			return;
 		}
 
 	}
-	client.push($('#client').val());
-	typeval.push($('#Typeprocess').val());
-	task.push($('#task').val());
-	subtask.push($('#subtask').val());
-	timespent.push($('#timespend').val());
-	countdown.push($('#count_prod').val());
-	comments.push($('#usercomments').val());
-	target.push($('#target').val());
-	per.push($('#percentageval_set').val());
+	var checkcount=0;
+	client.forEach((item, i) => {
+			if(client[i] == $('#client').val() && typeval[i] == $('#Typeprocess').val() && task[i] == $('#task').val() && subtask[i] == $('#subtask').val()){
+				checkcount++;
+			}
+	});
+	//alert(checkcount);
+	if(client.length != 0 && checkcount > 0)
+	{
+		swal("Warning", "Details Already added!! Please check", "warning");
+		return;
+	}else{
+		client.push($('#client').val());
+		typeval.push($('#Typeprocess').val());
+		task.push($('#task').val());
+		subtask.push($('#subtask').val());
+		timespent.push($('#timespend').val());
+		if($('#Typeprocess').val() == 'Productive'){
+			countdown.push($('#count_prod').val());
+			var tim=$('#timespend').val();
+			var timetomin=moment.duration(tim).asMinutes();
+			var needtocomplete=Math.round((parseInt($('#target').val())/parseInt(60))*parseInt(timetomin));
+		//	console.log(needtocomplete);
+			set_tobe_achieved.push(needtocomplete);
+		}else{
+			countdown.push('-');
+			set_tobe_achieved.push('-');
+		}
 
-	swal("Success", "Details Added Successfully!!!", "success");
+		comments.push($('#usercomments').val());
+		target.push($('#target').val());
+		per.push($('#percentageval_set').val());
 
-	$('#client').val('');
-	$('#Typeprocess').val('');
-	$('#task').val('');
-	$('#subtask').val('');
-	$('#timespend').val('00:00');
-	$('#count_prod').val('0');
-	$('#usercomments').val('');
-	$('#target').val('');
-	$('#percentageval_set').val('');
-	$('#percentage').html('-');
+		swal("Success", "Details Added Successfully!!!", "success");
+
+	//	$('#client').val('');
+		$('#Typeprocess').val('');
+		$('#task').val('');
+		$('#subtask').val('');
+		$('#timespend').val('00:00');
+		$('#count_prod').val('0');
+		$('#usercomments').val('');
+		$('#target').val('');
+		$('#percentageval_set').val('');
+		$('#percentage').html('-');
+	}
 	displaytimesheetdata();
 
 }
+
 function displaytimesheetdata(){
 	var out='';
 	var productivetimeget=moment.duration ('00:00');
@@ -794,26 +927,34 @@ function displaytimesheetdata(){
 		for(var i=0;i< client.length;i++){
 			if(subtask[i] == 'Break'){
 				out +='<tr style="background:#d6d3d3">';
+				out +='<td >Default Break</td>';
+
 			}else{
+				
 				out +='<tr>';
-			}
-			if(typeval[i] == 'Productive'){
 				out +='<td >'+client[i].split("/")[1]+'</td>';
-				out +='<td>'+typeval[i]+'</td>';
+			}
+
+
+			out +='<td>'+typeval[i]+'</td>';
+			if(typeval[i] == 'Productive'){
 				out +='<td>'+task[i].split("/")[1]+'</td>';
 				out +='<td>'+subtask[i].split("/")[1]+'</td>';
 			}else{
-				out +='<td >'+client[i]+'</td>';
-				out +='<td>'+typeval[i]+'</td>';
 				out +='<td>'+task[i]+'</td>';
 				out +='<td>'+subtask[i]+'</td>';
 			}
 			out +='<td>'+timespent[i]+'</td>';
 			out +='<td>'+countdown[i]+'</td>';
-			out +='<td>'+target[i]+'</td>';
+			out +='<td style="display:none">'+target[i]+'</td>';
 			out +='<td>'+per[i]+'</td>';
 			out +='<td>'+comments[i]+'</td>';
-			out +='<td><i class="fas fa-pencil-alt"  onclick="updatetimesheet('+i+')"></i><i class="fa fa-trash"  onclick="removetimesheet('+i+')"></i></td>';
+			if(subtask[i] == 'Break'){
+				out +='<td></td>';
+			}
+			else{
+				out +='<td><i class="fas fa-pencil-alt"  onclick="updatetimesheet('+i+')"></i><i class="fa fa-trash"  onclick="removetimesheet('+i+')"></i></td>';
+			}
 			out +='</tr>';
 			if(typeval[i] == 'Productive'){
 				productivetimeget.add(timespent[i]);
@@ -851,25 +992,45 @@ function displaytimesheetdata(){
 
 		var productioncount=0;
 		countdown.forEach((counting)=>{
-			productioncount = parseInt(productioncount)+parseInt(counting);
+			if(counting == '-'){
+				var ct=0;
+			}else{
+				var ct=counting;
+			}
+			productioncount = parseInt(productioncount)+parseInt(ct);
 		})
 		$('#totalcount').html(productioncount);
 
-		var overallpercentage=0;
-		var lengthofperc=0;
-		per.forEach((percentageval)=>{
-			if(percentageval !=''){
-				var getvalues = percentageval.replace("%","");
-				lengthofperc++;
-				overallpercentage = parseInt(overallpercentage)+parseInt(getvalues);
+		var targetcount=0;
+		var i=0;
+		target.forEach((counting)=>{
+			var tim=timespent[i];
+			var timetomin=moment.duration(tim).asMinutes();
+			if(counting == '-' ||counting == '' ){
+				var needtocomplete=0;
+				//set_tobe_achieved.push(0);
+			}else{
+				var needtocomplete=Math.round((parseInt(counting)/parseInt(60))*parseInt(timetomin));
+				//set_tobe_achieved.push(needtocomplete);
 			}
+			targetcount = parseInt(targetcount)+parseInt(needtocomplete);
+			i++;
 		})
-		var val_overallper =Math.round((parseInt(overallpercentage)/parseInt(lengthofperc)));
+		$('#totaltarget').html(targetcount);
+		 var val_overallper =Math.round((parseInt($('#totalcount').text())/parseInt($('#totaltarget').text()))*100);
+
 		$('#overallpercentage').html(val_overallper+'%');
+
+		if(val_overallper < 90){
+			$('#get_below90details').show();
+		}else{
+			$('#get_below90details').hide();
+		}
 
 	}else{
 		$('#totalassignedhours').html("00:00");
 		$('#totalcount').html("0");
+		$('#totaltarget').html("0");
 		$('#productivetime').html("00:00");
 		$('#non_productivetime').html("00:00");
 		$('#breaktime').html("00:00");
@@ -892,6 +1053,7 @@ function removetimesheet(i){
 		target.splice(i,1);
 		per.splice(i,1);
 		comments.splice(i,1);
+		set_tobe_achieved.splice(i,1);
 		swal("Success", "Details Removed Successfully!!!", "success");
 	}
 	displaytimesheetdata();
@@ -903,8 +1065,9 @@ function updatetimesheet(valget){
 			showMeridian: false,
 			showInputs: true,
 			minTime: '00',
-			timeFormat:'hh:mm',
-			showMeridian: !1
+			timeFormat:'HH:mm',
+			zindex: 9999999,
+			interval: 5,
 	});
 	$('#clientid').html(client[valget]);
 	$('#typeid').html(typeval[valget]);
@@ -926,6 +1089,10 @@ function updatevalueTS(){
 	comments[index]=$('#commentsupdate').val();
 	target[index]=$('#targetupdate').val();
 	per[index]=$('#percentageupdate_data').val();
+	var tim=timespent[index];
+	var timetomin=moment.duration(tim).asMinutes();
+	var needtocomplete=Math.round((parseInt(target[index])/parseInt(60))*parseInt(timetomin));
+	set_tobe_achieved[index]=needtocomplete;
 	$('#updatetimesheet').modal('hide');
 	swal("Success", "Details Updated Successfully!!!", "success");
 	displaytimesheetdata();
@@ -957,12 +1124,15 @@ function logooutsubmit(){
 							"comments":comments,
 							"target":target,
 							"percentage":per,
+							"tobe_achived":set_tobe_achieved,
 							"reporting_person":$('#reportingperson').val(),
 							"totaltimespend":$('#totalassignedhours').text(),
 							"productive_time":$('#productivetime').text(),
 							"non_rpoductive_time":$('#non_productivetime').text(),
 							"totalproduction_count":$('#totalcount').text(),
-							"overall_percentage":$('#overallpercentage').text()
+							"overall_percentage":$('#overallpercentage').text(),
+							"otherdetailsenter":$('#get_below90details_tx').val(),
+							"target_count":$('#totaltarget').text(),
 		},
 		success :function(data){
 
@@ -1004,18 +1174,47 @@ function calculatepercentage() {
 					var timetomin=moment.duration(tim).asMinutes();
 					var needtocomplete=Math.round((parseInt(targetval)/parseInt(60))*parseInt(timetomin));
 
-					var Percentageval = Math.round((parseInt($('#count_prod').val())/parseInt(needtocomplete))*100);
-
-					$('#percentageval_set').val(Percentageval+'%');
-					$('#percentage').html(Percentageval+'%');
+					var Percentageval = parseInt(Math.round((parseInt($('#count_prod').val())/parseInt(needtocomplete))*100));
+					var perval=Percentageval?Percentageval:0;
+					if(perval != '0'){
+						$('#percentageval_set').val(perval+'%');
+					}else{
+						$('#percentageval_set').val('');
+					}
+					$('#percentage').html(perval+'%');
 				}else{
 					alert("No Target Setup found!!!");
+					//return;
 				}
 			}
 		});
 	}
 }
 
+function checktargetsetup(){
+	if($('#Typeprocess').val() == 'Productive'){
+		$.ajax({
+			method : 'post',
+			url    : '<?php echo base_url()?>Timesheet/gettagetvalue',
+			data   : {
+								"client":$('#client').val(),
+								"task":$('#task').val(),
+								"sub_task":$('#subtask').val()
+							},
+			success : function(resget){
+				var dt=JSON.parse(resget);
+				if(dt.length == 0){
+					$('#timespend').hide();
+					$('#count_prod').hide();
+					swal("Error", "Target Not Found, Please Contact Your Supervisor!!!!", "error");
+				}else{
+					$('#timespend').show();
+					$('#count_prod').show();
+				}
+			}
+		});
+	}
+}
 
 function calculatepercentage_update() {
 
@@ -1039,10 +1238,14 @@ function calculatepercentage_update() {
 					var timetomin=moment.duration(tim).asMinutes();
 					var needtocomplete=Math.round((parseInt(targetval)/parseInt(60))*parseInt(timetomin));
 
-					var Percentageval = Math.round((parseInt($('#countupdate').val())/parseInt(needtocomplete))*100);
-
-					$('#percentageupdate_data').val(Percentageval+'%');
-					$('#percentageupdate').html(Percentageval+'%');
+					var Percentageval = parseInt(Math.round((parseInt($('#countupdate').val())/parseInt(needtocomplete))*100));
+					var perval=Percentageval?Percentageval:0;
+					if(perval != '0'){
+						$('#percentageupdate_data').val(perval+'%');
+					}else{
+						$('#percentageupdate_data').val('');
+					}
+					$('#percentageupdate').html(perval+'%');
 				}else{
 					alert("No Target Setup found!!!");
 				}
@@ -1060,10 +1263,36 @@ $(document).ready(function(){
             showMeridian: false,
             showInputs: true,
 						minTime: '00',
-						timeFormat:'hh:mm',
-						showMeridian: !1
+						timeFormat:'HH:mm',
+						interval: 5,
+					//	font-size:'10px',
         });
 
     });
+
+		$(document).ready(function(){
+		setInterval(function(){
+		  var base_url = "<?php echo base_url(); ?>";
+		  $.ajax({
+		    url : base_url+"Notification/viewcheckinduriation",
+		    method : "POST",
+		    success : function(datares){
+		      var res=JSON.parse(datares);
+		      localStorage.setItem('checkid',res[0]['id']);
+		      localStorage.setItem('timing',res[0]['timedifferent']);
+		      if(parseInt(res[0]['timedifferent'].split(":")[0]) > 24){}else{
+		        $('#timer').html('<b id="timerview"><i class="fa fa-clock" aria-hidden="true"></i><span class="runingtime">'+res[0]['timedifferent']+'</span></b>');
+		      }
+		    }
+		  });
+		}, 1000);
+		});
+
+
+//test SP
+
+
+
+
 </script>
 </html>

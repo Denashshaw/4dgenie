@@ -15,17 +15,13 @@
 </style>
 
 <?php
- include('header.php');
+ $this->load->view('header');
   $userdata=$this->session->all_userdata();
 ?>
 <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.jqueryui.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowgroup/1.1.2/css/rowGroup.jqueryui.min.css">
-
-
-
-
-<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.22/js/dataTables.jqueryui.min.js"></script>
 	<script type="text/javascript" src="https://cdn.datatables.net/rowgroup/1.1.2/js/dataTables.rowGroup.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
@@ -40,21 +36,17 @@
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
   <div class="container-fluid p-0">
-    <?php include('page_head.php');?>
+    <?php $this->load->view('page_head.php');?>
     <div class="row activity-row">
-			<div class="col-md-12 activity">Time Sheet</div>
+			<div class="col-md-12 activity">Time Sheet Report</div>
 		</div>
     <div class="row activity-row">
       <div class="col-md-12 activity">
-        <?php if($userdata['role'] !='agent'){ ?>
-        	<a href="<?php echo base_url();?>Timesheet/missingts"><button class="check-out" style="float:right;margin-right:5%">Missing TS</button><br></a>
-        <?php } ?>
+
         <div class="row emp-table ">
          <div class="col-md-12 table-responsive" >
-              <form method="post" id="timesheetfilter" action="<?php echo base_url(); ?>/Timesheet">
+              <form method="post" id="timesheetfilter" action="<?php echo base_url(); ?>Timesheet/TimesheetReport">
            <div class="row">
-
-
              <div class="col-md-2">
                <p>From Date</p>
                <input type="text" id="fromdate" name="fromdate" class="form-control" value="<?php echo date('m/01/Y',); ?>">
@@ -65,22 +57,31 @@
              </div>
              <div class="col-md-2">
                <p>Agent</p>
-                <select class="form-control" name="agent" id="agents" style="font-size:12px;font-weight:bold">
+                <select class="form-control" name="agent" id="agents" style="font-size:12px;font-weight:bold" >
                 </select>
              </div>
-
+             <div class="col-md-2">
+               <p>Category</p>
+                <select class="form-control" id="category" name="category" style="font-size:12px;font-weight:bold">
+                  <option value="Summary">Summary</option>
+                  <option value="Raw Data">Raw Data</option>
+                </select>
+             </div>
              <div class="col-md-2">
                <input type="submit" class="check-in subbtn" value="Submit" name="submit" style="margin-top:20%">
              </div>
-             <div class="col-md-3" style="font-size:12px;text-align:center">
+             <?php if(!$getagent_data){ ?>
+             <div class="col-md-2" style="font-size:12px;text-align:center">
                <div class="card" style="background:#007a8080;">
                  <br><b>Overall Percentage</b>
                  <p id="over_percentage" style="font-size:20px;">0%</p>
                </div>
              </div>
+           <?php } ?>
            </div>
             </form>
            <br>
+           <?php if($getagent_report){ ?>
            <table class="table table-bordered" id="dtset">
              <thead>
                <tr>
@@ -149,6 +150,86 @@
             <?php } ?>
             </tbody>
           </table>
+
+        <?php } ?>
+
+        <?php if($getagent_data){ ?>
+          <table class="table table-bordered" id="rawdatafix">
+            <thead>
+              <tr>
+                <th>Agent</th>
+                <th>Department</th>
+                <th>Report Date</th>
+                <th>Category</th>
+                <th>Client</th>
+                <th>Type</th>
+                <th>Task</th>
+                <th>Sub-Task</th>
+                <th>Time Spent</th>
+                <th>Count</th>
+                <th>Target/hr</th>
+                  <th>To be Achived</th>
+                <th>Percentage</th>
+                <th>Agent Comments</th>
+                <th>Reviewer</th>
+                <th>Reviewer Comments</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              $tempid='';
+              $i=0;
+              foreach($getagent_data as $b){
+                if($tempid == $b->emp_id){
+
+                }else{
+                  if($i == 0){
+
+                  }else{
+                  ?>
+                  <tr>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <?php
+                  }
+                }
+                ?>
+                <tr>
+                  <td><?php echo $b->emp_id.'/'.$b->name; ?></td>
+                  <td><?php echo $b->department; ?></td>
+                  <td><?php echo $b->report_date; ?></td>
+                  <td><?php echo $b->category; ?></td>
+                  <?php if($b->sub_task == 'Break'){ ?>
+                    <td><?php echo 'Default Break'; ?></td>
+                  <?php }else{ ?>
+                    <td><?php echo explode("/",$b->client)[1]; ?></td>
+                  <?php } ?>
+
+                  <td><?php echo $b->type; ?></td>
+                  <?php if($b->type == 'Productive'){ ?>
+                    <td><?php echo explode("/",$b->task)[1]; ?></td>
+                    <td><?php echo explode("/",$b->sub_task)[1]; ?></td>
+                  <?php }else{ ?>
+                    <td><?php echo $b->task; ?></td>
+                    <td><?php echo $b->sub_task; ?></td>
+                  <?php } ?>
+                  <td><?php echo $b->time_spent; ?></td>
+                  <td><?php echo $b->count_production; ?></td>
+                  <td><?php echo $b->target; ?></td>
+                  <td><?php echo $b->tobe_achived; ?></td>
+                  <td><?php echo $b->percentage; ?></td>
+                  <td><?php echo $b->comments; ?></td>
+                  <td><?php echo $b->reviewer_id.'/'.$b->reviewer_name; ?></td>
+                  <td><?php echo $b->reviewer_comments; ?></td>
+
+                </tr>
+              <?php
+              $tempid=$b->emp_id;
+              $i++;
+            } ?>
+            </tbody>
+          </table>
+        <?php } ?>
          </div>
         </div>
       </div>
@@ -255,7 +336,7 @@ if(test == 'MANAGEMENT' || role == 'supervisor')
 {
 $('#dtset').DataTable({
   dom: 'Bfrtip',
-  order: [[ 0, "desc" ]],
+  order: [[ 0, "asc" ]],
   "bSortCellsTop": true,
   buttons: [
   {
@@ -270,6 +351,17 @@ $('#dtset').DataTable({
    },
    {
      extend:'print',
+     title: 'Timesheet Report',
+   }
+   ],
+});
+$('#rawdatafix').DataTable({
+  dom: 'Bfrtip',
+   "ordering": false,
+  "bSortCellsTop": true,
+  buttons: [
+  {
+     extend:'excel',
      title: 'Timesheet Report',
    }
    ],
@@ -310,17 +402,17 @@ function viewpopupdetails(rep_date,empid){
       var res=resdataset.getdata;
     //  console.log(res);
       var res_report=resdataset.getdata_report;
-      if(res_report.length > 0){
+      if(res.length > 0){
         $('.viewtimesheet').modal('show');
         var out=0;
         var indexget=[];
         for(var i=0;i<res.length;i++){
           out +='<tr>';
-            if(res[i]['sub_task'] == 'Break'){
-              out +='<td>Default Break</td>';
-            }else{
-              out +='<td>'+res[i]['client'].split('/')[1]+'</td>';
-            }
+          if(res[i]['sub_task'] == 'Break'){
+            out +='<td>Default Break</td>';
+          }else{
+            out +='<td>'+res[i]['client'].split('/')[1]+'</td>';
+          }
           if(res[i]['type'] =='Productive'){
             out +='<td>'+res[i]['type']+'</td>';
             out +='<td>'+res[i]['task'].split('/')[1]+'</td>';

@@ -429,7 +429,7 @@ class Client_model extends CI_Model
       ->join('client_sub_task', 'client_sub_task.id = client_target.sub_task', 'left')
       ->join('client', 'client.id = client_target.client', 'left')
       ->join('department', 'department.id = client_task.department', 'left')
-      // ->where('department.department', $_SESSION['department'])      
+      // ->where('department.department', $_SESSION['department'])
       ->group_by(array('client_target.client', 'client_target.task', 'client_target.sub_task'))
       ->where('client_target.client', $_POST['client_id'])->get()->result();
     // echo $this->db->last_query();
@@ -472,5 +472,30 @@ class Client_model extends CI_Model
   }
 
   // denash shaw code end
+
+  // denash shaw code start
+
+ public function checkEmpIdExists()
+ {
+   return $this->db->select('emp_id')->from('users')->where('emp_id', $_POST['emp_id_add'])->get()->row();
+ }
+
+ public function getReportingPerson()
+ {
+   $assgned_res =  $this->db->query("SELECT emp_separation_managers.manager_id, emp_separation_managers.reporting_manager FROM `emp_separation_managers` LEFT JOIN users ON users.emp_id = emp_separation_managers.emp_id WHERE emp_separation_managers.emp_id='" . $_POST['emp_id'] . "' ");
+
+   $all_res = $this->db->query("SELECT emp_id, name FROM users WHERE role='supervisor' ");
+   return array(
+     'all_managers' => $all_res->result(),
+     'assigned_managers' => $assgned_res->result()
+   );
+ }
+
+ public function getAllClients()
+ {
+   return $this->db->select('client')->from('client')->get()->result();
+ }
+
+ // denash shaw code ends
 
 }

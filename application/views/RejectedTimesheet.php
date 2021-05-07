@@ -1,6 +1,7 @@
 
 <div class="page-wrapper chiller-theme toggled">
 <style>
+
 .dataTables_wrapper {
     font-family: tahoma;
     font-size: 11px;
@@ -36,7 +37,7 @@
 
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 <main class="page-content">
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
@@ -79,6 +80,10 @@
             <p> Non-Productive Time</p>
             <p id="non_productivetime" style="font-weight:bold">00:00</p>
           </div>
+          <div class="card card-body" style="display:none">
+            <p> Total Target val</p>
+            <p id="tobe_achived_value" style="font-weight:bold">00:00</p>
+          </div>
           <div class="card card-body">
             <p> Total Production Count</p>
             <p id="totalcount" style="font-weight:bold">0</p>
@@ -95,7 +100,7 @@
          <div class="col-md-12 table-responsive" >
          <br>
            <table class="table table-bordered table-hover" id="dtset"  style="cursor:pointer">
-             <form class="" action="<?php echo base_url(); ?>Timesheet/updaterejected" method="post">
+             <form class="" action="<?php echo base_url(); ?>Timesheet/updaterejected" method="post" id="formsubmit">
                <input type="hidden" name="set_reportdate" id="set_reportdate">
                <input type="hidden" name="set_category" id="set_category">
                <input type="hidden" name="reviewer_id" id="reviewer_id">
@@ -129,12 +134,12 @@
                  </td>
                  <td>
                    <p>Time Spent</p>
-                  <input type="time"  id="timespend" name="timespend" value="00:00" max="12:59" onblur="calculatepercentage()" class="form-control"  style="font-size:12px;" required>
+                  <input type="text"  id="timespend" name="timespend" value="00:00" max="12:59" onblur="calculatepercentage()" class="form-control"  style="font-size:12px;" required>
                  <td>
                    <p>Count</p>
                    <input type="text" id="count_prod" name="count_prod" class="form-control" onblur="calculatepercentage()" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" style="font-size:12px;">
                 </td>
-                 <td>
+                 <td style="display:none">
                    <p>Target</p>
                    <input type="text" readonly id="target" name="target"class="form-control" style="font-size:12px;">
                  </td>
@@ -150,7 +155,7 @@
                  <td><p>Reviewer Comment</p></td>
                  <td>
                    <p>Action</p>
-                   <button type="submit" id="completed-task" class="form-control fabutton">
+                   <button type="button" value="submit" onclick="submitform()" id="completed-task" class="form-control fabutton">
                         <i class="fa fa-plus fa-lg"></i>
                   </button>
 
@@ -161,6 +166,10 @@
              <tbody id="printdata">
             </tbody>
           </table>
+          <div class="col-md-3" id="get_below90details" >
+            <p>Details</p>
+            <textarea name="get_below90details_tx" id="get_below90details_tx" rows="3" cols="30" style="font-size:12px;"></textarea>
+          </div>
           <div class="" align="center">
             <input type="button" class="check-in" value="submit" onclick="submitfinalform()">
 
@@ -174,6 +183,14 @@
 </main>
 
 </div>
+<script type="text/javascript">
+  async function submitform() {
+    var res = await calculatepercentage();
+    if(res == 'yes'){
+       setTimeout(function(){   $('#formsubmit').submit(); }, 1000);
+    }
+  }
+</script>
 <div class="modal fade" id="updatetimesheet" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -222,13 +239,13 @@
           <div class="col-md-3">
             <br>
             <p>Time Spent</p>
-            <input type="time" id="timespendupdate" name="timespendupdate" onblur="calculatepercentage_update()">
+            <input type="text" id="timespendupdate" style="width:80%" name="timespendupdate"  value="00:00" max="12:59" onblur="calculatepercentage_update()">
           </div>
           <div class="col-md-3"><br>
             <p>Count</p>
             <input type="text" style="width:50%"  onblur="calculatepercentage_update()" id="countupdate" name="countupdate"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
           </div>
-          <div class="col-md-3"><br>
+          <div class="col-md-3" style="display:none"><br>
             <p>Target</p>
             <input type="text"  style="width:50%" id="targetupdate" name="targetupdate" readonly >
           </div>
@@ -244,9 +261,6 @@
           </div>
         </div>
         <br>
-
-
-
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary">Save changes</button>
@@ -264,7 +278,9 @@ $.ajax({
   method:"POST",
   data:{"empid":'<?php echo $checktimesheet[0]->emp_id; ?>',"report_date":'<?php echo $checktimesheet[0]->report_date; ?>'},
   success:function(dataset){
-    var res = JSON.parse(dataset);
+    //console.log(dataset);
+    var res_all = JSON.parse(dataset);
+    var res = res_all.alldata;
     var out='';
     var timingoverall=moment.duration ('00:00');
     var productivetime=moment.duration ('00:00');
@@ -272,6 +288,9 @@ $.ajax({
     var total_production=0;
     var lengthofperc=0;
     var overallpercentage=0;
+
+    var addcount=0;
+    var addtargetcount=0;
     for(var i=0;i<res.length;i++){
       out +='<tr>';
       out +='<td>'+res[i]['client'].split('/')[1]+'</td>';
@@ -290,37 +309,36 @@ $.ajax({
 
       out +='<td>'+res[i]['time_spent']+'</td>';
       out +='<td>'+res[i]['count_production']+'</td>';
-      out +='<td>'+res[i]['target']+'</td>';
+      out +='<td style="display:none">'+res[i]['target']+'</td>';
       out +='<td>'+res[i]['percentage']+'</td>';
       out +='<td>'+res[i]['comments']+'</td>';
       out +='<td>'+res[i]['reviewer_comments']+'</td>';
-
-      out +='<td><i class="fas fa-pencil-alt" style="font-size:25px;" onclick="updatetimesheet(JSON.parse(\''
-   + JSON.stringify(res[i]).replace(/'/g, '&apos;').replace(/"/g, '&quot;') + '\'))"></i></td>';
+      var idget = res[i]['id'];
+      out +='<td><i class="fas fa-pencil-alt" style="font-size:18px;color:#3fc98e" onclick="updatetimesheet(JSON.parse(\''
+   + JSON.stringify(res[i]).replace(/'/g, '&apos;').replace(/"/g, '&quot;') + '\'))"></i> <i class="fas fa-trash" style="font-size:18px;color:#dc3545" onclick="deletevalues('+idget+')"></i></td>';
       out +='</tr>';
       total_production = parseInt(total_production)+parseInt(res[i]['count_production']);
       timingoverall.add(res[i]['time_spent']);
 
       if(res[i]['percentage'] !=''){
-        var getvalues = res[i]['percentage'].replace("%","");
-        lengthofperc++;
-        overallpercentage = parseInt(overallpercentage)+parseInt(getvalues);
+        addcount =parseInt(addcount)+parseInt(res[i]['count_production']);
+        addtargetcount =parseInt(addtargetcount)+parseInt(res[i]['tobe_achived']);
       }
-
     }
-    var val_overallper =Math.round((parseInt(overallpercentage)/parseInt(lengthofperc)));
+    $('#tobe_achived_value').html(addtargetcount);
+    var val_overallper =Math.round((parseInt(addcount)/parseInt(addtargetcount))*100);
     $('#overallpercentage').html(val_overallper+'%');
-
+    $('#get_below90details_tx').val(res_all.alldata_report[0]['percentagebelow90']);
     $('#totalassignedhours').html(("0" +timingoverall.hours()).slice(-2)+':'+("0" +timingoverall.minutes()).slice(-2));
     $('#productivetime').html(("0" +productivetime.hours()).slice(-2)+':'+("0" +productivetime.minutes()).slice(-2));
     $('#non_productivetime').html(("0" +non_productivetime.hours()).slice(-2)+':'+("0" +non_productivetime.minutes()).slice(-2));
     $('#totalcount').html(total_production);
 
 
-    $('#set_reportdate').val(res[0]['report_date']);
-    $("#set_category").val(res[0]['category']);
-    $("#reviewer_id").val(res[0]['reviewer_id']);
-    $("#reviewer_name").val(res[0]['reviewer_name']);
+    $('#set_reportdate').val(res_all.alldata_report[0]['report_date']);
+    $("#set_category").val(res_all.alldata_report[0]['category']);
+    $("#reviewer_id").val(res_all.alldata_report[0]['reviewer_id']);
+    $("#reviewer_name").val(res_all.alldata_report[0]['reviewer_name']);
     $('#printdata').html(out);
 
     var totalhr = parseInt($('#totalassignedhours').text().split(":")[0]);
@@ -352,6 +370,7 @@ function tasklistget(types){
 	}else{
 		var out_type='';
 		out_type +='<option value="">Select Task</option>';
+    var dpt = "<?php echo $_SESSION['department']; ?>";
 		if(types.value == 'Productive'){
 			$.ajax({
 				url: '<?php echo base_url(); ?>Timesheet/gettasklist',
@@ -361,13 +380,26 @@ function tasklistget(types){
 					var resdata=JSON.parse(res);
 
 					for(var i=0;i<resdata.length;i++){
-						out_type += '<option value="'+resdata[i]['id']+'/'+resdata[i]['task']+'">'+resdata[i]['task']+'</option>';
+            if(dpt == 'DATA'){
+							$('#task').attr('readonly', true);
+							out_type += '<option value="'+resdata[i]['id']+'/'+resdata[i]['task']+'" selected readonly>'+resdata[i]['task']+'</option>';
+
+						}else{
+						  out_type += '<option value="'+resdata[i]['id']+'/'+resdata[i]['task']+'">'+resdata[i]['task']+'</option>';
+            }
+
 					}
 					$('#task').html(out_type);
+          if(dpt == 'DATA'){
+            sub_tasklistget($('#task').val());
+          }
 				}
 			});
 		}
 		if(types.value == 'Non-Productive'){
+      if(dpt == 'DATA'){
+        $('#task').attr('readonly', false);
+      }
 			out_type +='<option value="Non-Productive">Non-Productive</option><option value="Personal">Personal</option>';
 			$('#task').html(out_type);
 		}
@@ -381,7 +413,7 @@ function sub_tasklistget(subtype){
 		$.ajax({
 			url: '<?php echo base_url(); ?>Timesheet/getsubtasklist',
 			method:'POST',
-			data:{"task":subtype.value},
+			data:{"task":$('#task').val()},
 			success: function(res){
 				var resdata=JSON.parse(res);
 				for(var i=0;i<resdata.length;i++){
@@ -391,19 +423,24 @@ function sub_tasklistget(subtype){
 			}
 		});
 	}else{
-		if(subtype.value == 'Non-Productive'){
+    if(subtype.value == 'Non-Productive'){
 			out_subtype +='<option value="Team Meeting">Team Meeting</option><option value="Client Down Time">Client Down Time</option>';
 			out_subtype +='<option value="One To One Meeting">One To One Meeting</option><option value="Training">Training</option>';
+			out_subtype +='<option value="Events">Events</option>';
 		}
 		if(subtype.value == 'Personal'){
 			out_subtype +='<option value="Break" >Break</option><option value="System Down">System Down</option>';
-			out_subtype +='<option value="Cab Late">Cab Late</option><option value="Permission">Permission</option>';
+			var dt="<?php echo $_SESSION['department']; ?>";
+			if(dt != 'DATA'){
+				out_subtype +='<option value="Cab Late">Cab Late</option>';
+			}
+			out_subtype +='<option value="Permission">Permission</option>';
 		}
 		$('#subtask').html(out_subtype);
 	}
 }
 
-function calculatepercentage() {
+async function calculatepercentage() {
 
 	if($('#timespend').val() =='00:00' || $('#count_prod').val() == ''){ return 0; }
 	if($('#Typeprocess').val() == 'Productive'){
@@ -424,23 +461,37 @@ function calculatepercentage() {
 					var tim=$('#timespend').val();
 					var timetomin=moment.duration(tim).asMinutes();
 					var needtocomplete=Math.round((parseInt(targetval)/parseInt(60))*parseInt(timetomin));
+        //  $('#needtobecompleted').val(needtocomplete);
+					var Percentageval = parseInt(Math.round((parseInt($('#count_prod').val())/parseInt(needtocomplete))*100));
+          var perval=Percentageval?Percentageval:0;
 
-					var Percentageval = Math.round((parseInt($('#count_prod').val())/parseInt(needtocomplete))*100);
-
-					$('#percentageval_set').val(Percentageval+'%');
-					$('#percentage').html(Percentageval+'%');
+          if(perval != '0'){
+            $('#percentageval_set').val(perval+'%');
+          }else{
+            $('#percentageval_set').val('');
+          }
+					$('#percentage').html(perval+'%');
 				}else{
 					alert("No Target Setup found!!!");
 				}
 			}
 		});
 	}
+  return "yes";
 }
 
 
 function updatetimesheet(res){
 	$('#updatetimesheet').modal('show');
   console.log(res.id);
+  $('#timespendupdate').timepicker({
+      showMeridian: false,
+      showInputs: true,
+      minTime: '00',
+      timeFormat:'HH:mm',
+      zindex: 9999999,
+      interval: 5,
+  });
   $('#clientid').html(res.client);
 	 $('#typeid').html(res.type);
 	 $('#taskid').html(res.task);
@@ -454,7 +505,7 @@ function updatetimesheet(res){
 	 $('#indexid').val(res.id);
 }
 
-function calculatepercentage_update() {
+function calculatepercentage_update(){
 
 	if($('#timespendupdate').val() =='00:00' || $('#countupdate').val() == ''){ return 0; }
 	if($('#typeid').text() == 'Productive'){
@@ -476,10 +527,15 @@ function calculatepercentage_update() {
 					var timetomin=moment.duration(tim).asMinutes();
 					var needtocomplete=Math.round((parseInt(targetval)/parseInt(60))*parseInt(timetomin));
 
-					var Percentageval = Math.round((parseInt($('#countupdate').val())/parseInt(needtocomplete))*100);
+					var Percentageval = parseInt(Math.round((parseInt($('#countupdate').val())/parseInt(needtocomplete))*100));
+          var perval=Percentageval?Percentageval:0;
 
-					$('#percentageupdate_data').val(Percentageval+'%');
-					$('#percentageupdate').html(Percentageval+'%');
+          if(perval != '0'){
+            $('#percentageupdate_data').val(perval+'%');
+          }else{
+            $('#percentageupdate_data').val('');
+          }
+					$('#percentageupdate').html(perval+'%');
 				}else{
 					alert("No Target Setup found!!!");
 				}
@@ -500,7 +556,9 @@ function submitfinalform() {
               "non_productivetime":$('#non_productivetime').text(),
               "totalcount":$('#totalcount').text(),
               "overallpercentage":$('#overallpercentage').text(),
-              "datereport":dt
+              "datereport":dt,
+              "total_target":$('#tobe_achived_value').text(),
+              "percentagebelow90":$('#get_below90details_tx').val(),
             },
     success : function(resget){
       location.replace('<?php echo base_url();?>Login/checktimesheet');
@@ -509,4 +567,28 @@ function submitfinalform() {
 }
 
 
+function deletevalues(id) {
+  $.ajax({
+    url: '<?php echo base_url(); ?>Timesheet/deleterows',
+    method:'POST',
+    data:{'id':id},
+    success: function(res){
+      location.reload();
+    }
+  });
+}
+
+</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+        $('#timespend').timepicker({
+            showMeridian: false,
+            showInputs: true,
+						minTime: '00',
+						timeFormat:'HH:mm',
+						interval: 5,
+        });
+
+    });
 </script>

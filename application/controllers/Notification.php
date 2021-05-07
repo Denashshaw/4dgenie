@@ -69,6 +69,12 @@ class Notification extends CI_Controller {
 		$res = $this->NotificationModel->fetchandinsert('checkin_checkout');
 		echo json_encode($res);
 	}
+
+	public function getagent()
+	{
+		$res = $this->NotificationModel->testSP();
+		echo json_encode($res);
+	}
 }
 
 ?>

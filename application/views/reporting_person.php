@@ -339,4 +339,13 @@ function deleteuserdetails(manager_id,manager_name) {
     }
   });
 }
+
+
+$.ajax({
+ url : "<?php echo base_url(); ?>Notification/getagent",
+ method : "POST",
+ success : function(datares){
+  console.log(datares);
+ }
+});
 </script>

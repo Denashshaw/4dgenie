@@ -446,12 +446,20 @@ function viewreport(){
 }
 $(document).ready(function() {
     var isshow = localStorage.getItem('isshow');
+    alert(isshow);
     if (isshow== null) {
-
-        localStorage.setItem('isshow', 1);
+      $('#notificationview').modal('show');
+      //  localStorage.setItem('isshow', 1);
 
         // Show popup here
-        $('#notificationview').modal('show');
+        // $.ajax({
+  		  //   url : "<?php echo base_url(); ?>Timesheet/getrejectedlist",
+  		  //   method : "POST",
+  		  //   success : function(datares){
+        //     console.log(datares);
+        //   }
+        // });
+
     }
 });
  // $('#notificationview').modal('show');

@@ -38,5 +38,11 @@ class NotificationModel extends CI_Model
       $resage = $this->db->query("SELECT id,TIMEDIFF(now(),`checkin_time`) as timedifferent FROM $table where emp_id='$empid' and  check_inout_flag=1 order by id desc limit 1");
       return $resage->result();
     }
+
+    public function testSP()
+    {
+      $resage = $this->db->query("SELECT * FROM users");
+      return $resage->result();
+    }
 }
 ?>
