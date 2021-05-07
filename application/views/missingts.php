@@ -52,35 +52,7 @@
             <div class="col-md-3">
               <input type="button" class="check-in" onclick="usersub()" name="" value="Submit" style="margin-top:12%">
             </div>
-            <!-- <div class="row col-md-12">
-            <div class="card card-body">
-              <p> Total Time Spent</p>
-              <p id="totalassignedhours" style="font-weight:bold">00:00</p>
-            </div>
-            <div class="card card-body">
-              <p> Productive Time</p>
-              <p id="productivetime" style="font-weight:bold">00:00</p>
-            </div>
-            <div class="card card-body">
-              <p> Non-Productive Time</p>
-              <p id="non_productivetime" style="font-weight:bold">00:00</p>
-            </div>
-            <div class="card card-body" style="display:none">
-              <p> Total Target val</p>
-              <p id="tobe_achived_value" style="font-weight:bold">00:00</p>
-            </div>
-            <div class="card card-body">
-              <p> Total Production Count</p>
-              <p id="totalcount" style="font-weight:bold">0</p>
-            </div>
-            <div class="card card-body">
-              <p> Overall Percentage</p>
-              <p id="overallpercentage" style="font-weight:bold">0%</p>
-            </div>
-          </div> -->
-
-
-        </div>
+          </div>
         <div class="row">
          <div class="col-md-12">
            <div class="row emp-table viewtimesheet" style="display:none;">
@@ -295,6 +267,9 @@
 </div>
 <?php include('sweetalert.php'); ?>
 <script>
+$(document).ready(function() {
+  reportdate.max = new Date().toISOString().split("T")[0];
+})
 function usersub(){
   $.ajax({
     url:"<?php echo base_url(); ?>Timesheet/checktsrejectiondata",
@@ -418,6 +393,7 @@ function sub_tasklistget(subtype){
 			out_subtype +='<option value="Team Meeting">Team Meeting</option><option value="Client Down Time">Client Down Time</option>';
 			out_subtype +='<option value="One To One Meeting">One To One Meeting</option><option value="Training">Training</option>';
 			out_subtype +='<option value="Events">Events</option>';
+
 		}
 		if(subtype.value == 'Personal'){
 			out_subtype +='<option value="Break" >Break</option><option value="System Down">System Down</option>';
@@ -426,6 +402,7 @@ function sub_tasklistget(subtype){
 				out_subtype +='<option value="Cab Late">Cab Late</option>';
 			}
 			out_subtype +='<option value="Permission">Permission</option>';
+      out_subtype +='<option value="Leave">Leave</option>';
 		}
 		$('#subtask').html(out_subtype);
 	}
@@ -454,7 +431,12 @@ function checktargetsetup(){
 				}
 			}
 		});
-	}
+	}else{
+    if($('#subtask').val() == 'Leave'){
+      $('#timespend').hide();
+      $('#count_prod').hide();
+    }
+  }
 }
 
 async function calculatepercentage() {
@@ -605,6 +587,7 @@ function displaytimesheetdata(){
 	var nonproductivetimeget=moment.duration ('00:00');
 	var getbreaktiming=moment.duration ('00:00');
 	if(client.length > 0){
+    var showornotflag=0;
 		for(var i=0;i< client.length;i++){
 			if(subtask[i] == 'Break'){
 				out +='<tr style="background:#d6d3d3">';
@@ -625,7 +608,13 @@ function displaytimesheetdata(){
 				out +='<td>'+task[i]+'</td>';
 				out +='<td>'+subtask[i]+'</td>';
 			}
-			out +='<td>'+timespent[i]+'</td>';
+      if(subtask[i] == 'Leave'){
+        showornotflag++;
+        out +='<td>-</td>';
+      }else{
+        out +='<td>'+timespent[i]+'</td>';
+      }
+
 			out +='<td>'+countdown[i]+'</td>';
 			out +='<td style="display:none">'+target[i]+'</td>';
 			out +='<td>'+per[i]+'</td>';
@@ -665,11 +654,15 @@ function displaytimesheetdata(){
 
 
 		//check working hours > 9
+
 		if(timingoverall.hours() > 8){
 			$('.timesheetsubmit').show();
 		}else{
 			$('.timesheetsubmit').hide();
 		}
+    if(showornotflag > 0){
+      $('.timesheetsubmit').show();
+    }
 
 		var productioncount=0;
 		countdown.forEach((counting)=>{
@@ -699,10 +692,14 @@ function displaytimesheetdata(){
 		})
 		$('#totaltarget').html(targetcount);
 		 var val_overallper =Math.round((parseInt($('#totalcount').text())/parseInt($('#totaltarget').text()))*100);
+     if(isNaN(val_overallper)){
+       var perc_get=0;
+     }else{
+       var perc_get=val_overallper;
+     }
+		$('#overallpercentage').html(perc_get+'%');
 
-		$('#overallpercentage').html(val_overallper+'%');
-
-		if(val_overallper < 90){
+		if(perc_get < 90){
 			$('#get_below90details').show();
 		}else{
 			$('#get_below90details').hide();
