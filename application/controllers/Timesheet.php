@@ -105,6 +105,9 @@ class Timesheet extends CI_Controller {
     $dataset=array();
 		$reporting_person=explode("/",$_POST['reporting_person']);
     for($i=0;$i<sizeof($_POST['client']);$i++){
+			if($_POST['sub_task'][$i] == 'Leave'){
+				$category ='Leave';
+			}
       $dataset[$i]['emp_id']=$emp_id;
       $dataset[$i]['name']=$name;
       $dataset[$i]['department']=$department;
@@ -124,7 +127,9 @@ class Timesheet extends CI_Controller {
 			$dataset[$i]['reviewer_name']=$reporting_person[1];
 			$dataset[$i]['status']='Initiated';
     }
-
+		if(	$category == 'Leave'){
+			$category ='Leave';
+		}
 		$timesheet_report_data=array(
 			"emp_id"=>$emp_id,
 			"name"=>$name,
