@@ -808,13 +808,10 @@ function logooutsubmit(){
 
 			if(data == '"Update Success"'){
 				swal("Success", "Time-Sheet Updated Successfully!!!", "success");
-				var per_time = $('.permission').val();
-				 location.replace('<?php echo base_url();?>Checkin_checkout/CheckOut/'+parseInt(per_time));
+				 location.replace('<?php echo base_url();?>Timesheet');
 			}
 			if(data == '"Insert Success"'){
-			//	swal("Success", "Time-Sheet Submitted Successfully!!!", "success");
-				var per_time = $('.permission').val();
-			  location.replace('<?php echo base_url();?>Checkin_checkout/CheckOut/'+parseInt(per_time));
+			  location.replace('<?php echo base_url();?>Timesheet');
 			//	location.reload();
 
 			}
