@@ -58,21 +58,36 @@ class attendanceModel extends CI_Model
 
 			if($attendancearray[$index]["Day"] == 'Sunday'){
 				$attendancearray[$index]['Status'] = 'Holiday';
-			}else if($attendancearray[$index]["Day"] == 'Saturday' && ($shift_intime[0] == 1 && $shift_intime[1] > 7)){
+        $attendancearray[$index]['Status_details'] = 'Sunday Holiday';
+			}else if($attendancearray[$index]["Day"] == 'Saturday'){
         $attendancearray[$index]['Status'] = 'Holiday';
+        $attendancearray[$index]['Status_details'] = 'Saturday Holiday';
+
       }
 			else if($attendancearray[$index]['checkin']!=''){
 		        $attendancearray[$index]['Status'] = '<p id="presentid">Present</p>';
+            $attendancearray[$index]['Status_details'] = 'Present';
 		    }
 		    else{
-		    	$queryleave = "SELECT * FROM emp_leave_details WHERE emp_id='".$id."'	and  ('".$ckdate."' between leave_start_date and leave_end_date)";
+		    	$queryleave = "SELECT * FROM emp_leave_details WHERE emp_id='".$id."'	and  ('".$ckdate."' between leave_start_date and leave_end_date) and leave_status='Approved'";
 		    	//echo $queryleave;
-				$quResleave = $this->db->query($queryleave);
-				if($quResleave->row() > 0){
-					$attendancearray[$index]['Status'] = '<p id="leaveid">Leave</p>';
-				}else{
-		        	$attendancearray[$index]['Status'] = '<p id="absentid">Absent</p>';
-				}
+  				$quResleave = $this->db->query($queryleave);
+  				if($quResleave->row() > 0){
+  					$attendancearray[$index]['Status'] = '<p id="leaveid">Leave</p>';
+            $leavedataset = $quResleave->result();
+            $attendancearray[$index]['Status_details'] = $leavedataset[0]->leave_reason;
+  				}else{
+                $query_holiday = $this->db->query("SELECT * FROM holidays WHERE FIND_IN_SET((select department from users where emp_id='$id'),department) and holiday_date='$ckdate'");
+                if($query_holiday->row() > 0){
+                  $attendancearray[$index]['Status'] = 'Holiday';
+                  $holidaydata = $query_holiday->result();
+                  $attendancearray[$index]['Status_details'] = $holidaydata[0]->festival;
+                }else{
+                  $attendancearray[$index]['Status'] = '<p id="absentid">Absent</p>';
+                  $attendancearray[$index]['Status_details'] = 'Absent';
+                }
+
+  				}
 		    }
 
 			$index++;
@@ -80,6 +95,43 @@ class attendanceModel extends CI_Model
 
 
 		echo json_encode(array("attendancedata"=>$attendancearray,"shiftdetails"=>$userdet));
+    }
+
+    public function getproduction_per($value)
+    {
+      $userid=$value['userid'];
+      $date=date_format(date_create($value['date']),'Y-m-d');
+      $query_percentage = $this->db->query("SELECT SUBSTRING_INDEX(overall_percentage,'%',1) as value FROM timesheet_report WHERE emp_id='$userid' and report_date='$date'");
+      $res["category"]="Production Percentage";
+      $res["value"]=$query_percentage->result()[0]->value;
+      return $res;
+  //    return $this->db->last_query();
+    }
+
+    public function getbreakdetails($dt)
+    {
+      $userid=$dt['userid'];
+      $date=date_format(date_create($dt['date']),'Y-m-d');
+      $query_bk = $this->db->query("SELECT * FROM breakin_breakout WHERE emp_id='$userid' and breakin_time LIKE '$date%'");
+      return $query_bk->result();
+    }
+
+    public function Holidays($dtv)
+    {
+      $userid=$dtv['userid'];
+      $myear=explode("-",$dtv['monthyear'])[1];
+      $query_bk = $this->db->query("SELECT * FROM holidays WHERE FIND_IN_SET((select department from users where emp_id='$userid'),department) and year='$myear'");
+      return $query_bk->result();
+      //return $this->db->last_query();
+    }
+
+    public function getPermission($dataset)
+    {
+      $userid=$dataset['userid'];
+      $myear=explode("-",$dataset['monthyear']);
+      $arrenge=$myear[1].'-'.$myear[0];
+      $query_per = $this->db->query("SELECT permission_hours FROM emp_permission_details WHERE emp_id='$userid' and permission_date like '$arrenge%' and status='Approved'");
+      return  $query_per->result();
     }
 }
 ?>

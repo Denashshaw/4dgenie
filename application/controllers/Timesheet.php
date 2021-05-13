@@ -107,6 +107,9 @@ class Timesheet extends CI_Controller {
     for($i=0;$i<sizeof($_POST['client']);$i++){
 			if($_POST['sub_task'][$i] == 'Leave'){
 				$category ='Leave';
+				$statusbulk='Leave';
+			}else{
+				$statusbulk='Initiated';
 			}
       $dataset[$i]['emp_id']=$emp_id;
       $dataset[$i]['name']=$name;
@@ -125,10 +128,14 @@ class Timesheet extends CI_Controller {
       $dataset[$i]['comments']=$_POST['comments'][$i];
 			$dataset[$i]['reviewer_id']=$reporting_person[0];
 			$dataset[$i]['reviewer_name']=$reporting_person[1];
-			$dataset[$i]['status']='Initiated';
+			$dataset[$i]['status']=$statusbulk;
     }
 		if(	$category == 'Leave'){
 			$category ='Leave';
+			$statusvalue='Leave';
+
+		}else{
+			$statusvalue='Initiated';
 		}
 		$timesheet_report_data=array(
 			"emp_id"=>$emp_id,
@@ -138,7 +145,7 @@ class Timesheet extends CI_Controller {
 			"category"=>$category,
 			"reviewer_id"=>$reporting_person[0],
 			"reviewer_name"=>$reporting_person[1],
-			"status"=>'Initiated',
+			"status"=>$statusvalue,
 			"totaltime_spend"=>$_POST['totaltimespend'],
 			"productive_time"=>$_POST['productive_time'],
 			"non_productive_time"=>$_POST['non_rpoductive_time'],
@@ -153,6 +160,7 @@ class Timesheet extends CI_Controller {
 
     $resGet =$this->Timesheet_model->datastore('timesheet',$dataset);
 		echo json_encode($resGet);
+
   }
 
 	public function reviewerupdatestatus()
