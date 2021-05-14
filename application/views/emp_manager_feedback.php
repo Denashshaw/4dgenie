@@ -469,6 +469,11 @@ function viewstatusupdate(i){
       $('#areaofimproveview').html('<p style="font-size:12px">'+res[0]['area_of_improvement']+'</p>');
       $('#goalview').html('<p style="font-size:12px">'+res[0]['goals_for_next_month']+'</p>');
       $('#emp_comm_view').html('<p style="font-size:12px">'+res[0]['employee_com']+'</p>');
+
+      $('#prod_percentage').val(res[0]['produnction_perc']);
+      $('#quality_percenatage').val(res[0]['quality_perc']);
+      $('#attendance').val(res[0]['attendance']);
+      $('#timeefficiency').val(res[0]['time_efficiency']);
     }
   });
 
