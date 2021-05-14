@@ -136,10 +136,16 @@ class Timesheet_model extends CI_Model
     return $res->result();
   }
   public function gettask_data(){
+    if($_SESSION['role'] =='supervisor' && $_SESSION['department'] =='MANAGEMENT'){
+      $department=$_SESSION['sub_department'];
+    }else{
+      $department=$_SESSION['department'];
+    }
     $task_type=$_POST['type'];
-    $department=$_SESSION['department'];
+
     $getdata=$this->db->query("SELECT * FROM client_task where task_type='$task_type' and department in (SELECT id from department where department='$department')");
     return $getdata->result();
+
   }
   public function getsubtask_data()
   {
