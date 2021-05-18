@@ -129,7 +129,7 @@
  										</td>
  										<td  style="width:5%">
  											<p>Count</p>
- 											<input type="text" id="count_prod" name="count_prod" class="form-control" onblur="calculatepercentage()" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" style="font-size:12px;">
+ 											<input type="text" id="count_prod" name="count_prod" class="form-control" onkeyup="calculatepercentage()" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" style="font-size:12px;">
  										</td>
  										<td style="width:5%;display:none">
  											<p>Target/hr</p>
@@ -441,7 +441,7 @@ function checktargetsetup(){
 
 async function calculatepercentage() {
 
-	if($('#timespend').val() =='00:00' || $('#count_prod').val() == ''){ return 0; }
+	if($('#timespend').val() =='00:00' || $('#count_prod').val() == ''){   $('#percentage').html('0%');$('#percentageval_set').val(''); return 0; }
 	if($('#Typeprocess').val() == 'Productive'){
 		$.ajax({
 			method : 'post',
@@ -516,8 +516,12 @@ var per=[];
 var set_tobe_achieved=[];
 
 
-function timesheetadd(){
-	calculatepercentage();
+async function timesheetadd(){
+
+    var res = await calculatepercentage();
+    if(res == 'yes'){
+
+
 	if($('#subtask').val() == 'Break'){
 		var timing = $('#timespend').val().split(':');
 		var time1=timing[0];
@@ -578,7 +582,7 @@ function timesheetadd(){
 		$('#percentage').html('-');
 	}
 	displaytimesheetdata();
-
+}
 }
 
 function displaytimesheetdata(){

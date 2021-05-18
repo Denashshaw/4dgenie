@@ -171,7 +171,7 @@ input[type=time]::datetime-edit-field.numeric{
 										</td>
 										<td  style="width:5%">
 											<p>Count</p>
-											<input type="text" id="count_prod" name="count_prod" class="form-control" onblur="calculatepercentage()" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" style="font-size:12px;">
+											<input type="text" id="count_prod" name="count_prod" class="form-control" onkeyup="calculatepercentage()" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" style="font-size:12px;">
 										</td>
 										<td style="width:5%;display:none">
 											<p>Target/hr</p>
@@ -559,6 +559,7 @@ function redirectUser(){
 }
 
 $(document).ready(function(){
+	checkinstatus();
 	var base_url = $('#base_url').val();
 	$.ajax({
 		url: base_url+'Checkin_checkout/checkPermission',
@@ -574,7 +575,7 @@ $(document).ready(function(){
 			console.log(err)
 		}
 	});
-	checkinstatus();
+
 	breakinstatus();
 });
 
@@ -853,8 +854,12 @@ var per=[];
 var set_tobe_achieved=[];
 
 
-function timesheetadd(){
-	calculatepercentage();
+async function timesheetadd(){
+
+    var res = await calculatepercentage();
+		alert(res);
+    if(res == 'yes'){
+
 	if($('#subtask').val() == 'Break'){
 		var timing = $('#timespend').val().split(':');
 		var time1=timing[0];
@@ -915,7 +920,7 @@ function timesheetadd(){
 		$('#percentage').html('-');
 	}
 	displaytimesheetdata();
-
+}
 }
 
 function displaytimesheetdata(){
@@ -930,7 +935,7 @@ function displaytimesheetdata(){
 				out +='<td >Default Break</td>';
 
 			}else{
-				
+
 				out +='<tr>';
 				out +='<td >'+client[i].split("/")[1]+'</td>';
 			}
